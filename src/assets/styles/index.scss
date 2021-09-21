@@ -2,9 +2,11 @@
 @import "./base/flexbox";
 @import "./base/variables";
 
+@import "../../features/App/app";
+
 @import "../../components/Header/header";
 @import "../../components/Sidebar/sidebar";
 @import "../../components/Button/button";
 @import "../../components/Import/import";
-@import "../../features/App/app";
+@import "../../components/Main/main";
 
