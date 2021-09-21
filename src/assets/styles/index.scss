@@ -1,6 +1,10 @@
 @import "./base/base";
 @import "./base/flexbox";
+@import "./base/variables";
 
 @import "../../components/Header/header";
 @import "../../components/Sidebar/sidebar";
+@import "../../components/Button/button";
+@import "../../components/Import/import";
+@import "../../features/App/app";
 

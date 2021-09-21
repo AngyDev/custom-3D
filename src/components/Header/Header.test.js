@@ -10,11 +10,11 @@ describe('Header testing', () => {
         wrapper = mount(<Header />);
     });
 
-    it('should contain Header text', () => {
-        expect(wrapper.find('h1').text()).toContain("Header");
-    });
-
-    // it('should contain Profile component', () => {
-    //     expect(wrapper.find('Profile')).toHaveLength(1);
+    // it('should contain Header text', () => {
+    //     expect(wrapper.find('h1').text()).toContain("Header");
     // });
+
+    it('should contain Import component', () => {
+        expect(wrapper.find('Import')).toHaveLength(1);
+    });
 });
