@@ -55,5 +55,8 @@
     "setupFiles": [
       "./setupTests.js"
     ]
+  },
+  "dependencies": {
+    "three": "^0.132.2"
   }
 }
