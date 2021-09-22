@@ -1,9 +1,16 @@
 import React, { useRef, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+import { selectScene, setScene } from '../../features/scene/sceneSlice';
 
 export default function Main() {
+
+    const sceneRedux = useSelector(selectScene);
+
+    const dispatch = useDispatch();
 
     const canvasRef = useRef(null);
 
@@ -67,6 +74,9 @@ export default function Main() {
         const axesHelper = new THREE.AxesHelper(5);
         scene.add(axesHelper);
 
+        const group = new THREE.Group();
+        scene.add(group);
+
         var render = function () {
             // Render
             renderer.render(scene, camera);
@@ -93,6 +103,8 @@ export default function Main() {
         window.addEventListener("resize", onWindowResize, false);
 
         render();
+
+        dispatch(setScene(scene));
 
         return () => canvasRef.current.removeChild(renderer.domElement);
     }, []);
