@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { selectScene } from '../../features/scene/sceneSlice';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
