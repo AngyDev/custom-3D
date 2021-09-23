@@ -11,7 +11,7 @@ describe('Sidebar testing', () => {
     });
 
     it('should contain Sidebar text', () => {
-        expect(wrapper.find('h1').text()).toContain("Sidebar");
+        expect(wrapper.find('h3').text()).toContain("Scene");
     });
 
     // it('should contain Profile component', () => {

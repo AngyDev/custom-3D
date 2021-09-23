@@ -3,4 +3,12 @@
     height: 100vh;
     background-color: #eeeeee;
     padding: 10px;
+
+    &__list {
+        margin-top: 10px;
+    }
+
+    &__panel {
+        margin-bottom: 10px;
+    }
 }
