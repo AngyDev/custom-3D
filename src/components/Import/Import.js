@@ -1,22 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { selectScene } from '../../features/scene/sceneSlice';
+import { selectScene, setScene } from '../../features/scene/sceneSlice';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import * as THREE from "three";
+import { useDispatch } from 'react-redux';
 
 export default function Import() {
 
     const scene = useSelector(selectScene);
-    const vector = new THREE.Vector3();
-    var isFirstImport = true;
+    const dispatch = useDispatch();
+
+    const [mesh, setMesh] = useState();
+    const [vector, setVector] = useState(new THREE.Vector3());
+    const [isFirstImport, setIsFirstImport] = useState(true);
+
+    useEffect(() => {
+        if (mesh !== undefined) {
+            // If it is the first file, calculates the position of the mesh otherwise create a group of mesh
+            if (isFirstImport) {
+                setFirstObjPosition(mesh);
+            } else {
+                createGroup(mesh);
+            }
+        }
+        console.log(scene);
+    }, [mesh, vector])
 
     const handleChange = (e) => {
         const files = e.target.files;
 
-        importFile(files);
-    }
-
-    const importFile = (files) => {
         if (files.length > 0) {
             for (var i = 0; i < files.length; i++) {
                 loadFile(files[i]);
@@ -24,6 +36,10 @@ export default function Import() {
         }
     }
 
+    /**
+     * Loads the file and reads the content of the file
+     * @param {File} file File imported
+     */
     const loadFile = (file) => {
         const filename = file.name;
         const reader = new FileReader();
@@ -31,21 +47,28 @@ export default function Import() {
         reader.addEventListener('load', (event) => {
             const contents = event.target.result;
 
-            const mesh = createMeshFromFile(filename, contents);
+            // const mesh = createMeshFromFile(filename, contents);
 
-            //sidebar.buildOption(this.scene, mesh);
-            isFirstImport && setFirstObjPosition(mesh);
-
-            const group = scene.children.find((obj) => obj.type === "Group");
-
-            mesh.geometry.translate(-vector.x, -vector.y, -vector.z);
-
-            group.add(mesh);
-            //scene.add(mesh);
+            setMesh(createMeshFromFile(filename, contents));
 
         }, false);
 
         reader.readAsArrayBuffer(file);
+    }
+
+    /**
+     * Adds the mesh to the group
+     * @param {Mesh} mesh THREE.Mesh
+     */
+    const createGroup = (mesh) => {
+        
+        const group = scene.children.find((obj) => obj.type === "Group");
+
+        mesh.geometry.translate(-vector.x, -vector.y, -vector.z);
+
+        group.add(mesh);
+
+        dispatch(setScene({ ...scene }));
     }
 
     /**
@@ -70,12 +93,16 @@ export default function Import() {
 
     /**
      * Sets the position of the first object of the group
+     * @param {Mesh} mesh THREE.Mesh
      */
     const setFirstObjPosition = (mesh) => {
-        const box3 = new THREE.Box3().setFromObject(mesh);
-        box3.getCenter(vector);
+        const center = new THREE.Vector3();
 
-        isFirstImport = false;
+        const box3 = new THREE.Box3().setFromObject(mesh);
+        box3.getCenter(center);
+
+        setVector(center);
+        setIsFirstImport(false);
     }
 
     return (
