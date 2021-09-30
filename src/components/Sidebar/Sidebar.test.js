@@ -2,19 +2,24 @@ import React from "react";
 import '@testing-library/jest-dom';
 import { mount } from 'enzyme';
 import Sidebar from "./Sidebar";
+import { Provider } from "react-redux";
+import configureStore from 'redux-mock-store';
 
 describe('Sidebar testing', () => {
 
     let wrapper;
     beforeEach(() => {
-        wrapper = mount(<Sidebar />);
+        const initialState = {
+            scene: {
+                scene: {}
+            }
+        }
+        const mockStore = configureStore();
+        const store = mockStore(initialState);
+        wrapper = mount(<Provider store={store}><Sidebar /></Provider>);
     });
 
-    it('should contain Sidebar text', () => {
-        expect(wrapper.find('h3').text()).toContain("Scene");
+    it('should contain Profile component', () => {
+        expect(wrapper.find('Panel')).toHaveLength(1);
     });
-
-    // it('should contain Profile component', () => {
-    //     expect(wrapper.find('Profile')).toHaveLength(1);
-    // });
 });
