@@ -29,7 +29,7 @@
     "@testing-library/react-hooks": "^7.0.2",
     "@types/jest": "^27.0.2",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
-    "babel-jest": "^27.2.1",
+    "babel-jest": "^27.2.4",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^5.2.6",
@@ -56,9 +56,18 @@
     "automock": false,
     "setupFiles": [
       "./setupTests.js"
+    ],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!variables/.*)"
     ]
   },
   "dependencies": {
-    "three": "^0.132.2"
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "redux-mock-store": "^1.5.4",
+    "three": "^0.132.2",
+    "ts-jest": "^27.0.5"
   }
 }
