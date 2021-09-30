@@ -1,0 +1,22 @@
+.option {
+    padding: 4px;
+}
+
+.option:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.visible::after {
+    content: "";
+    display: block;
+    background: url("../../assets/images/icons/eye-solid.svg") no-repeat;
+    width: 20px;
+    height: 20px;
+    /* float: left; */
+    margin: 0 6px 0 0;
+    cursor: pointer;
+}
+
+.visible.active::after {
+    content: url("../../assets/images/icons/eye-slash-solid.svg");
+}
