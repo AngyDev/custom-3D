@@ -13,6 +13,9 @@ export default function Import() {
     const [mesh, setMesh] = useState();
     const [vector, setVector] = useState(new THREE.Vector3());
     const [isFirstImport, setIsFirstImport] = useState(true);
+    const [files, setFiles] = useState([]);
+
+    const group = scene.children && scene.children.find((obj) => obj.type === "Group");
 
     useEffect(() => {
         if (mesh !== undefined) {
@@ -20,20 +23,23 @@ export default function Import() {
             if (isFirstImport) {
                 setFirstObjPosition(mesh);
             } else {
-                createGroup(mesh);
+                addMeshToGroup(mesh);
             }
         }
-        console.log(scene);
     }, [mesh, vector])
 
-    const handleChange = (e) => {
-        const files = e.target.files;
-
+    useEffect(() => {
         if (files.length > 0) {
             for (var i = 0; i < files.length; i++) {
                 loadFile(files[i]);
             }
         }
+    }, [files])
+
+    const handleChange = (e) => {
+        const files = e.target.files;
+
+        setFiles(files);
     }
 
     /**
@@ -46,29 +52,12 @@ export default function Import() {
 
         reader.addEventListener('load', (event) => {
             const contents = event.target.result;
-
-            // const mesh = createMeshFromFile(filename, contents);
-
+            
             setMesh(createMeshFromFile(filename, contents));
 
         }, false);
 
         reader.readAsArrayBuffer(file);
-    }
-
-    /**
-     * Adds the mesh to the group
-     * @param {Mesh} mesh THREE.Mesh
-     */
-    const createGroup = (mesh) => {
-        
-        const group = scene.children.find((obj) => obj.type === "Group");
-
-        mesh.geometry.translate(-vector.x, -vector.y, -vector.z);
-
-        group.add(mesh);
-
-        dispatch(setScene({ ...scene }));
     }
 
     /**
@@ -92,6 +81,27 @@ export default function Import() {
     }
 
     /**
+     * Adds the mesh to the group
+     * @param {Mesh} mesh THREE.Mesh
+     */
+    const addMeshToGroup = (mesh) => {
+
+        group.add(mesh);
+
+        setGroupPosition();
+    }
+
+    /**
+     * Sets group position
+     */
+    const setGroupPosition = () => {
+
+        group.position.set(-vector.x, -vector.y, -vector.z);
+
+        dispatch(setScene({ ...scene }));
+    }
+ 
+    /**
      * Sets the position of the first object of the group
      * @param {Mesh} mesh THREE.Mesh
      */
@@ -103,6 +113,8 @@ export default function Import() {
 
         setVector(center);
         setIsFirstImport(false);
+
+        addMeshToGroup(mesh);
     }
 
     return (

@@ -7,7 +7,7 @@ export const sceneSlice = createSlice({
     },
     reducers: {
         setScene: (state, action) => {
-            state.scene = action.payload
+            state.scene = action.payload;
         }
     }
 })
