@@ -28,10 +28,20 @@ export default function Panel() {
         }
     }, [scene])
 
+    /**
+     * Checks if the mesh is in the list
+     * @param {Array} list List of meshes
+     * @param {Mesh} mesh THREE.Mesh
+     * @returns 
+     */
     const containMesh = (list, mesh) => {
         return list.some((item) => item.uuid === mesh.uuid);
     }
 
+    /**
+     * Deletes the object from HTML and scene 
+     * @param {Event} e 
+     */
     const deleteClick = (e) => {
         const name = e.target.attributes.name.nodeValue;
         const id = e.target.attributes.id.nodeValue;
@@ -55,12 +65,6 @@ export default function Panel() {
             <div id="scene" className="">
                 {
                     meshList.length > 0 && meshList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} />)
-
-                    // groupObject.length > 0 && groupObject[0].children && console.log(groupObject[0].children) 
-                    // scene.children && scene.children.map((obj, i) => obj.type === "Group" && obj.children.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick}/>))
-                    // groupObject.length > 1 && groupObject[0].children.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} />)
-
-                    // groupObject.length > 0 && groupObject[0].children && groupObject[0].children.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick}/>)
                 }
             </div>
         </div>

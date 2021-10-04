@@ -6,6 +6,10 @@ export default function PanelItem(props) {
 
     const scene = useSelector(selectScene);
 
+    /**
+     * Adds onclick a visible/unvisible functionality
+     * @param {Event} e 
+     */
     const handleClick = (e) => {
         e.target.classList.toggle("active");
 
@@ -22,35 +26,6 @@ export default function PanelItem(props) {
             }
         })
     }
-
-    // const deleteClick = (e) => {
-    //     const name = e.target.attributes.name.nodeValue;
-    //     const parent = e.target.parentNode;
-
-    //     console.log(name);
-    //     console.log(parent);
-
-    //     if (confirm(`Are you sure you want to delete ${name}?`)) {
-    //         // Delete the element
-    //         scene.children.forEach((object) => {
-    //             if (object.type === 'Group') {
-    //                 object.children.forEach((item) => {
-
-    //                     // if (item.name === name) {
-
-    //                     //     parent.remove();
-    //                     //     object.remove(item);
-    //                     // }
-    //                     if (item.uuid === name) {
-
-    //                         parent.remove();
-    //                         object.remove(item);
-    //                     }
-    //                 });
-    //             }
-    //         })
-    //     }
-    // }
 
     return (
         <>
