@@ -20,3 +20,13 @@
 .visible.active::after {
     content: url("../../assets/images/icons/eye-slash-solid.svg");
 }
+
+.delete::after {
+    content: "";
+    display: block;
+    background: url("../../assets/images/icons/trash-solid.svg") no-repeat;
+    width: 18px;
+    height: 18px;
+    margin: 0 0 0 6px;
+    cursor: pointer;
+}
