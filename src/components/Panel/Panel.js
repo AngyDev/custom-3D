@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { selectScene } from '../../features/scene/sceneSlice';
 import PanelItem from '../PanelItem/PanelItem';
 
-export default function Panel() {
+export default function Panel(props) {
 
     const scene = useSelector(selectScene);
     const [groupObject, setGroupObject] = useState([]);
@@ -62,11 +62,18 @@ export default function Panel() {
 
     return (
         <div className="panel">
-            <div id="scene" className="">
-                {
-                    meshList.length > 0 && meshList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} />)
-                }
-            </div>
+            {
+                props.type === "scene"
+                    ?
+                    <div id="scene" className="">
+                        {
+                            meshList.length > 0 && meshList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} />)
+                        }
+                    </div>
+                    :
+                    <div id="planes" className="">
+                    </div>
+            }
         </div>
     )
 }
