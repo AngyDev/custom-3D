@@ -1,5 +1,4 @@
 import React from 'react'
-import Button from '../Button/Button'
 import Import from '../Import/Import'
 
 export default function Header() {
