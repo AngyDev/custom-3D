@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectScene } from '../../features/scene/sceneSlice';
+import { getScene } from '../../features/scene/sceneSlice';
 
 export default function PanelItem(props) {
 
-    const scene = useSelector(selectScene);
+    const scene = useSelector(getScene);
 
     /**
      * Adds onclick a visible/unvisible functionality

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectScene } from '../../features/scene/sceneSlice';
+import { isModified, getGroup, getSceneModified, getScene } from '../../features/scene/sceneSlice';
 import PanelItem from '../PanelItem/PanelItem';
 
 export default function Panel(props) {
 
-    const scene = useSelector(selectScene);
+    const scene = useSelector(getScene);
     const [groupObject, setGroupObject] = useState([]);
     const [meshList, setMeshList] = useState([]);
+
+    const group = useSelector(getGroup);
+    const isModified = useSelector(getSceneModified);
 
     useEffect(() => {
         if (scene.children) {
@@ -26,7 +29,7 @@ export default function Panel(props) {
                 }
             })
         }
-    }, [scene])
+    }, [isModified])
 
     /**
      * Checks if the mesh is in the list

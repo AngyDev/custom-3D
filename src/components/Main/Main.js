@@ -4,11 +4,12 @@ import { useSelector } from 'react-redux';
 import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
-import { selectScene, setScene } from '../../features/scene/sceneSlice';
+import { getSceneModified, getScene, setScene, setSceneModified } from '../../features/scene/sceneSlice';
 
 export default function Main() {
 
-    const sceneRedux = useSelector(selectScene);
+    const sceneRedux = useSelector(getScene);
+    const sceneModified = useSelector(getSceneModified)
 
     const dispatch = useDispatch();
 
@@ -105,6 +106,7 @@ export default function Main() {
         render();
 
         dispatch(setScene(scene));
+        dispatch(setSceneModified(!sceneModified));
 
         return () => canvasRef.current.removeChild(renderer.domElement);
     }, []);
