@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { selectScene, setScene } from '../../features/scene/sceneSlice';
+import { setSceneModified, getChildrens, getGroup, getSceneModified, getScene } from '../../features/scene/sceneSlice';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import * as THREE from "three";
 import { useDispatch } from 'react-redux';
 
 export default function Import() {
 
-    const scene = useSelector(selectScene);
+    const scene = useSelector(getScene);
+    const group = useSelector(getGroup);
+    const isModified = useSelector(getSceneModified);
     const dispatch = useDispatch();
 
     const [mesh, setMesh] = useState();
     const [vector, setVector] = useState(new THREE.Vector3());
     const [isFirstImport, setIsFirstImport] = useState(true);
     const [files, setFiles] = useState([]);
-
-    const group = scene.children && scene.children.find((obj) => obj.type === "Group");
 
     useEffect(() => {
         if (mesh !== undefined) {
@@ -98,7 +98,7 @@ export default function Import() {
 
         group.position.set(-vector.x, -vector.y, -vector.z);
 
-        dispatch(setScene({ ...scene }));
+        dispatch(setSceneModified(!isModified));
     }
  
     /**

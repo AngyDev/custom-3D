@@ -2,15 +2,20 @@ import React, { useState } from 'react';
 import Button from "../Button/Button";
 import * as THREE from "three";
 import { useSelector } from 'react-redux';
-import { selectScene } from '../../features/scene/sceneSlice';
+import { getScene } from '../../features/scene/sceneSlice';
 
 export default function AddPlane() {
 
     const [counter, setCounter] = useState(1);
-    const scene = useSelector(selectScene);
+    const scene = useSelector(getScene);
 
+    /**
+     * Adds plane to the scene
+     */
     const addPlane = () => {
+
         const plane = createPlane();
+        scene.add(plane);
     }
     
     const createPlane = () => {
