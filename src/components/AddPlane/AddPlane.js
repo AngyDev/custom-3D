@@ -9,6 +9,8 @@ export default function AddPlane() {
     const [counter, setCounter] = useState(1);
     const scene = useSelector(getScene);
 
+    const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
+
     /**
      * Adds plane to the scene
      */
@@ -16,8 +18,15 @@ export default function AddPlane() {
 
         const plane = createPlane();
         scene.add(plane);
+        
+        tControls.attach(plane);
+        tControls.setMode("translate");
     }
     
+    /**
+     * Creates the mesh of the plane
+     * @returns Mesh
+     */
     const createPlane = () => {
         var geometry = new THREE.PlaneGeometry(50, 50, 1, 1);
         var material = new THREE.MeshStandardMaterial({ color: "#38382f", side: THREE.DoubleSide});
