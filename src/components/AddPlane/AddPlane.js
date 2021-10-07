@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import Button from "../Button/Button";
 import * as THREE from "three";
-import { useSelector } from 'react-redux';
-import { getScene } from '../../features/scene/sceneSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getScene, getSceneModified, setSceneModified } from '../../features/scene/sceneSlice';
 
 export default function AddPlane() {
 
     const [counter, setCounter] = useState(1);
     const scene = useSelector(getScene);
+    const isModified = useSelector(getSceneModified);
+    const dispatch = useDispatch();
 
     const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
 
@@ -18,23 +20,25 @@ export default function AddPlane() {
 
         const plane = createPlane();
         scene.add(plane);
-        
+
         tControls.attach(plane);
         tControls.setMode("translate");
+
+        dispatch(setSceneModified(!isModified));
     }
-    
+
     /**
      * Creates the mesh of the plane
      * @returns Mesh
      */
     const createPlane = () => {
         var geometry = new THREE.PlaneGeometry(50, 50, 1, 1);
-        var material = new THREE.MeshStandardMaterial({ color: "#38382f", side: THREE.DoubleSide});
+        var material = new THREE.MeshStandardMaterial({ color: "#38382f", side: THREE.DoubleSide });
         var mesh = new THREE.Mesh(geometry, material);
         mesh.name = 'Plane' + counter;
-        
+
         setCounter(counter => counter + 1);
-        
+
         return mesh;
     }
 
