@@ -6,8 +6,8 @@ import PanelItem from '../PanelItem/PanelItem';
 export default function Panel(props) {
 
     const scene = useSelector(getScene);
-    const [groupObject, setGroupObject] = useState([]);
     const [meshList, setMeshList] = useState([]);
+    const [planeList, setPlaneList] = useState([]);
 
     const group = useSelector(getGroup);
     const isModified = useSelector(getSceneModified);
@@ -16,16 +16,23 @@ export default function Panel(props) {
         if (scene.children) {
             scene.children.map((obj, i) => {
                 if (obj.type === "Group") {
-                    // setGroupObject([obj]);
                     obj.children.map((mesh) => {
                         if (meshList.length > 0) {
                             if (!containMesh(meshList, mesh)) {
-                                setMeshList((prev) => [...prev, mesh])
+                                setMeshList((prev) => [...prev, mesh]);
                             }
                         } else {
-                            setMeshList((prev) => [...prev, mesh])
+                            setMeshList((prev) => [...prev, mesh]);
                         }
                     })
+                } else if (obj.type === "Mesh") {
+                    if (planeList.length > 0) {
+                        if (!containMesh(planeList, obj)) {
+                            setPlaneList((prev) => [...prev, obj]);
+                        }
+                    } else {
+                        setPlaneList((prev) => [...prev, obj]);
+                    }
                 }
             })
         }
@@ -75,6 +82,9 @@ export default function Panel(props) {
                     </div>
                     :
                     <div id="planes" className="">
+                        {
+                            planeList.length > 0 && planeList.map((obj, i) => <p key={i}>{obj.name}</p>)
+                        }
                     </div>
             }
         </div>
