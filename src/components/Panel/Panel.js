@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { isModified, getGroup, getSceneModified, getScene } from '../../features/scene/sceneSlice';
+import { getGroup, getSceneModified, getScene } from '../../features/scene/sceneSlice';
 import PanelItem from '../PanelItem/PanelItem';
 
 export default function Panel(props) {
@@ -12,7 +12,10 @@ export default function Panel(props) {
     const group = useSelector(getGroup);
     const isModified = useSelector(getSceneModified);
 
+    const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
+
     useEffect(() => {
+        setMeshList(meshList.filter(mesh => mesh.parent !== null));
         if (scene.children) {
             scene.children.map((obj, i) => {
                 if (obj.type === "Group") {
@@ -34,7 +37,7 @@ export default function Panel(props) {
      */
     const addMeshToList = (list, mesh, saveState) => {
         const isContainMesh = list.some((item) => item.uuid === mesh.uuid);
-
+   
         if (list.length > 0) {
             if (!isContainMesh) {
                 saveState((prev) => [...prev, mesh]);
@@ -54,6 +57,7 @@ export default function Panel(props) {
         const parent = e.target.parentNode;
 
         setMeshList(meshList.filter(mesh => mesh.uuid !== id));
+        setPlaneList(planeList.filter(mesh => mesh.uuid !== id));
 
         scene.children.forEach((object) => {
             if (object.type === 'Group') {
@@ -62,6 +66,11 @@ export default function Panel(props) {
                         object.remove(item);
                     }
                 });
+            } else if (object.type === 'Mesh') {
+                if (object.uuid === id) {
+                    scene.remove(object);
+                    tControls.detach();
+                }
             }
         })
     }
@@ -73,13 +82,13 @@ export default function Panel(props) {
                     ?
                     <div id="scene" className="">
                         {
-                            meshList.length > 0 && meshList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} />)
+                            meshList.length > 0 && meshList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} type="scene" />)
                         }
                     </div>
                     :
                     <div id="planes" className="">
                         {
-                            planeList.length > 0 && planeList.map((obj, i) => <p key={i}>{obj.name}</p>)
+                            planeList.length > 0 && planeList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} type="planes" />)
                         }
                     </div>
             }
