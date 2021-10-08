@@ -30,3 +30,33 @@
     margin: 0 0 0 6px;
     cursor: pointer;
 }
+
+.translate::after {
+    content: "";
+    display: block;
+    background: url("../../assets/images/icons/arrows-alt-solid.svg") no-repeat;
+    width: 18px;
+    height: 18px;
+    margin: 0 0 0 6px;
+    cursor: pointer;
+}
+
+.rotate::after {
+    content: "";
+    display: block;
+    background: url("../../assets/images/icons/sync-alt-solid.svg") no-repeat;
+    width: 18px;
+    height: 18px;
+    margin: 0 0 0 6px;
+    cursor: pointer;
+}
+
+.scale::after {
+    content: "";
+    display: block;
+    background: url("../../assets/images/icons/expand-alt-solid.svg") no-repeat;
+    width: 18px;
+    height: 18px;
+    margin: 0 0 0 6px;
+    cursor: pointer;
+}
