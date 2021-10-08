@@ -89,8 +89,8 @@ export default function Main() {
 
         const onWindowResize = () => {
             // Update sizes
-            sizes.width = canvasRef.offsetWidth;
-            sizes.height = canvasRef.offsetHeight;
+            sizes.width = canvasCurrent.offsetWidth;
+            sizes.height = canvasCurrent.offsetHeight;
 
             // Update camera
             camera.aspect = sizes.width / sizes.height;

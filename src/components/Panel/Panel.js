@@ -17,35 +17,31 @@ export default function Panel(props) {
             scene.children.map((obj, i) => {
                 if (obj.type === "Group") {
                     obj.children.map((mesh) => {
-                        if (meshList.length > 0) {
-                            if (!containMesh(meshList, mesh)) {
-                                setMeshList((prev) => [...prev, mesh]);
-                            }
-                        } else {
-                            setMeshList((prev) => [...prev, mesh]);
-                        }
+                        addMeshToList(meshList, mesh, setMeshList);
                     })
                 } else if (obj.type === "Mesh") {
-                    if (planeList.length > 0) {
-                        if (!containMesh(planeList, obj)) {
-                            setPlaneList((prev) => [...prev, obj]);
-                        }
-                    } else {
-                        setPlaneList((prev) => [...prev, obj]);
-                    }
+                    addMeshToList(planeList, obj, setPlaneList);
                 }
             })
         }
     }, [isModified])
 
     /**
-     * Checks if the mesh is in the list
+     * Checks if the mesh is in the list and if it is not add the mesh to the list
      * @param {Array} list List of meshes
      * @param {Mesh} mesh THREE.Mesh
-     * @returns 
+     * @param {SetStateAction} saveState React state of list
      */
-    const containMesh = (list, mesh) => {
-        return list.some((item) => item.uuid === mesh.uuid);
+    const addMeshToList = (list, mesh, saveState) => {
+        const isContainMesh = list.some((item) => item.uuid === mesh.uuid);
+
+        if (list.length > 0) {
+            if (!isContainMesh) {
+                saveState((prev) => [...prev, mesh]);
+            }
+        } else {
+            saveState((prev) => [...prev, mesh]);
+        }
     }
 
     /**
