@@ -1,10 +1,15 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getIsCommentsActive, setCommentsActive } from '../../features/comments/commentsSlice';
 import Button from '../Button/Button';
 
 export default function AddComment() {
 
+    const isCommentsActive = useSelector(getIsCommentsActive);
+    const dispatch = useDispatch();
+
     const handleClick = () => {
-        console.log("click");
+        dispatch(setCommentsActive(!isCommentsActive));
     }
 
     return (
