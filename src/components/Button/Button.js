@@ -8,7 +8,7 @@ export default function Button(props) {
             disabled={props.loading}
             onClick={props.onClick}
         >
-            {props.text}
+            {props.text}{props.img && <img className="btn__img" src={props.img} alt="Comments" />}
         </button>
     )
 }
