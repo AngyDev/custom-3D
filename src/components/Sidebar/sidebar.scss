@@ -1,7 +1,7 @@
 .sidebar {
     width: 20%;
     height: 100vh;
-    background-color: #eeeeee;
+    background-color: $sidebar-bg-color;
     padding: 10px;
 
     &__buttons {
