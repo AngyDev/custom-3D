@@ -11,7 +11,7 @@ export const sceneSlice = createSlice({
             state.scene = action.payload;
         },
         setSceneModified: (state, action) => {
-            state.modified = action.payload;
+            state.sceneModified = action.payload;
         }
     }
 })
@@ -23,7 +23,7 @@ export const { setScene, setGroup, setSceneModified } = sceneSlice.actions;
 export const getScene = (state) => state.scene.scene;
 
 export const getChildrens = (state) => state.scene.scene.children;
-export const getSceneModified = (state) => state.scene.modified;
+export const getSceneModified = (state) => state.scene.sceneModified;
 
 export const getGroup = (state) => state.scene.scene.children && state.scene.scene.children.find((obj) => obj.type === "Group");
 
