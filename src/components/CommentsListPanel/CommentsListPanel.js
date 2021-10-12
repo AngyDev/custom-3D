@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Button from "../Button/Button";
 
 export default function CommentsListPanel() {
 
@@ -9,11 +10,18 @@ export default function CommentsListPanel() {
         return () => {
             window.dispatchEvent(new Event('resize'));
         }
-    })
+    });
+
+    const handleClick = () => {
+        
+    }
 
     return (
         <div className="commentsListPanel">
             <h3>Comments</h3>
+            <div className="sidebar__buttons">
+                <Button typeClass="btn--size" text="ADD COMMENT" onClick={handleClick}/>
+            </div>
         </div>
     )
 }
