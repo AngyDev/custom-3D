@@ -5,14 +5,14 @@ import * as THREE from "three";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
 import { getIsCommentsActive } from '../../features/comments/commentsSlice';
-import { getSceneModified, getScene, setScene, setSceneModified } from '../../features/scene/sceneSlice';
+import { getSceneModified, getScene, setScene, setSceneModified, setCanvas } from '../../features/scene/sceneSlice';
 
 export default function Main() {
 
     const isCommentsActive = useSelector(getIsCommentsActive);
 
     const sceneRedux = useSelector(getScene);
-    const sceneModified = useSelector(getSceneModified)
+    const sceneModified = useSelector(getSceneModified);
 
     const dispatch = useDispatch();
 
@@ -21,6 +21,8 @@ export default function Main() {
     useEffect(() => {
 
         const canvasCurrent = canvasRef.current;
+
+        dispatch(setCanvas(canvasCurrent));
 
         // Sizes
         const sizes = {
