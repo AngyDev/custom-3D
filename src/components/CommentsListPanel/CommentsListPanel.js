@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getCanvas, getGroup, getScene } from '../../features/scene/sceneSlice';
 import Button from "../Button/Button";
 import * as THREE from "three";
+import { useForm } from 'react-hook-form';
 
 export default function CommentsListPanel() {
 
+    const { handleSubmit, register, reset, formState: { errors } } = useForm();
+
+    const [openText, setOpenText] = useState(false);
     const scene = useSelector(getScene);
     const group = useSelector(getGroup);
     const canvas = useSelector(getCanvas);
@@ -47,28 +51,47 @@ export default function CommentsListPanel() {
         const intersects = raycaster.intersectObjects(group.children, true);
 
         // Creates a point
-        const geometry = new THREE.SphereGeometry( 0.5, 32, 16 );
-        const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-        const sphere = new THREE.Mesh( geometry, material );
+        const geometry = new THREE.SphereGeometry(0.5, 32, 16);
+        const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const sphere = new THREE.Mesh(geometry, material);
 
         console.log(intersects);
         if (intersects.length > 0) {
-            for ( let i = 0; i < intersects.length; i ++ ) {
+            for (let i = 0; i < intersects.length; i++) {
 
                 //intersects[ i ].object.material.color.set( 0xff0000 );
                 sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
-                scene.add( sphere );
+                scene.add(sphere);
+
+                setOpenText(true);
 
             }
         }
     }
 
+    const saveComment = (data) => {
+        console.log(data);
+    }
+
     return (
-        <div className="commentsListPanel">
+        <div className="comments">
             <h3>Comments</h3>
             <div className="sidebar__buttons">
-                <Button typeClass="btn--size" text="ADD COMMENT" onClick={handleClick} />
+                <Button typeClass="btn--size" text="ADD POINT" onClick={handleClick} />
             </div>
+            {
+                openText &&
+                <form className="comments__text flex flex-col" onSubmit={handleSubmit(saveComment)}>
+                    <div>
+                        <label htmlFor="comment">Add Comment</label>
+                        <textarea name="comment" id="comment" cols="30" rows="5" {...register("comment")} />
+                    </div>
+                    <div className="flex justify-between comments__btn">
+                        <Button typeClass="btn--size" text="SAVE" />
+                        <input className="btn btn--size" type="reset" value="RESET" />
+                    </div>
+                </form>
+            }
         </div>
     )
 }

@@ -1,4 +1,4 @@
-.commentsListPanel {
+.comments {
     right: 0;
     width: 310px;
     min-width: 310px;
@@ -6,4 +6,16 @@
     background-color: $sidebar-bg-color;
     padding: 10px;
     position: sticky;
+    &__text {
+        margin-top: 10px;
+        textarea {
+            resize: none;
+            font-family: $font-app;
+            font-size: $font-size-base;
+            width: 100%;
+        }
+    }
+    &__btn {
+        margin-top: 10px;
+    }
 }
