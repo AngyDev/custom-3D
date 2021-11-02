@@ -13,9 +13,15 @@
             font-family: $font-app;
             font-size: $font-size-base;
             width: 100%;
+            margin-top: 5px;
+            padding: 5px;
+            box-sizing: border-box;
         }
     }
     &__btn {
+        margin-top: 10px;
+    }
+    &__panel {
         margin-top: 10px;
     }
 }

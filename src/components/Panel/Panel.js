@@ -8,6 +8,7 @@ export default function Panel(props) {
     const scene = useSelector(getScene);
     const [meshList, setMeshList] = useState([]);
     const [planeList, setPlaneList] = useState([]);
+    const [pointList, setPointList] = useState([]);
 
     const group = useSelector(getGroup);
     const isModified = useSelector(getSceneModified);
@@ -22,8 +23,10 @@ export default function Panel(props) {
                     obj.children.map((mesh) => {
                         addMeshToList(meshList, mesh, setMeshList);
                     })
-                } else if (obj.type === "Mesh") {
+                } else if (obj.name.startsWith("Plane")) {
                     addMeshToList(planeList, obj, setPlaneList);
+                } else if (obj.name.startsWith("Point")) {
+                    addMeshToList(pointList, obj, setPointList);
                 }
             })
         }
@@ -37,7 +40,7 @@ export default function Panel(props) {
      */
     const addMeshToList = (list, mesh, saveState) => {
         const isContainMesh = list.some((item) => item.uuid === mesh.uuid);
-   
+
         if (list.length > 0) {
             if (!isContainMesh) {
                 saveState((prev) => [...prev, mesh]);
@@ -58,6 +61,7 @@ export default function Panel(props) {
 
         setMeshList(meshList.filter(mesh => mesh.uuid !== id));
         setPlaneList(planeList.filter(mesh => mesh.uuid !== id));
+        setPointList(pointList.filter(mesh => mesh.uuid !== id));
 
         scene.children.forEach((object) => {
             if (object.type === 'Group') {
@@ -86,11 +90,19 @@ export default function Panel(props) {
                         }
                     </div>
                     :
-                    <div id="planes" className="">
-                        {
-                            planeList.length > 0 && planeList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} type="planes" />)
-                        }
-                    </div>
+                    props.type === "planes"
+                        ?
+                        <div id="planes" className="">
+                            {
+                                planeList.length > 0 && planeList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} type="planes" />)
+                            }
+                        </div>
+                        :
+                        <div id="points" className="">
+                            {
+                                pointList.length > 0 && pointList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} type="points" />)
+                            }
+                        </div>
             }
         </div>
     )
