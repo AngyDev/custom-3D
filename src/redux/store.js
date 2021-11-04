@@ -1,5 +1,6 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { commentsReducer } from '../features/comments/commentsSlice';
+import { dimensionsReducer } from '../features/dimensions/dimensionsSlice';
 import { sceneReducer } from '../features/scene/sceneSlice';
 
 export default configureStore({
@@ -8,6 +9,7 @@ export default configureStore({
     }),
     reducer: {
         scene: sceneReducer,
-        comments: commentsReducer
+        comments: commentsReducer,
+        dimensions: dimensionsReducer
     }
 })
