@@ -6,6 +6,8 @@ import * as THREE from "three";
 import { useForm } from 'react-hook-form';
 import Panel from '../Panel/Panel';
 import { useDispatch } from 'react-redux';
+
+import Comments from '../Comments/Comments';
 import { getSidebarWidth } from '../../features/dimensions/dimensionsSlice';
 import { getHeaderHeight } from '../../features/dimensions/dimensionsSlice';
 import { getIsTextOpen } from '../../features/comments/commentsSlice';
@@ -16,6 +18,8 @@ export default function CommentsListPanel() {
 
     const [openText, setOpenText] = useState(false);
     const [counter, setCounter] = useState(1);
+    const [showComment, setShowComment] = useState(false);
+    const [comments, setComments] = useState([]);
 
     const scene = useSelector(getScene);
     const group = useSelector(getGroup);
@@ -40,8 +44,13 @@ export default function CommentsListPanel() {
         }
     });
 
-    const addPoint = () => {
 
+    useEffect(() => {
+        setOpenText(isTextOpen);
+    }, [isTextOpen])
+
+    const addPoint = () => {
+      
         canvas.addEventListener('dblclick', onPointerClick);
     }
 
@@ -77,7 +86,13 @@ export default function CommentsListPanel() {
     }
 
     const saveComment = (data) => {
-        console.log(data);
+        // after the save on the DB show the comment in the panel
+        setShowComment(true);
+        const userComment = {
+            user_name: "Angela Busato",
+            text: data.comment
+        }
+        setComments((prev) => [...prev, userComment]);
     }
 
     return (
@@ -102,6 +117,10 @@ export default function CommentsListPanel() {
                         <input className="btn btn--size" type="reset" value="RESET" />
                     </div>
                 </form>
+            }
+            {
+                showComment &&
+                <Comments data={comments} />
             }
         </div>
     )
