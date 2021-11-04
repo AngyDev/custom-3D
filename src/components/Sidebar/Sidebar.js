@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import Panel from '../Panel/Panel';
 import AddPlane from '../AddPlane/AddPlane';
+import { setSidebarWidth } from '../../features/dimensions/dimensionsSlice';
+import { useDispatch } from 'react-redux';
 
 export default function Sidebar() {
 
+    const sidebarRef = useRef(null);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const sidebarCurrent = sidebarRef.current;
+
+        dispatch(setSidebarWidth(sidebarCurrent.offsetWidth));
+    }, [])
+
     return (
-        <div className="sidebar">
+        <div className="sidebar" ref={sidebarRef}>
 
             <div className="sidebar__buttons">
                 <AddPlane />

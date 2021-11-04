@@ -6,6 +6,9 @@ import * as THREE from "three";
 import { useForm } from 'react-hook-form';
 import Panel from '../Panel/Panel';
 import { useDispatch } from 'react-redux';
+import { getSidebarWidth } from '../../features/dimensions/dimensionsSlice';
+import { getHeaderHeight } from '../../features/dimensions/dimensionsSlice';
+import { getIsTextOpen } from '../../features/comments/commentsSlice';
 
 export default function CommentsListPanel() {
 
@@ -13,14 +16,19 @@ export default function CommentsListPanel() {
 
     const [openText, setOpenText] = useState(false);
     const [counter, setCounter] = useState(1);
+
     const scene = useSelector(getScene);
     const group = useSelector(getGroup);
     const canvas = useSelector(getCanvas);
     const isModified = useSelector(getSceneModified);
+    //const isTextOpen = useSelector(getIsTextOpen);
+
     const dispatch = useDispatch();
     const camera = scene.children && scene.children.find((children) => children.type === "PerspectiveCamera");
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
+    const sidebarWidth = useSelector(getSidebarWidth);
+    const headerHeight = useSelector(getHeaderHeight);
 
     // Dispatch the resize event to recalculate the width of the canvas when the bar is open and close (return)
     useEffect(() => {
@@ -32,14 +40,9 @@ export default function CommentsListPanel() {
         }
     });
 
-    const handleClick = () => {
+    const addPoint = () => {
 
         canvas.addEventListener('dblclick', onPointerClick);
-
-        // const geometry = new THREE.BoxGeometry(10, 10, 10);
-        // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        // const cube = new THREE.Mesh(geometry, material);
-        // scene.add(cube);
     }
 
     /**
@@ -48,8 +51,8 @@ export default function CommentsListPanel() {
      */
     const onPointerClick = (event) => {
 
-        pointer.x = (event.clientX / canvas.offsetWidth) * 2 - 1;
-        pointer.y = - (event.clientY / canvas.offsetHeight) * 2 + 1;
+        pointer.x = ((event.clientX - sidebarWidth) / canvas.offsetWidth) * 2 - 1;
+        pointer.y = - ((event.clientY - headerHeight) / canvas.offsetHeight) * 2 + 1;
         raycaster.setFromCamera(pointer, camera);
 
         // See if the ray from the camera into the world hits one of our meshes
@@ -62,18 +65,14 @@ export default function CommentsListPanel() {
 
         console.log(intersects);
         if (intersects.length > 0) {
-            for (let i = 0; i < intersects.length; i++) {
+            sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+            sphere.name = 'Point' + counter;
+            scene.add(sphere);
 
-                //intersects[ i ].object.material.color.set( 0xff0000 );
-                sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
-                sphere.name = 'Point' + counter;
-                scene.add(sphere);
+            setCounter(counter => counter + 1);
+            setOpenText(true);
 
-                setCounter(counter => counter + 1);
-                setOpenText(true);
-
-                dispatch(setSceneModified(!isModified));
-            }
+            dispatch(setSceneModified(!isModified));
         }
     }
 
@@ -85,7 +84,7 @@ export default function CommentsListPanel() {
         <div className="comments">
             <h3>Comments</h3>
             <div className="sidebar__buttons">
-                <Button typeClass="btn--size" text="ADD POINT" onClick={handleClick} />
+                <Button typeClass="btn--size" text="ADD POINT" onClick={addPoint} />
             </div>
             <div className="comments__panel">
                 <h3>Points on the mesh</h3>
