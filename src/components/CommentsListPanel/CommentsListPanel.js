@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { useForm } from 'react-hook-form';
 import Panel from '../Panel/Panel';
 import { useDispatch } from 'react-redux';
+
 import Comments from '../Comments/Comments';
 import { getSidebarWidth } from '../../features/dimensions/dimensionsSlice';
 import { getHeaderHeight } from '../../features/dimensions/dimensionsSlice';
@@ -43,12 +44,13 @@ export default function CommentsListPanel() {
         }
     });
 
+
     useEffect(() => {
         setOpenText(isTextOpen);
     }, [isTextOpen])
 
     const addPoint = () => {
-
+      
         canvas.addEventListener('dblclick', onPointerClick);
     }
 
