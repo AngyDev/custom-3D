@@ -6,11 +6,11 @@ import Button from '../Button/Button';
 export default function AddComment() {
 
     const isCommentsActive = useSelector(getIsCommentsActive);
-    const isTextOpen = useSelector(getIsTextOpen);
+    // const isTextOpen = useSelector(getIsTextOpen);
     const dispatch = useDispatch();
 
     const handleClick = () => {
-        dispatch(setIsTextOpen(false));
+        // dispatch(setIsTextOpen(false));
         dispatch(setCommentsActive(!isCommentsActive));
     }
 

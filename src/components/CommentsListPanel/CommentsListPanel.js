@@ -44,10 +44,9 @@ export default function CommentsListPanel() {
         }
     });
 
-
-    useEffect(() => {
-        setOpenText(isTextOpen);
-    }, [isTextOpen])
+    // useEffect(() => {
+    //     setOpenText(isTextOpen);
+    // }, [isTextOpen])
 
     const addPoint = () => {
       
