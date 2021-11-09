@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import Button from "../Button/Button";
 import * as THREE from "three";
 import { useDispatch, useSelector } from 'react-redux';
-import { getScene, getSceneModified, setSceneModified } from '../../features/scene/sceneSlice';
+import { getScene, getSceneModified, setSceneModified, setSelected } from '../../features/scene/sceneSlice';
 
 export default function AddPlane() {
 
     const [counter, setCounter] = useState(1);
     const scene = useSelector(getScene);
     const isModified = useSelector(getSceneModified);
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
 
@@ -24,6 +24,7 @@ export default function AddPlane() {
         tControls.attach(plane);
         tControls.setMode("translate");
 
+        // dispatch(setSelected(plane));
         dispatch(setSceneModified(!isModified));
     }
 

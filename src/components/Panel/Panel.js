@@ -100,7 +100,7 @@ export default function Panel(props) {
                         :
                         <div id="points" className="">
                             {
-                                pointList.length > 0 && pointList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} type="points" />)
+                                pointList.length > 0 && pointList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} type="points" pointClick={props.pointClick}/>)
                             }
                         </div>
             }

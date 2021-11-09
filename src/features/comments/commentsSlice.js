@@ -4,7 +4,8 @@ export const commentsSlice = createSlice({
     name: 'comments',
     initialState: {
         isCommentsActive: false,
-        isTextOpen: false
+        isTextOpen: false,
+        countPoint: 1
     },
     reducers: {
         setCommentsActive: (state, action) => {
@@ -12,14 +13,18 @@ export const commentsSlice = createSlice({
         },
         setIsTextOpen: (state, action) => {
             state.isTextOpen = action.payload;
+        },
+        incrementCount: (state) => {
+            state.countPoint += 1;
         }
     }
 })
 
 
-export const { setCommentsActive, setIsTextOpen } = commentsSlice.actions;
+export const { setCommentsActive, setIsTextOpen, incrementCount } = commentsSlice.actions;
 
 export const getIsCommentsActive = (state) => state.comments.isCommentsActive;
 export const getIsTextOpen = (state) => state.comments.isTextOpen;
+export const getCountPoint = (state) => state.comments.countPoint;
 
 export const commentsReducer = commentsSlice.reducer;

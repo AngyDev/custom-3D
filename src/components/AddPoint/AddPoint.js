@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getCanvas, getGroup, getScene, getSceneModified, setSceneModified } from '../../features/scene/sceneSlice';
 import * as THREE from "three";
@@ -23,6 +23,9 @@ export default function AddPoint() {
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
 
+    // useEffect(() => {
+    //     console.log("AddPoint");
+    // })
 
     const addPoint = () => {
 
@@ -37,7 +40,6 @@ export default function AddPoint() {
 
         pointer.x = ((event.clientX - sidebarWidth) / canvas.offsetWidth) * 2 - 1;
         pointer.y = - ((event.clientY - headerHeight) / canvas.offsetHeight) * 2 + 1;
-        console.log(camera);
         raycaster.setFromCamera(pointer, camera);
 
         // See if the ray from the camera into the world hits one of our meshes
@@ -50,19 +52,16 @@ export default function AddPoint() {
 
         console.log(intersects);
         if (intersects.length > 0) {
-            // for (let i = 0; i < intersects.length; i++) {
 
-            //intersects[ i ].object.material.color.set( 0xff0000 );
             sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
             sphere.name = 'Point' + counter;
             scene.add(sphere);
-
+            console.log("point");
             setCounter(counter => counter + 1);
             // setOpenText(true);
 
             dispatch(setIsTextOpen(true));
             dispatch(setSceneModified(!isModified));
-            // }
         }
     }
 
