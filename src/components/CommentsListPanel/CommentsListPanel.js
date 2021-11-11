@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getCanvas, getChildren, getGroup, getScene, getSceneModified, setSceneModified } from '../../features/scene/sceneSlice';
+import { getCanvas, getChildren, getGroup, getScene, getSceneModified, setSceneModified, setSelectedMesh } from '../../features/scene/sceneSlice';
 import Button from "../Button/Button";
 import * as THREE from "three";
 import { useForm } from 'react-hook-form';
@@ -80,27 +80,13 @@ export default function CommentsListPanel() {
             sphere.name = 'Point' + countPoint;
             scene.add(sphere);
 
-            selectedPoint(sphere.name);
-
             dispatch(incrementCount());
             setOpenText(true);
 
             // dispatch(setIsTextOpen(true));
+            dispatch(setSelectedMesh(sphere.uuid));
             dispatch(setSceneModified(!isModified));
         }
-    }
-
-    const selectedPoint = (pointName) => {
-
-        children.map((mesh) => {
-            if (mesh.name.startsWith('Point')) {
-                if (mesh.name === pointName) {
-                    mesh.material.color.setHex(0xffff00);
-                } else {
-                    mesh.material.color.setHex(0xff0000);
-                }
-            }
-        });
     }
 
     const saveComment = (data, e) => {
@@ -113,14 +99,6 @@ export default function CommentsListPanel() {
         e.target.reset();
     }
 
-    const handlePoint = (e) => {
-        e.target.parentNode.classList.toggle('option-active');
-
-        const pointName = e.target.innerText;
-
-        selectedPoint(pointName);
-    }
-
     return (
         <div className="comments">
             <h3>Comments</h3>
@@ -130,7 +108,7 @@ export default function CommentsListPanel() {
             </div>
             <div className="comments__panel">
                 <h3>Points on the mesh</h3>
-                <Panel type="points" pointClick={(e) => handlePoint(e)} />
+                <Panel type="points"/>
             </div>
             {
                 openText &&
