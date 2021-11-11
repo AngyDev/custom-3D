@@ -1,5 +1,8 @@
 .option {
     padding: 4px;
+    &__point {
+        cursor: pointer;
+    }
 }
 
 .option:hover {

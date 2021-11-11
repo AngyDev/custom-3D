@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { getScene } from '../../features/scene/sceneSlice';
+import { getScene, getSelected } from '../../features/scene/sceneSlice';
 
 export default function PanelItem(props) {
 
@@ -14,7 +15,7 @@ export default function PanelItem(props) {
     const handleClick = (e) => {
         e.target.classList.toggle("active");
 
-        const name = e.target.nextSibling.data;
+        const name = e.target.nextSibling.innerText;
 
         scene.children.forEach((object) => {
             if (object.type === "Group") {
@@ -47,7 +48,13 @@ export default function PanelItem(props) {
         <>
             <div className="option flex">
                 <span className="visible" onClick={handleClick}></span>
-                {props.name}
+                {
+                    props.type === "points"
+                        ?
+                        <span className="option__point" onClick={props.pointClick}>{props.name}</span>
+                        :
+                        <span>{props.name}</span>
+                }
                 {
                     props.type === "planes" && <><span id={props.uuid} name={props.name} className="translate" onClick={(e) => transformPlane(e, "translate")}></span><span id={props.uuid} name={props.name} className="rotate" onClick={(e) => transformPlane(e, "rotate")}></span><span id={props.uuid} name={props.name} className="scale" onClick={(e) => transformPlane(e, "scale")}></span></>
                 }
