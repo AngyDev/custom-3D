@@ -9,7 +9,7 @@ export default function AddPlane() {
     const [counter, setCounter] = useState(1);
     const scene = useSelector(getScene);
     const isModified = useSelector(getSceneModified);
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
 
