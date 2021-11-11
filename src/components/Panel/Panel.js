@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { getGroup, getSceneModified, getScene } from '../../features/scene/sceneSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getGroup, getSceneModified, getScene, setSelectedMesh } from '../../features/scene/sceneSlice';
 import PanelItem from '../PanelItem/PanelItem';
 
 export default function Panel(props) {
@@ -12,6 +12,7 @@ export default function Panel(props) {
 
     const group = useSelector(getGroup);
     const isModified = useSelector(getSceneModified);
+    const dispatch = useDispatch();
 
     const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
 
@@ -63,6 +64,10 @@ export default function Panel(props) {
         setPlaneList(planeList.filter(mesh => mesh.uuid !== id));
         setPointList(pointList.filter(mesh => mesh.uuid !== id));
 
+        // When the first element is deleted the selection go to the second, this is a workaround, pass a not existing id
+        // no one mesh is selected
+        dispatch(setSelectedMesh(1));
+
         scene.children.forEach((object) => {
             if (object.type === 'Group') {
                 object.children.forEach((item) => {
@@ -100,7 +105,7 @@ export default function Panel(props) {
                         :
                         <div id="points" className="">
                             {
-                                pointList.length > 0 && pointList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} type="points" pointClick={props.pointClick}/>)
+                                pointList.length > 0 && pointList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={deleteClick} type="points" />)
                             }
                         </div>
             }

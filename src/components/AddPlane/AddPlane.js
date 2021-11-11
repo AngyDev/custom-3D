@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from "../Button/Button";
 import * as THREE from "three";
 import { useDispatch, useSelector } from 'react-redux';
-import { getScene, getSceneModified, setSceneModified, setSelected } from '../../features/scene/sceneSlice';
+import { getScene, getSceneModified, setSceneModified, setSelectedMesh } from '../../features/scene/sceneSlice';
 
 export default function AddPlane() {
 
@@ -24,7 +24,7 @@ export default function AddPlane() {
         tControls.attach(plane);
         tControls.setMode("translate");
 
-        // dispatch(setSelected(plane));
+        dispatch(setSelectedMesh(plane.uuid));
         dispatch(setSceneModified(!isModified));
     }
 
