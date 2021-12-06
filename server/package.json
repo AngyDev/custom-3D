@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
+    "knex": "knex --knexfile ./src/utils/knexfile.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Angela Busato",
