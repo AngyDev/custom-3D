@@ -43,7 +43,7 @@
   "table": {
     "tables": [
       {
-        "name": "user",
+        "name": "users",
         "comment": "",
         "columns": [
           {
@@ -235,7 +235,7 @@
           "active": false,
           "left": 62,
           "top": 55,
-          "zIndex": 200,
+          "zIndex": 6,
           "widthName": 60,
           "widthComment": 60,
           "color": "#FFEB3B"
@@ -244,7 +244,7 @@
         "id": "a0fd3b2a-25fa-4efb-b229-9d83212d7240"
       },
       {
-        "name": "project",
+        "name": "projects",
         "comment": "",
         "columns": [
           {
@@ -286,7 +286,7 @@
               "pk": false,
               "fk": false,
               "pfk": false,
-              "widthName": 67.0634765625,
+              "widthName": 63.4326171875,
               "widthComment": 60,
               "widthDataType": 61.9599609375,
               "widthDefault": 60
@@ -309,9 +309,9 @@
               "pk": false,
               "fk": false,
               "pfk": false,
-              "widthName": 60,
+              "widthName": 67.0634765625,
               "widthComment": 60,
-              "widthDataType": 60,
+              "widthDataType": 61.9599609375,
               "widthDefault": 60
             },
             "id": "82ffbf34-63c0-414c-9336-fcaf42b55111"
@@ -502,10 +502,10 @@
           }
         ],
         "ui": {
-          "active": false,
+          "active": true,
           "left": 521,
           "top": 72,
-          "zIndex": 222,
+          "zIndex": 8,
           "widthName": 60,
           "widthComment": 60,
           "color": "#F11313"
@@ -706,7 +706,7 @@
           "active": false,
           "left": 512,
           "top": 482,
-          "zIndex": 226,
+          "zIndex": 3,
           "widthName": 61.9599609375,
           "widthComment": 60,
           "color": "#03A9F4"
