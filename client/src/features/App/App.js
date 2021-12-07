@@ -1,25 +1,22 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import Header from '../../components/Header/Header';
-import Main from '../../components/Main/Main';
-import Sidebar from '../../components/Sidebar/Sidebar';
-import CommentsListPanel from "../../components/CommentsListPanel/CommentsListPanel";
-import { getIsCommentsActive } from '../comments/commentsSlice';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Dashboard from '../../components/Dashboard/Dashboard';
+import LayoutEditor from '../../components/Layout/LayoutEditor';
 
 export default function App() {
 
-    const isCommentsActive = useSelector(getIsCommentsActive);
-
     return (
         <div className="app">
-            <Header />
-            <div className="flex">
-                <Sidebar />
-                <Main />
-                {
-                    isCommentsActive && <CommentsListPanel />
-                }
-            </div>
+            <BrowserRouter>
+                <Switch>
+                    <Route exact path="/">
+                        <Dashboard />
+                    </Route>
+                    <Route path="/editor">
+                        <LayoutEditor />
+                    </Route>
+                </Switch>
+            </BrowserRouter>
         </div>
     )
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getIsCommentsActive, getIsTextOpen, setCommentsActive, setIsTextOpen } from '../../features/comments/commentsSlice';
 import Button from '../Button/Button';
+import commentIcon from '../../assets/images/icons/comment-regular.svg';
 
 export default function AddComment() {
 
@@ -16,7 +17,7 @@ export default function AddComment() {
 
     return (
         <div>
-            <Button typeClass="btn--img" img="../../assets/images/icons/comment-regular.svg" onClick={handleClick}/>
+            <Button typeClass="btn--img" img={commentIcon} onClick={handleClick}/>
         </div>
     )
 }
