@@ -1,3 +1,4 @@
+const { v4 } = require ('uuid');
 import { UsersModel } from '../models/UsersModel';
 
 export class UsersController {
@@ -18,6 +19,10 @@ export class UsersController {
             password: user.password,
             role: user.role
         })
+    }
+
+    static updateUser(id, user) {
+        return UsersModel.query().patchAndFetchById(id, user);
     }
 
     static deleteUser(id) {

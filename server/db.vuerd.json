@@ -3,8 +3,8 @@
     "version": "2.2.10",
     "width": 2000,
     "height": 2000,
-    "scrollTop": -1,
-    "scrollLeft": -1,
+    "scrollTop": 0,
+    "scrollLeft": -28.33333333333337,
     "zoomLevel": 1,
     "show": {
       "tableComment": true,
@@ -235,7 +235,7 @@
           "active": false,
           "left": 62,
           "top": 55,
-          "zIndex": 6,
+          "zIndex": 2,
           "widthName": 60,
           "widthComment": 60,
           "color": "#FFEB3B"
@@ -256,7 +256,7 @@
               "autoIncrement": true,
               "primaryKey": true,
               "unique": false,
-              "notNull": false
+              "notNull": true
             },
             "ui": {
               "active": false,
@@ -271,53 +271,7 @@
             "id": "690888de-e2de-45ef-b009-736828231ca2"
           },
           {
-            "name": "created_at",
-            "comment": "",
-            "dataType": "timestamp",
-            "default": "",
-            "option": {
-              "autoIncrement": false,
-              "primaryKey": false,
-              "unique": false,
-              "notNull": false
-            },
-            "ui": {
-              "active": false,
-              "pk": false,
-              "fk": false,
-              "pfk": false,
-              "widthName": 63.4326171875,
-              "widthComment": 60,
-              "widthDataType": 61.9599609375,
-              "widthDefault": 60
-            },
-            "id": "9324daac-e4ad-4caf-9ac9-b3a63912ee38"
-          },
-          {
-            "name": "updated_at",
-            "comment": "",
-            "dataType": "timestamp",
-            "default": "",
-            "option": {
-              "autoIncrement": false,
-              "primaryKey": false,
-              "unique": false,
-              "notNull": false
-            },
-            "ui": {
-              "active": false,
-              "pk": false,
-              "fk": false,
-              "pfk": false,
-              "widthName": 67.0634765625,
-              "widthComment": 60,
-              "widthDataType": 61.9599609375,
-              "widthDefault": 60
-            },
-            "id": "82ffbf34-63c0-414c-9336-fcaf42b55111"
-          },
-          {
-            "name": "name",
+            "name": "project_name",
             "comment": "",
             "dataType": "string",
             "default": "",
@@ -332,7 +286,7 @@
               "pk": false,
               "fk": false,
               "pfk": false,
-              "widthName": 60,
+              "widthName": 80.76806640625,
               "widthComment": 60,
               "widthDataType": 60,
               "widthDefault": 60
@@ -409,7 +363,7 @@
             "id": "a99a0709-b868-44b5-9aa2-612dc856a3fc"
           },
           {
-            "name": "state",
+            "name": "status",
             "comment": "",
             "dataType": "string",
             "default": "start",
@@ -417,7 +371,7 @@
               "autoIncrement": false,
               "primaryKey": false,
               "unique": false,
-              "notNull": true
+              "notNull": false
             },
             "ui": {
               "active": false,
@@ -502,10 +456,10 @@
           }
         ],
         "ui": {
-          "active": true,
+          "active": false,
           "left": 521,
           "top": 72,
-          "zIndex": 8,
+          "zIndex": 3,
           "widthName": 60,
           "widthComment": 60,
           "color": "#F11313"
@@ -706,7 +660,7 @@
           "active": false,
           "left": 512,
           "top": 482,
-          "zIndex": 3,
+          "zIndex": 1,
           "widthName": 61.9599609375,
           "widthComment": 60,
           "color": "#03A9F4"
@@ -741,7 +695,7 @@
             "2c2dab0b-3f40-4078-9f0a-ea0d3125f36e"
           ],
           "x": 521,
-          "y": 219.25,
+          "y": 198.75,
           "direction": "left"
         },
         "constraintName": "fk_user_to_project",
@@ -757,8 +711,8 @@
           "columnIds": [
             "690888de-e2de-45ef-b009-736828231ca2"
           ],
-          "x": 718.05712890625,
-          "y": 366.5,
+          "x": 720.21533203125,
+          "y": 325.5,
           "direction": "bottom"
         },
         "end": {
