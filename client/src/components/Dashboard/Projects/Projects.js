@@ -1,11 +1,16 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import useGetProjectsByUserId from '../../../hooks/useGetProjectsByUserId';
+import Button from '../../Button/Button';
 
 export default function Projects() {
 
     const { projects } = useGetProjectsByUserId();
+    const history = useHistory();
 
-    console.log(projects);
+    const openProject = (id) => {
+        history.push(`/editor/${id}`);
+    }
 
     return (
         <>
@@ -15,6 +20,7 @@ export default function Projects() {
                         <th>Name</th>
                         <th>Patient Code</th>
                         <th>Status</th>
+                        <th>Open Project</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,6 +30,7 @@ export default function Projects() {
                                 <td>{project.projectName}</td>
                                 <td>{project.patientCode}</td>
                                 <td>{project.status}</td>
+                                <td><Button typeClass="btn--size" text="Open" onClick={() => openProject(project.id)}/></td>
                             </tr>)
                     }
                 </tbody>

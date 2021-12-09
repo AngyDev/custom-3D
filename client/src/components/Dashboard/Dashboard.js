@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
-import Button from '../Button/Button'
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
+import Button from '../Button/Button';
 import Modal from '../Modal/Modal';
 import NewProject from './NewProject/NewProject';
 import Projects from './Projects/Projects';
