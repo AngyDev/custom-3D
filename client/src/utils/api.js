@@ -17,6 +17,8 @@ export const getProjectsByUserId = async (userId) => {
 }
 
 export const saveProject = async (userId, project) => {
+    console.log(userId);
+    console.log(project);
     try {
         const res = await axios({
             method: 'POST',
