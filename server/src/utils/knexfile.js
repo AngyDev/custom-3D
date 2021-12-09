@@ -19,12 +19,18 @@ module.exports = {
         useNullAsDefault: true,
         migrations: {
             directory: '../migrations',
-        }
+        },
+        seeds: {
+            directory: '../seeds',
+        },
     },
     development: {
         ...defaults,
         migrations: {
             directory: '../migrations'
+        },
+        seeds: {
+            directory: '../seeds',
         },
         useNullAsDefault: true
     }

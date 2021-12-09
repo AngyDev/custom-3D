@@ -5,9 +5,11 @@ export default function Projects() {
 
     const { projects } = useGetProjectsByUserId();
 
+    console.log(projects);
+
     return (
         <>
-            <table id="table">
+            <table className="table mt-5 text-center">
                 <thead>
                     <tr>
                         <th>Name</th>
