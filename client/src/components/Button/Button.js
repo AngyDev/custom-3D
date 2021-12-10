@@ -7,6 +7,7 @@ export default function Button(props) {
             type={props.type}
             disabled={props.loading}
             onClick={props.onClick}
+            title={props.title}
         >
             {props.text}{props.img && <img className="btn__img" src={props.img} alt="Comments" />}
         </button>

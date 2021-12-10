@@ -17,7 +17,7 @@ export default function AddComment() {
 
     return (
         <div>
-            <Button typeClass="btn--img" img={commentIcon} onClick={handleClick}/>
+            <Button typeClass="btn--img" img={commentIcon} onClick={handleClick} title="Add comment"/>
         </div>
     )
 }

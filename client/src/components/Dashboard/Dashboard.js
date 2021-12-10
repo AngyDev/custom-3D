@@ -15,13 +15,9 @@ export default function Dashboard() {
         setIsOpen(true);
     }
 
-    const openNewProject = () => {
-        history.push("/editor");
-    }
-
     const saveNewProject = async (data) => {
-        await saveProject("d27db05e-fb3f-4942-a517-59fefbd97937", data);
-        history.push("/editor");
+        const response = await saveProject("d27db05e-fb3f-4942-a517-59fefbd97937", data);
+        history.push(`/editor/${response.id}`);
         setIsOpen(false);
     }
 
@@ -30,7 +26,7 @@ export default function Dashboard() {
             <h1 className="text-center mt-5">Projects list</h1>
             <Projects />
             <Button typeClass="btn--size" text="NEW PROJECT" onClick={handleClick} />
-            <Modal open={isOpen} onClose={() => setIsOpen(false)} onClick={openNewProject} title="New Project" text="Save">
+            <Modal open={isOpen} onClose={() => setIsOpen(false)} title="New Project" text="Save">
                 <NewProject isOpen={isOpen} saveNewProject={saveNewProject} />
             </Modal>
         </div>
