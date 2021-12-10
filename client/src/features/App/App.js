@@ -12,7 +12,7 @@ export default function App() {
                     <Route exact path="/">
                         <Dashboard />
                     </Route>
-                    <Route path="/editor">
+                    <Route path="/editor/:id">
                         <LayoutEditor />
                     </Route>
                 </Switch>
