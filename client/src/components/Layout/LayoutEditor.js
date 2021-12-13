@@ -6,18 +6,21 @@ import Sidebar from '../Sidebar/Sidebar';
 import Main from '../Main/Main';
 import CommentsListPanel from '../CommentsListPanel/CommentsListPanel'
 import { useParams } from 'react-router';
+import useGetProjectById from '../../hooks/useGetProjectById';
 
 export default function LayoutEditor() {
 
     const { id } = useParams();
-    
+    const { project } = useGetProjectById(id);
+
     useEffect(() => {
         console.log("id: " + id);
     }, []);
-    
+
     const isCommentsActive = useSelector(getIsCommentsActive);
 
     return (
+        Object.keys(project).length > 0 &&
         <div className="app">
             <Header />
             <div className="flex">
