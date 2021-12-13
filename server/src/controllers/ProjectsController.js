@@ -54,7 +54,11 @@ export class ProjectsController {
      * @returns 
      */
     static updateProjectScene(id, scene) {
-        return ProjectsModel.query().patchAndFetchById(id, scene);
+        return ProjectsModel.query().patchAndFetchById(id, { scene: scene });
+    }
+
+    static updateProject(id, payload) {
+        return ProjectsModel.query().updateAndFetchById(id, payload);
     }
 
     /**
