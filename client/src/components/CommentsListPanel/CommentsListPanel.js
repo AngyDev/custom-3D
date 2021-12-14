@@ -61,7 +61,7 @@ export default function CommentsListPanel() {
      * @param {Event} event 
      */
     const onPointerClick = (event) => {
-        console.log("casa");
+        console.log("pointerClick");
 
         pointer.x = ((event.clientX - sidebarWidth) / canvas.offsetWidth) * 2 - 1;
         pointer.y = - ((event.clientY - headerHeight) / canvas.offsetHeight) * 2 + 1;
