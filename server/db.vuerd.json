@@ -235,7 +235,7 @@
           "active": false,
           "left": 62,
           "top": 55,
-          "zIndex": 2,
+          "zIndex": 1,
           "widthName": 60,
           "widthComment": 60,
           "color": "#FFEB3B"
@@ -459,7 +459,7 @@
           "active": false,
           "left": 521,
           "top": 72,
-          "zIndex": 3,
+          "zIndex": 2,
           "widthName": 60,
           "widthComment": 60,
           "color": "#F11313"
@@ -635,8 +635,8 @@
         ],
         "ui": {
           "active": true,
-          "left": 512,
-          "top": 482,
+          "left": 467,
+          "top": 438,
           "zIndex": 4,
           "widthName": 61.9599609375,
           "widthComment": 60,
@@ -697,8 +697,8 @@
           "columnIds": [
             "3e2b2feb-c5dc-4c4f-aea5-24f0bab4a735"
           ],
-          "x": 712.04443359375,
-          "y": 482,
+          "x": 667.04443359375,
+          "y": 438,
           "direction": "top"
         },
         "constraintName": "fk_project_to_comments",
