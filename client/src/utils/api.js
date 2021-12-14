@@ -69,3 +69,23 @@ export const saveProjectScene = async (id, scene) => {
         return false
     }
 }
+
+export const saveComment = async (projectId, pointId, comment) => {
+    try {
+        const res = await axios({
+            method: 'POST',
+            url: `${API_URL}/comment`,
+            data: {
+                project_id: projectId,
+                user_id: comment.userId,
+                text: comment.text,
+                point_id: pointId
+            }
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error.message)
+        return false
+    }
+}
