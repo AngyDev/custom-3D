@@ -3,6 +3,9 @@ import { ProjectsController } from '../controllers/ProjectsController';
 
 const router = express.Router();
 
+/**
+ * Get projects
+ */
 router.get("/projects", async (req, res) => {
     try {
         const response = await ProjectsController.getProjects();
@@ -17,6 +20,9 @@ router.get("/projects", async (req, res) => {
     }
 });
 
+/**
+ * Get project by id
+ */
 router.get("/project/:id", async (req, res) => {
     try {
         const id = req.params.id;
@@ -33,6 +39,9 @@ router.get("/project/:id", async (req, res) => {
     }
 });
 
+/**
+ * Get project by userId
+ */
 router.get("/project-user/:userId", async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -48,6 +57,9 @@ router.get("/project-user/:userId", async (req, res) => {
     }
 });
 
+/**
+ * Create project
+ */
 router.post("/project", async (req, res) => {
     try {
         const project = req.body;
@@ -59,6 +71,9 @@ router.post("/project", async (req, res) => {
     }
 });
 
+/**
+ * Update project
+ */
 router.put('/project/:id', async (req, res) => {
     try {
         const response = await ProjectsController.updateProject(req.params.id, req.body);
@@ -70,6 +85,9 @@ router.put('/project/:id', async (req, res) => {
     }
 });
 
+/**
+ * Update Scene in Project
+ */
 router.post("/project-scene", async (req, res) => {
     try {
         const { id, scene } = req.body;
@@ -86,6 +104,9 @@ router.post("/project-scene", async (req, res) => {
     }
 });
 
+/**
+ * Delete project
+ */
 router.delete("/project/:id", async (req, res) => {
     try {
         const id = req.params.id;

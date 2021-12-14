@@ -1,8 +1,8 @@
 import { Model } from 'objection';
-import { CommentsModel } from './CommentsModel';
 import { ProjectsModel } from './ProjectsModel';
+import { UsersModel } from './UsersModel';
 
-export class UsersModel extends Model {
+export class CommentsModel extends Model {
 
     $beforeInsert() {
         this.createdAt = new Date().toISOString();
@@ -15,25 +15,25 @@ export class UsersModel extends Model {
     }
 
     static get tableName() {
-        return 'users';
+        return 'comments';
     }
 
     static get relationMappings() {
         return {
-            projects: {
-                relation: Model.HasManyRelation,
-                modelClass: ProjectsModel,
+            users: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: UsersModel,
                 join: {
-                    from: 'users.id',
-                    to: 'projects.user_id'
+                    from: 'comments.user_id',
+                    to: 'users.id'
                 }
             },
-            comments: {
-                relation: Model.HasManyRelation,
-                modelClass: CommentsModel,
+            projects: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: ProjectsModel,
                 join: {
-                    from: 'users.id',
-                    to: 'comments.user_id'
+                    from: 'comments.project_id',
+                    to: 'projects.id'
                 }
             }
         }

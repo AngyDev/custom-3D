@@ -1,4 +1,5 @@
 import { Model } from 'objection';
+import { CommentsModel } from './CommentsModel';
 import { UsersModel } from './UsersModel';
 
 export class ProjectsModel extends Model {
@@ -25,6 +26,14 @@ export class ProjectsModel extends Model {
                 join: {
                     from: 'projects.user_id',
                     to: 'users.id'
+                }
+            },
+            comments: {
+                relation: Model.BelongsToOneRelation,
+                modelClass: CommentsModel,
+                join: {
+                    from: 'projects.id',
+                    to: 'comments.project_id'
                 }
             }
         }
