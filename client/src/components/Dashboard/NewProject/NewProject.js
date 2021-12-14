@@ -6,10 +6,6 @@ export default function NewProject({ isOpen, saveNewProject }) {
 
     const { handleSubmit, register, formState: { errors } } = useForm();
 
-    // const onSubmit = (data) => {
-    //     console.log(data);
-    // }
-
     return (
         <div>
             <form className="form flex flex-col" onSubmit={handleSubmit(saveNewProject)}>

@@ -21,7 +21,7 @@ export default function LayoutEditor() {
 
     return (
         Object.keys(project).length > 0 &&
-        <div className="app">
+        <>
             <Header />
             <div className="flex">
                 <Sidebar />
@@ -30,6 +30,6 @@ export default function LayoutEditor() {
                     isCommentsActive && <CommentsListPanel />
                 }
             </div>
-        </div>
+        </>
     )
 }
