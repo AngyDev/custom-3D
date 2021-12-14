@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getCanvas, getChildren, getGroup, getScene, getSceneModified, setSceneModified, setSelectedMesh } from '../../features/scene/sceneSlice';
 import Button from "../Button/Button";
@@ -12,6 +12,7 @@ import { getSidebarWidth } from '../../features/dimensions/dimensionsSlice';
 import { getHeaderHeight } from '../../features/dimensions/dimensionsSlice';
 import { getCountPoint, getIsTextOpen, incrementCount, setIsTextOpen } from '../../features/comments/commentsSlice';
 import AddPoint from '../AddPoint/AddPoint';
+import { UserContext } from '../../context/UserContext';
 
 export default function CommentsListPanel() {
 
@@ -19,6 +20,8 @@ export default function CommentsListPanel() {
 
     const [openText, setOpenText] = useState(false);
     const [comments, setComments] = useState([]);
+
+    const { user } = useContext(UserContext);
 
     const scene = useSelector(getScene);
     const group = useSelector(getGroup);
@@ -108,7 +111,7 @@ export default function CommentsListPanel() {
             </div>
             <div className="comments__panel">
                 <h3>Points on the mesh</h3>
-                <Panel type="points"/>
+                <Panel type="points" />
             </div>
             {
                 openText &&
