@@ -70,16 +70,17 @@ export const saveProjectScene = async (id, scene) => {
     }
 }
 
-export const saveComment = async (projectId, pointId, comment) => {
+export const saveComment = async (comment) => {
+    
     try {
         const res = await axios({
             method: 'POST',
             url: `${API_URL}/comment`,
             data: {
-                project_id: projectId,
+                project_id: comment.projectId,
                 user_id: comment.userId,
                 text: comment.text,
-                point_id: pointId
+                point_id: comment.pointId
             }
         });
 

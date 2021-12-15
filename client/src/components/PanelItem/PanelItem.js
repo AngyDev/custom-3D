@@ -96,7 +96,7 @@ export default function PanelItem(props) {
 
     return (
         <>
-            <div className={selected ? "option option-active flex" : "option flex"}>
+            <div className={selected ? "option option-active flex align-center" : "option flex align-center"}>
                 <span className="visible" id={props.uuid} onClick={handleClick}></span>
                 {
                     props.type === "points"

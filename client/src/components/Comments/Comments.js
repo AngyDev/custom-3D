@@ -7,7 +7,7 @@ export default function Comments(props) {
             <h3>User Comments</h3>
             <hr />
             {
-                props.data.length > 0 && props.data.map((item, i) => <CommentsItem key={i} name={item.user_name} text={item.text}/>)
+                props.data.length > 0 && props.data.map((item) => <CommentsItem key={item.id} name={item.firstName + ' ' + item.lastName} text={item.text}/>)
             }
         </div>
     )

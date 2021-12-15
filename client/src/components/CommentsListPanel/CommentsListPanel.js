@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getCanvas, getChildren, getGroup, getScene, getSceneModified, setSceneModified, setSelectedMesh } from '../../features/scene/sceneSlice';
+import { getCanvas, getChildren, getGroup, getScene, getSceneModified, getSelectedMesh, setSceneModified, setSelectedMesh } from '../../features/scene/sceneSlice';
 import Button from "../Button/Button";
 import * as THREE from "three";
 import { useForm } from 'react-hook-form';
@@ -13,8 +13,9 @@ import { getHeaderHeight } from '../../features/dimensions/dimensionsSlice';
 import { getCountPoint, getIsTextOpen, incrementCount, setIsTextOpen } from '../../features/comments/commentsSlice';
 import AddPoint from '../AddPoint/AddPoint';
 import { UserContext } from '../../context/UserContext';
+import { saveComment } from '../../utils/api';
 
-export default function CommentsListPanel() {
+export default function CommentsListPanel({ projectId }) {
 
     const { handleSubmit, register, reset, formState: { errors } } = useForm();
 
@@ -32,6 +33,7 @@ export default function CommentsListPanel() {
     const headerHeight = useSelector(getHeaderHeight);
     const children = useSelector(getChildren);
     const countPoint = useSelector(getCountPoint);
+    const selectedMesh = useSelector(getSelectedMesh);
 
     const dispatch = useDispatch();
     const camera = scene.children && scene.children.find((children) => children.type === "PerspectiveCamera");
@@ -92,13 +94,18 @@ export default function CommentsListPanel() {
         }
     }
 
-    const saveComment = (data, e) => {
-        // after the save on the DB show the comment in the panel
-        const userComment = {
-            user_name: "Angela Busato",
-            text: data.comment
+    const onSave = async (data, e) => {
+
+        const comment = {
+            projectId: projectId,
+            userId: user.id,
+            text: data.text,
+            pointId: selectedMesh
         }
-        setComments((prev) => [...prev, userComment]);
+
+        const response = await saveComment(comment);
+
+        setComments(response);
         e.target.reset();
     }
 
@@ -116,10 +123,10 @@ export default function CommentsListPanel() {
             {
                 openText &&
                 <div>
-                    <form className="comments__text flex flex-col" onSubmit={handleSubmit(saveComment)}>
+                    <form className="comments__text flex flex-col" onSubmit={handleSubmit(onSave)}>
                         <div>
                             <label htmlFor="comment">Add Comment</label>
-                            <textarea name="comment" id="comment" cols="30" rows="5" {...register("comment")} />
+                            <textarea name="comment" id="comment" cols="30" rows="5" {...register("text")} />
                         </div>
                         <div className="flex justify-between comments__btn">
                             <Button typeClass="btn--size" text="SAVE" />

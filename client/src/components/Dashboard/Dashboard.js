@@ -5,18 +5,21 @@ import Modal from '../Modal/Modal';
 import NewProject from './NewProject/NewProject';
 import Projects from './Projects/Projects';
 import { saveProject } from '../../utils/api';
+import { useContext } from 'react';
+import { UserContext } from '../../context/UserContext';
 
 export default function Dashboard() {
 
     const history = useHistory();
     const [isOpen, setIsOpen] = useState(false);
+    const { user } = useContext(UserContext);
 
     const handleClick = () => {
         setIsOpen(true);
     }
 
     const saveNewProject = async (data) => {
-        const response = await saveProject("d27db05e-fb3f-4942-a517-59fefbd97937", data);
+        const response = await saveProject(user.id, data);
         history.push(`/editor/${response.id}`);
         setIsOpen(false);
     }
