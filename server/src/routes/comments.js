@@ -34,7 +34,8 @@ router.post('/comment', async (req, res) => {
         if (!findProject) return res.status(404).send('Project not found');
 
         const createComment = await CommentsController.createComment(req.body);
-        return res.status(200).json(createComment);
+        const response = await CommentsController.getCommentsByProjectIdAndPointId(req.body.project_id, req.body.point_id);
+        return res.status(200).json(response);
 
     } catch (error) {
         res.status(400).json(error.message);

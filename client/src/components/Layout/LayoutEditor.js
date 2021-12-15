@@ -27,7 +27,7 @@ export default function LayoutEditor() {
                 <Sidebar />
                 <Main />
                 {
-                    isCommentsActive && <CommentsListPanel />
+                    isCommentsActive && <CommentsListPanel projectId={project.id}/>
                 }
             </div>
         </>
