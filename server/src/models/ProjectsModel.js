@@ -10,7 +10,6 @@ export class ProjectsModel extends Model {
     }
 
     $beforeUpdate() {
-        this.createdAt = new Date().toISOString();
         this.updatedAt = new Date().toISOString();
     }
 

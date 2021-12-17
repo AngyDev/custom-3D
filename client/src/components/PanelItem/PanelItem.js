@@ -12,13 +12,14 @@ export default function PanelItem(props) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // checks the selected mesh
+        // checks the selected mesh to add background to panel object
         if (props.uuid === selectedMesh) {
             setSelected(true);
         } else {
             setSelected(false);
         }
         // changes the color of the point
+        // TODO: checks if it is the correct place for this function, every time the useEffect is called the function is called
         selectedPoints(selectedMesh);
     }, [selectedMesh]);
 

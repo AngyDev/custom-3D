@@ -1,23 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from '../Button/Button';
 import saveIcon from '../../assets/images/icons/save-solid.svg';
 import { useSelector } from 'react-redux';
-import { getScene } from '../../features/scene/sceneSlice';
+import { getScene, getChildren } from '../../features/scene/sceneSlice';
 import { saveProjectScene } from '../../utils/api';
 
-export default function Save() {
+export default function Save({ projectId }) {
+	const scene = useSelector(getScene);
+	const children = useSelector(getChildren);
 
-    const scene = useSelector(getScene);
+	const saveScene = async () => {
+		const group = children.filter((item) => item.type === 'Group');
 
-    const saveScene = () => {
-        console.log(scene);
-        const json = scene.toJSON();
-        const output = JSON.stringify(json);
-        saveProjectScene("b6e67444-1450-4f15-84d6-74ed7f67a1f4", output);
-        console.log("saved");
-    }
+		const json = group[0].toJSON();
+		const output = JSON.stringify(json);
+        
+		console.log(output);
 
-    return (
-        <Button typeClass="btn--img" img={saveIcon} onClick={saveScene} title="Save" />
-    )
+		const response = await saveProjectScene(projectId, output);
+		if (response) {
+			console.log('saved');
+		}
+	};
+
+	return <Button typeClass="btn--img" img={saveIcon} onClick={saveScene} title="Save" />;
 }

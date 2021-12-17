@@ -25,7 +25,7 @@ export class ProjectsController {
      * @param {String} userId User ID
      * @returns The list of projects by user id
      */
-    // TODO: Some fileds are missing
+    // TODO: Some fields are missing
     static getProjectsByUserId(userId) {
         return ProjectsModel.query().select(['projects.id', 'projects.project_name', 'projects.patient_code', 'projects.status']).where('projects.user_id', userId)
     }

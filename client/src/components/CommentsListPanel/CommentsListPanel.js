@@ -39,6 +39,7 @@ export default function CommentsListPanel({ projectId }) {
     const camera = scene.children && scene.children.find((children) => children.type === "PerspectiveCamera");
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
+    const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
 
     // Dispatch the resize event to recalculate the width of the canvas when the bar is open and close (return)
     useEffect(() => {
@@ -84,6 +85,8 @@ export default function CommentsListPanel({ projectId }) {
             sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
             sphere.name = 'Point' + countPoint;
             scene.add(sphere);
+
+            tControls.detach();
 
             dispatch(incrementCount());
             setOpenText(true);
