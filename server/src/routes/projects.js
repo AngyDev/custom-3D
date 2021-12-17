@@ -1,4 +1,5 @@
 import express from 'express';
+import { ObjectsController } from '../controllers/ObjectsController';
 import { ProjectsController } from '../controllers/ProjectsController';
 
 const router = express.Router();
@@ -26,13 +27,13 @@ router.get("/projects", async(req, res) => {
 router.get("/project/:id", async(req, res) => {
     try {
         const id = req.params.id;
-        const response = await ProjectsController.getProjectById(id);
+        const project = await ProjectsController.getProjectById(id);
+        const objects = await ObjectsController.getObjectsByProjectId(id);
 
-        if (response) {
-            res.send(response);
-        } else {
-            res.status(404).send('Not found');
-        }
+        return res.status(200).json({
+            project,
+            objects
+        })
 
     } catch (error) {
         console.error(error);

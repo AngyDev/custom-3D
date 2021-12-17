@@ -1,132 +1,124 @@
 import React, { useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import * as THREE from "three";
+import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
 import { getIsCommentsActive } from '../../features/comments/commentsSlice';
 import { getSceneModified, getScene, setScene, setSceneModified, setCanvas } from '../../features/scene/sceneSlice';
 
-export default function Main({project}) {
+export default function Main({ project }) {
+	const isCommentsActive = useSelector(getIsCommentsActive);
 
-    const isCommentsActive = useSelector(getIsCommentsActive);
+	const sceneRedux = useSelector(getScene);
+	const sceneModified = useSelector(getSceneModified);
 
-    const sceneRedux = useSelector(getScene);
-    const sceneModified = useSelector(getSceneModified);
+	const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
+	const canvasRef = useRef(null);
 
-    const canvasRef = useRef(null);
+	useEffect(() => {
+		const canvasCurrent = canvasRef.current;
 
-    let projectObjects;
+		dispatch(setCanvas(canvasCurrent));
 
-    useEffect(() => {
+		// Sizes
+		const sizes = {
+			width: canvasCurrent.offsetWidth,
+			height: canvasCurrent.offsetHeight
+		};
 
-        if (project.scene !== null) {
-            projectObjects = new THREE.ObjectLoader().parse(project.scene);
-        }
+		var scene = new THREE.Scene();
+		scene.background = new THREE.Color(0xf0f0f0);
 
-        const canvasCurrent = canvasRef.current;
+		// Base camera
+		const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 10000);
+		camera.position.z = 500;
+		scene.add(camera);
 
-        dispatch(setCanvas(canvasCurrent));
+		// LIGHTS
+		const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // color, intensity
+		scene.add(ambientLight);
 
-        // Sizes
-        const sizes = {
-            width: canvasCurrent.offsetWidth,
-            height: canvasCurrent.offsetHeight
-        }
+		const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+		directionalLight.position.copy(camera.position);
+		directionalLight.castShadow = true;
+		scene.add(directionalLight);
 
-        var scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xf0f0f0);
+		// Renderer
+		const renderer = new THREE.WebGLRenderer();
+		renderer.setSize(sizes.width, sizes.height);
+		renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // Base camera
-        const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 10000);
-        camera.position.z = 500;
-        scene.add(camera);
+		canvasRef.current.appendChild(renderer.domElement);
 
-        // LIGHTS
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // color, intensity
-        scene.add(ambientLight);
+		// Controls
+		const oControls = new OrbitControls(camera, canvasCurrent);
+		oControls.enableDamping = true;
+		oControls.maxDistance = 2000;
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        directionalLight.position.copy(camera.position);
-        directionalLight.castShadow = true;
-        scene.add(directionalLight);
+		// the light follow the camera position
+		oControls.addEventListener('change', lightUpdate);
 
-        // Renderer
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(sizes.width, sizes.height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		function lightUpdate() {
+			directionalLight.position.copy(camera.position);
+		}
 
-        canvasRef.current.appendChild(renderer.domElement);
+		// TransformControls
+		const tControls = new TransformControls(camera, canvasCurrent);
+		tControls.name = 'TransformControls';
+		// tControls.addEventListener('change', render);
 
-        // Controls
-        const oControls = new OrbitControls(camera, canvasCurrent);
-        oControls.enableDamping = true;
-        oControls.maxDistance = 2000;
+		tControls.addEventListener('dragging-changed', function(event) {
+			oControls.enabled = !event.value;
+		});
 
-        // the light follow the camera position
-        oControls.addEventListener('change', lightUpdate);
-        function lightUpdate() {
-            directionalLight.position.copy(camera.position);
-        }
+		scene.add(tControls);
 
-        // TransformControls
-        const tControls = new TransformControls(camera, canvasCurrent);
-        tControls.name = 'TransformControls';
-        // tControls.addEventListener('change', render);
+		const axesHelper = new THREE.AxesHelper(5);
+		scene.add(axesHelper);
 
-        tControls.addEventListener('dragging-changed', function (event) {
+		if (Object.keys(project.objects).length !== 0) {
+			for (const object of project.objects) {
+				scene.add(new THREE.ObjectLoader().parse(object.object));
+			}
+		} else {
+			const group = new THREE.Group();
+			scene.add(group);
+		}
 
-            oControls.enabled = !event.value;
-        });
+		var render = function() {
+			// Render
+			renderer.render(scene, camera);
+			// Update controls
+			oControls.update();
+			// Call tick again on the next frame
+			window.requestAnimationFrame(render);
+		};
 
-        scene.add(tControls);
+		const onWindowResize = () => {
+			// Update sizes
+			sizes.width = canvasCurrent.offsetWidth;
+			sizes.height = canvasCurrent.offsetHeight;
 
-        const axesHelper = new THREE.AxesHelper(5);
-        scene.add(axesHelper);
+			// Update camera
+			camera.aspect = sizes.width / sizes.height;
+			camera.updateProjectionMatrix();
 
-        if (projectObjects !== undefined) {
-            scene.add(projectObjects);
-        } else {
-            const group = new THREE.Group();
-            scene.add(group);
-        }
+			// Update renderer
+			renderer.setSize(sizes.width, sizes.height);
+			renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+		};
 
-        var render = function () {
-            // Render
-            renderer.render(scene, camera);
-            // Update controls
-            oControls.update();
-            // Call tick again on the next frame
-            window.requestAnimationFrame(render);
-        };
+		window.addEventListener('resize', onWindowResize, false);
 
-        const onWindowResize = () => {
-            // Update sizes
-            sizes.width = canvasCurrent.offsetWidth;
-            sizes.height = canvasCurrent.offsetHeight;
+		render();
 
-            // Update camera
-            camera.aspect = sizes.width / sizes.height;
-            camera.updateProjectionMatrix();
+		dispatch(setScene(scene));
+		dispatch(setSceneModified(!sceneModified));
 
-            // Update renderer
-            renderer.setSize(sizes.width, sizes.height);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        }
+		return () => canvasRef.current.removeChild(renderer.domElement);
+	}, []);
 
-        window.addEventListener("resize", onWindowResize, false);
-
-        render();
-
-        dispatch(setScene(scene));
-        dispatch(setSceneModified(!sceneModified));
-
-        return () => canvasRef.current.removeChild(renderer.domElement);
-    }, []);
-
-    return (
-        <div ref={canvasRef} className={isCommentsActive ? "canvas__comments" : "canvas"}></div>
-    )
+	return <div ref={canvasRef} className={isCommentsActive ? 'canvas__comments' : 'canvas'} />;
 }

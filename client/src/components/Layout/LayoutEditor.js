@@ -21,12 +21,12 @@ export default function LayoutEditor() {
     return (
         Object.keys(project).length > 0 &&
         <>
-            <Header projectId={project.id} />
+            <Header projectId={id} />
             <div className="flex">
                 <Sidebar />
                 <Main project={project}/>
                 {
-                    isCommentsActive && <CommentsListPanel projectId={project.id}/>
+                    isCommentsActive && <CommentsListPanel projectId={id}/>
                 }
             </div>
         </>
