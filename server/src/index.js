@@ -21,6 +21,7 @@ app.get("/", (req, res) => {
 app.use('/', require('./routes/users'));
 app.use('/', require('./routes/projects'));
 app.use('/', require('./routes/comments'));
+app.use('/', require('./routes/objects'));
 
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
