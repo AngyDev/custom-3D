@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000";
 
-export const getProjectById = async (id) => {
+export const getProjectById = async(id) => {
     try {
         const res = await axios({
             method: 'GET',
@@ -16,7 +16,7 @@ export const getProjectById = async (id) => {
     }
 }
 
-export const getProjectsByUserId = async (userId) => {
+export const getProjectsByUserId = async(userId) => {
     try {
         const res = await axios({
             method: 'GET',
@@ -30,7 +30,7 @@ export const getProjectsByUserId = async (userId) => {
     }
 }
 
-export const saveProject = async (userId, project) => {
+export const saveProject = async(userId, project) => {
     try {
         const res = await axios({
             method: 'POST',
@@ -52,7 +52,26 @@ export const saveProject = async (userId, project) => {
     }
 }
 
-export const saveProjectScene = async (id, scene) => {
+export const saveObject = async(id, projectId, object) => {
+    try {
+        const res = await axios({
+            method: 'POST',
+            url: `${API_URL}/object`,
+            data: {
+                object_id: id,
+                project_id: projectId,
+                object: object
+            }
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error.message);
+        return error.message;
+    }
+}
+
+export const saveProjectScene = async(id, scene) => {
     try {
         const res = await axios({
             method: 'POST',
@@ -70,8 +89,8 @@ export const saveProjectScene = async (id, scene) => {
     }
 }
 
-export const saveComment = async (comment) => {
-    
+export const saveComment = async(comment) => {
+
     try {
         const res = await axios({
             method: 'POST',

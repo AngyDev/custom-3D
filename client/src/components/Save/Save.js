@@ -3,7 +3,7 @@ import Button from '../Button/Button';
 import saveIcon from '../../assets/images/icons/save-solid.svg';
 import { useSelector } from 'react-redux';
 import { getScene, getChildren } from '../../features/scene/sceneSlice';
-import { saveProjectScene } from '../../utils/api';
+import { saveObject } from '../../utils/api';
 
 export default function Save({ projectId }) {
 	const scene = useSelector(getScene);
@@ -14,10 +14,10 @@ export default function Save({ projectId }) {
 
 		const json = group[0].toJSON();
 		const output = JSON.stringify(json);
-        
+
 		console.log(output);
 
-		const response = await saveProjectScene(projectId, output);
+		const response = await saveObject(group[0].uuid, projectId, output);
 		if (response) {
 			console.log('saved');
 		}

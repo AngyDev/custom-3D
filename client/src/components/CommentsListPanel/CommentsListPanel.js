@@ -13,7 +13,7 @@ import { getHeaderHeight } from '../../features/dimensions/dimensionsSlice';
 import { getCountPoint, getIsTextOpen, incrementCount, setIsTextOpen } from '../../features/comments/commentsSlice';
 import AddPoint from '../AddPoint/AddPoint';
 import { UserContext } from '../../context/UserContext';
-import { saveComment } from '../../utils/api';
+import { saveComment, saveObject } from '../../utils/api';
 
 export default function CommentsListPanel({ projectId }) {
 
@@ -66,7 +66,7 @@ export default function CommentsListPanel({ projectId }) {
      * Double Click event, the function creates a point when the user clicks on the mesh
      * @param {Event} event 
      */
-    const onPointerClick = (event) => {
+    const onPointerClick = async (event) => {
         console.log("pointerClick");
 
         pointer.x = ((event.clientX - sidebarWidth) / canvas.offsetWidth) * 2 - 1;
@@ -87,6 +87,9 @@ export default function CommentsListPanel({ projectId }) {
             scene.add(sphere);
 
             tControls.detach();
+
+            const object = JSON.stringify(sphere.toJSON());
+            const response = await saveObject(sphere.uuid, projectId, object);
 
             dispatch(incrementCount());
             setOpenText(true);
