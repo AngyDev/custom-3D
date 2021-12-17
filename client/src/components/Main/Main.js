@@ -7,7 +7,7 @@ import { TransformControls } from 'three/examples/jsm/controls/TransformControls
 import { getIsCommentsActive } from '../../features/comments/commentsSlice';
 import { getSceneModified, getScene, setScene, setSceneModified, setCanvas } from '../../features/scene/sceneSlice';
 
-export default function Main() {
+export default function Main({project}) {
 
     const isCommentsActive = useSelector(getIsCommentsActive);
 
@@ -18,7 +18,13 @@ export default function Main() {
 
     const canvasRef = useRef(null);
 
+    let projectObjects;
+
     useEffect(() => {
+
+        if (project.scene !== null) {
+            projectObjects = new THREE.ObjectLoader().parse(project.scene);
+        }
 
         const canvasCurrent = canvasRef.current;
 
@@ -80,8 +86,12 @@ export default function Main() {
         const axesHelper = new THREE.AxesHelper(5);
         scene.add(axesHelper);
 
-        const group = new THREE.Group();
-        scene.add(group);
+        if (projectObjects !== undefined) {
+            scene.add(projectObjects);
+        } else {
+            const group = new THREE.Group();
+            scene.add(group);
+        }
 
         var render = function () {
             // Render

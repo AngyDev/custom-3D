@@ -6,7 +6,7 @@ const router = express.Router();
 /**
  * Get projects
  */
-router.get("/projects", async (req, res) => {
+router.get("/projects", async(req, res) => {
     try {
         const response = await ProjectsController.getProjects();
 
@@ -23,7 +23,7 @@ router.get("/projects", async (req, res) => {
 /**
  * Get project by id
  */
-router.get("/project/:id", async (req, res) => {
+router.get("/project/:id", async(req, res) => {
     try {
         const id = req.params.id;
         const response = await ProjectsController.getProjectById(id);
@@ -42,7 +42,7 @@ router.get("/project/:id", async (req, res) => {
 /**
  * Get project by userId
  */
-router.get("/project-user/:userId", async (req, res) => {
+router.get("/project-user/:userId", async(req, res) => {
     try {
         const userId = req.params.userId;
         const response = await ProjectsController.getProjectsByUserId(userId);
@@ -60,7 +60,7 @@ router.get("/project-user/:userId", async (req, res) => {
 /**
  * Create project
  */
-router.post("/project", async (req, res) => {
+router.post("/project", async(req, res) => {
     try {
         const project = req.body;
         const createProject = await ProjectsController.createProject(project);
@@ -74,10 +74,10 @@ router.post("/project", async (req, res) => {
 /**
  * Update project
  */
-router.put('/project/:id', async (req, res) => {
+router.put('/project/:id', async(req, res) => {
     try {
         const response = await ProjectsController.updateProject(req.params.id, req.body);
-        if (response) res.send(response);
+        if (response) res.status(200).json(response);
         else res.status(404).send('Project not found');
     } catch (error) {
         res.status(400).json(error.message);
@@ -88,7 +88,7 @@ router.put('/project/:id', async (req, res) => {
 /**
  * Update Scene in Project
  */
-router.post("/project-scene", async (req, res) => {
+router.post("/project-scene", async(req, res) => {
     try {
         const { id, scene } = req.body;
         const project = await ProjectsController.getProjectById(id);
@@ -107,7 +107,7 @@ router.post("/project-scene", async (req, res) => {
 /**
  * Delete project
  */
-router.delete("/project/:id", async (req, res) => {
+router.delete("/project/:id", async(req, res) => {
     try {
         const id = req.params.id;
         const deleteProject = await ProjectsController.deleteProject(id);
