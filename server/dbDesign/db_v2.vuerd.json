@@ -4,7 +4,7 @@
     "width": 2000,
     "height": 2000,
     "scrollTop": 0,
-    "scrollLeft": -32.33333333333337,
+    "scrollLeft": -33.33333333333337,
     "zoomLevel": 1,
     "show": {
       "tableComment": true,
@@ -411,29 +411,6 @@
             "id": "b627d135-1883-4d18-8e64-fdf3abe463b4"
           },
           {
-            "name": "scene",
-            "comment": "",
-            "dataType": "json",
-            "default": "",
-            "option": {
-              "autoIncrement": false,
-              "primaryKey": false,
-              "unique": false,
-              "notNull": false
-            },
-            "ui": {
-              "active": false,
-              "pk": false,
-              "fk": false,
-              "pfk": false,
-              "widthName": 60,
-              "widthComment": 60,
-              "widthDataType": 60,
-              "widthDefault": 60
-            },
-            "id": "6897937b-a2ba-445e-917c-d8b2d7512024"
-          },
-          {
             "name": " assigned_at",
             "comment": "list of user_id",
             "dataType": "text[]",
@@ -461,7 +438,7 @@
           "active": false,
           "left": 522,
           "top": 72,
-          "zIndex": 2,
+          "zIndex": 30,
           "widthName": 60,
           "widthComment": 60,
           "color": "#F11313"
@@ -543,8 +520,8 @@
             "id": "140e6fdf-ec58-4bb9-9fd9-6bfe49eb3c4f"
           },
           {
-            "name": "mesh_id",
-            "comment": "al posto di point_id",
+            "name": "point_id",
+            "comment": "the uuid of the mesh",
             "dataType": "string",
             "default": "",
             "option": {
@@ -559,7 +536,7 @@
               "fk": true,
               "pfk": false,
               "widthName": 60,
-              "widthComment": 110.41162109375,
+              "widthComment": 119.7998046875,
               "widthDataType": 60,
               "widthDefault": 60
             },
@@ -636,10 +613,10 @@
           }
         ],
         "ui": {
-          "active": true,
+          "active": false,
           "left": 620,
           "top": 434,
-          "zIndex": 4,
+          "zIndex": 53,
           "widthName": 61.9599609375,
           "widthComment": 60,
           "color": "#03A9F4"
@@ -653,7 +630,7 @@
         "columns": [
           {
             "name": "id",
-            "comment": "",
+            "comment": "the uuid of the mesh",
             "dataType": "string",
             "default": "",
             "option": {
@@ -668,7 +645,7 @@
               "fk": false,
               "pfk": false,
               "widthName": 60,
-              "widthComment": 60,
+              "widthComment": 119.7998046875,
               "widthDataType": 60,
               "widthDefault": 60
             },
@@ -698,30 +675,7 @@
             "id": "474aab96-e63e-411e-9e31-487c51bf3b61"
           },
           {
-            "name": "mesh_id",
-            "comment": "",
-            "dataType": "string",
-            "default": "",
-            "option": {
-              "autoIncrement": false,
-              "primaryKey": false,
-              "unique": false,
-              "notNull": true
-            },
-            "ui": {
-              "active": false,
-              "pk": false,
-              "fk": false,
-              "pfk": false,
-              "widthName": 60,
-              "widthComment": 60,
-              "widthDataType": 60,
-              "widthDefault": 60
-            },
-            "id": "212d7bc4-309a-4f29-b87a-1626dc91224e"
-          },
-          {
-            "name": "mesh_obj",
+            "name": "object",
             "comment": "",
             "dataType": "json",
             "default": "",
@@ -742,13 +696,59 @@
               "widthDefault": 60
             },
             "id": "ed9e8da4-0297-4688-aac4-62d218778aca"
+          },
+          {
+            "name": "created_at",
+            "comment": "",
+            "dataType": "timestamp",
+            "default": "now",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 63.4326171875,
+              "widthComment": 60,
+              "widthDataType": 61.9599609375,
+              "widthDefault": 60
+            },
+            "id": "eb8ec9ca-db25-4b39-9aef-154b1b3274f2"
+          },
+          {
+            "name": "updated_at",
+            "comment": "",
+            "dataType": "timestamp",
+            "default": "now",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": true
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 67.0634765625,
+              "widthComment": 60,
+              "widthDataType": 61.9599609375,
+              "widthDefault": 60
+            },
+            "id": "daa07307-5ddc-4ca3-82e3-84d14cd75387"
           }
         ],
         "ui": {
-          "active": false,
-          "left": 72.3333,
-          "top": 330,
-          "zIndex": 3,
+          "active": true,
+          "left": 73.3333,
+          "top": 329,
+          "zIndex": 55,
           "widthName": 60,
           "widthComment": 60,
           "color": "#FF9800"
@@ -783,7 +783,7 @@
             "2c2dab0b-3f40-4078-9f0a-ea0d3125f36e"
           ],
           "x": 522,
-          "y": 135.375,
+          "y": 130.25,
           "direction": "left"
         },
         "constraintName": "fk_user_to_project",
@@ -800,7 +800,7 @@
             "690888de-e2de-45ef-b009-736828231ca2"
           ],
           "x": 721.21533203125,
-          "y": 325.5,
+          "y": 305,
           "direction": "bottom"
         },
         "end": {
@@ -808,7 +808,7 @@
           "columnIds": [
             "3e2b2feb-c5dc-4c4f-aea5-24f0bab4a735"
           ],
-          "x": 823.217529296875,
+          "x": 827.91162109375,
           "y": 434,
           "direction": "top"
         },
@@ -852,7 +852,7 @@
             "690888de-e2de-45ef-b009-736828231ca2"
           ],
           "x": 522,
-          "y": 262.125,
+          "y": 246.75,
           "direction": "left"
         },
         "end": {
@@ -860,8 +860,8 @@
           "columnIds": [
             "474aab96-e63e-411e-9e31-487c51bf3b61"
           ],
-          "x": 419.3333,
-          "y": 367.75,
+          "x": 489.1565421875,
+          "y": 457.625,
           "direction": "right"
         },
         "constraintName": "fk_projects_to_objects",
@@ -877,8 +877,8 @@
           "columnIds": [
             "da39b3b5-67ca-445b-b42f-6e60beeb8ceb"
           ],
-          "x": 419.3333,
-          "y": 443.25,
+          "x": 489.1565421875,
+          "y": 371.875,
           "direction": "right"
         },
         "end": {

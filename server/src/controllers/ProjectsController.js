@@ -17,7 +17,7 @@ export class ProjectsController {
      * @returns Project by id
      */
     static getProjectById(id) {
-        return ProjectsModel.query().findById(id).orderBy('created_at');
+        return ProjectsModel.query().findById(id);
     }
 
     /**
