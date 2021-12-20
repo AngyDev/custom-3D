@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { getIsTextOpen, setIsTextOpen } from '../../features/comments/commentsSlice';
 import { getScene, getSelectedMesh, setSelectedMesh } from '../../features/scene/sceneSlice';
 
 export default function PanelItem(props) {
@@ -9,6 +10,7 @@ export default function PanelItem(props) {
     const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
     const selectedMesh = useSelector(getSelectedMesh);
     const [selected, setSelected] = useState(false);
+    const isTextOpen = useSelector(getIsTextOpen);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -90,9 +92,11 @@ export default function PanelItem(props) {
      * @param {Event} e 
      */
     const pointClick = (uuid) => {
+        console.log("pointClick");
         selectedPoints(uuid);
 
         dispatch(setSelectedMesh(uuid));
+        dispatch(setIsTextOpen(!isTextOpen));
     }
 
     return (
