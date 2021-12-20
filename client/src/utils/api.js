@@ -109,3 +109,17 @@ export const saveComment = async(comment) => {
         return false
     }
 }
+
+export const getCommentsByProjectIdAndPointId = async(projectId, pointId) => {
+    try {
+        const res = await axios({
+            method: 'GET',
+            url: `${API_URL}/comments/${projectId}/${pointId}`
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error.message);
+        return false;
+    }
+}

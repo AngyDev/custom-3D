@@ -13,7 +13,7 @@ import { getHeaderHeight } from '../../features/dimensions/dimensionsSlice';
 import { getCountPoint, getIsTextOpen, incrementCount, setIsTextOpen } from '../../features/comments/commentsSlice';
 import AddPoint from '../AddPoint/AddPoint';
 import { UserContext } from '../../context/UserContext';
-import { saveComment, saveObject } from '../../utils/api';
+import { getCommentsByProjectIdAndPointId, saveComment, saveObject } from '../../utils/api';
 
 export default function CommentsListPanel({ projectId }) {
 
@@ -51,10 +51,12 @@ export default function CommentsListPanel({ projectId }) {
         }
     });
 
-    // useEffect(() => {
-    //     setOpenText(isTextOpen);
-    //     console.log(isTextOpen);
-    // }, [isTextOpen])
+    useEffect(async () => {
+        setOpenText(true);
+
+        const response = await getCommentsByProjectIdAndPointId(projectId, selectedMesh);
+        setComments(response);
+    }, [isTextOpen])
 
     const addPoint = () => {
 
@@ -93,6 +95,7 @@ export default function CommentsListPanel({ projectId }) {
 
             dispatch(incrementCount());
             setOpenText(true);
+            setComments([]);
 
             // dispatch(setIsTextOpen(true));
             dispatch(setSelectedMesh(sphere.uuid));
