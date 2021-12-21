@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGroup, getSceneModified, getScene, setSelectedMesh } from '../../features/scene/sceneSlice';
+import { deleteObject } from '../../utils/api';
 import PanelItem from '../PanelItem/PanelItem';
 
 export default function Panel(props) {
@@ -81,7 +82,9 @@ export default function Panel(props) {
                     tControls.detach();
                 }
             }
-        })
+        });
+
+        // const response = deleteObject(object.uuid);
     }
 
     return (

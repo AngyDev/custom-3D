@@ -32,4 +32,8 @@ export class ObjectsController {
             object: object.object
         })
     }
+
+    static deleteObject(id) {
+        return ObjectsModel.query().deleteById(id);
+    }
 }
