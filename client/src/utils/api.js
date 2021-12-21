@@ -123,3 +123,17 @@ export const getCommentsByProjectIdAndPointId = async(projectId, pointId) => {
         return false;
     }
 }
+
+export const deleteObject = async(objectId) => {
+    try {
+        const res = await axios({
+            method: 'DELETE',
+            url: `${API_URL}/object/${objectId}`
+        });
+
+        return res.data;
+    } catch (error) {
+        console.log(error.message);
+        return false;
+    }
+}

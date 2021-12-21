@@ -58,6 +58,19 @@ router.post('/object', async(req, res) => {
         res.status(400).json(error.message);
         console.error(error);
     }
+});
+
+/**
+ * Deletes object and comments
+ */
+router.delete("/object/:id", async(req, res) => {
+    try {
+        const id = req.params.id;
+        const deleteObject = await ObjectsController.deleteObject(id);
+        res.send("The object sucessfully deleted");
+    } catch (error) {
+        console.error(error);
+    }
 })
 
 module.exports = router;
