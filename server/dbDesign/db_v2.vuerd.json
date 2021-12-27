@@ -1,6 +1,6 @@
 {
   "canvas": {
-    "version": "2.2.10",
+    "version": "2.2.11",
     "width": 2000,
     "height": 2000,
     "scrollTop": 0,
@@ -438,7 +438,7 @@
           "active": false,
           "left": 522,
           "top": 72,
-          "zIndex": 30,
+          "zIndex": 2,
           "widthName": 60,
           "widthComment": 60,
           "color": "#F11313"
@@ -616,7 +616,7 @@
           "active": false,
           "left": 620,
           "top": 434,
-          "zIndex": 53,
+          "zIndex": 8,
           "widthName": 61.9599609375,
           "widthComment": 60,
           "color": "#03A9F4"
@@ -745,10 +745,10 @@
           }
         ],
         "ui": {
-          "active": true,
-          "left": 73.3333,
-          "top": 329,
-          "zIndex": 55,
+          "active": false,
+          "left": 47.3333,
+          "top": 403,
+          "zIndex": 5,
           "widthName": 60,
           "widthComment": 60,
           "color": "#FF9800"
@@ -860,8 +860,8 @@
           "columnIds": [
             "474aab96-e63e-411e-9e31-487c51bf3b61"
           ],
-          "x": 489.1565421875,
-          "y": 457.625,
+          "x": 463.1565421875,
+          "y": 531.625,
           "direction": "right"
         },
         "constraintName": "fk_projects_to_objects",
@@ -877,8 +877,8 @@
           "columnIds": [
             "da39b3b5-67ca-445b-b42f-6e60beeb8ceb"
           ],
-          "x": 489.1565421875,
-          "y": 371.875,
+          "x": 463.1565421875,
+          "y": 445.875,
           "direction": "right"
         },
         "end": {
