@@ -47,9 +47,13 @@ export default function PanelItem(props) {
             } else if (object.type === 'Mesh') {
                 if (object.name === name) {
                     object.visible = !object.visible;
+                    if (tControls.visible) tControls.detach();
+                    else tControls.attach();
                 }
             }
-        })
+        });
+
+        
     }
 
     /**
@@ -92,7 +96,7 @@ export default function PanelItem(props) {
      * @param {Event} e 
      */
     const pointClick = (uuid) => {
-        console.log("pointClick");
+        tControls.detach();
         selectedPoints(uuid);
 
         dispatch(setSelectedMesh(uuid));
