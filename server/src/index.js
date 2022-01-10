@@ -8,6 +8,8 @@ const { Model } = require('objection');
 const app = express();
 const port = 3000;
 
+global.__basedir = __dirname;
+
 app.use(cors());
 
 const environment = knex(process.env.NODE_ENV === "production" ? knexConfig.production : knexConfig.development);

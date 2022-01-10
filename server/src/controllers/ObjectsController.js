@@ -33,6 +33,22 @@ export class ObjectsController {
         })
     }
 
+    /**
+     * Saves the object in the db
+     * @param {Object} object Id
+     * @param {String} projectId 
+     * @param {String} filepath 
+     * @returns 
+     */
+    static saveObject(object, projectId, filepath) {
+        return ObjectsModel.query().insert({
+            id: object.object_id,
+            project_id: projectId,
+            object: {"model": "model.json"},
+            object_path: filepath
+        })
+    }
+
     static deleteObject(id) {
         return ObjectsModel.query().deleteById(id);
     }
