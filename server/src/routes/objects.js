@@ -1,6 +1,7 @@
 import express from 'express';
 import { ObjectsController } from '../controllers/ObjectsController';
 import { ProjectsController } from '../controllers/ProjectsController';
+const uploadFile = require('../middleware/upload');
 
 const router = express.Router();
 
@@ -33,6 +34,8 @@ router.get('/objects/:projectId/', async(req, res) => {
 
         if (response) {
             res.send(response);
+            // response return the objectPath field
+            //res.download(response[0]["objectPath"]);
         } else {
             res.status(404).send('Not found');
         }
@@ -43,11 +46,48 @@ router.get('/objects/:projectId/', async(req, res) => {
 });
 
 /**
+ * Upload object file
+ */
+router.post('/upload/:projectId', async (req, res) => {
+    try {
+        // Checks if the project exist
+        const findProject = await ProjectsController.getProjectById(req.params.projectId);
+
+        if (!findProject) return res.status(404).send('Project not found');
+
+        // Uploads the file in the server folder
+        await uploadFile(req, res);
+
+        if (req.file === undefined) {
+            return res.status(400).send({ message: 'Please upload a file!' });
+        }
+
+        const filepath = req.file.path;
+        const object = req.body;
+        const projectId = req.params.projectId;
+
+        // Saves the object in the db
+        await ObjectsController.saveObject(object, projectId, filepath);
+
+        res.status(200).send({
+            message: 'Uploaded the file successfully: ' + req.file.originalname
+        });
+        
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).send({
+            message: `Could not upload the file: ${req.file.originalname}. ${error}`
+        });
+    }
+});
+
+/**
  * Save object
  */
 router.post('/object', async(req, res) => {
     try {
-        const findProject = ProjectsController.getProjectById(req.body.project_id);
+        const findProject = await ProjectsController.getProjectById(req.body.project_id);
 
         if (!findProject) return res.status(404).send('Project not found');
 
