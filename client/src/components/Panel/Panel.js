@@ -12,7 +12,7 @@ export default function Panel(props) {
 	const [ planeList, setPlaneList ] = useState([]);
 	const [ pointList, setPointList ] = useState([]);
 	const [ isOpen, setIsOpen ] = useState(false);
-    const [ deleteElem, setDeleteElem ] = useState();
+  const [ deleteElem, setDeleteElem ] = useState();
 
 	const group = useSelector(getGroup);
 	const isModified = useSelector(getSceneModified);
@@ -59,7 +59,7 @@ export default function Panel(props) {
 	};
 
 	const handleDelete = (e) => {
-        setDeleteElem(e);
+    setDeleteElem(e);
 		setIsOpen(true);
 	};
 
@@ -95,7 +95,7 @@ export default function Panel(props) {
 			}
 		});
 
-        setIsOpen(false);
+    setIsOpen(false);
 
 		// const response = deleteObject(object.uuid);
 	};

@@ -40,9 +40,9 @@ export class ObjectsController {
      * @param {String} filepath 
      * @returns 
      */
-    static saveObject(object, projectId, filepath) {
+    static saveObject(objectId, projectId, filepath) {
         return ObjectsModel.query().insert({
-            id: object.object_id,
+            id: objectId,
             project_id: projectId,
             object: {"model": "model.json"},
             object_path: filepath
