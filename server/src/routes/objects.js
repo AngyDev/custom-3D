@@ -62,12 +62,14 @@ router.post('/upload/:projectId', async (req, res) => {
             return res.status(400).send({ message: 'Please upload a file!' });
         }
 
+        console.log(req.body);
+
         const filepath = req.file.path;
-        const object = req.body;
+        const objectId = req.body.id;
         const projectId = req.params.projectId;
 
         // Saves the object in the db
-        await ObjectsController.saveObject(object, projectId, filepath);
+        await ObjectsController.saveObject(objectId, projectId, filepath);
 
         res.status(200).send({
             message: 'Uploaded the file successfully: ' + req.file.originalname

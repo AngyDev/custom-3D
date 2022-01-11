@@ -45,28 +45,26 @@ export const saveProject = async(userId, project) => {
             }
         });
 
-        return res.data
-    } catch (error) {
-        console.log(error.message)
-        return error.message
-    }
-}
-
-export const saveObject = async(id, projectId, object) => {
-    try {
-        const res = await axios({
-            method: 'POST',
-            url: `${API_URL}/object`,
-            data: {
-                object_id: id,
-                project_id: projectId,
-                object: object
-            }
-        });
-
         return res.data;
     } catch (error) {
         console.log(error.message);
+        return error.message;
+    }
+}
+
+export const saveObject = async(id, projectId, file, filename) => {
+    let data = new FormData();
+    data.append("file", file, filename);
+    data.append("id", id);
+
+    try {
+        const res = await axios({
+            method: 'POST',
+            url: `${API_URL}/upload/${projectId}`,
+            data: data
+        });
+
+    } catch (error) {
         return error.message;
     }
 }
@@ -82,10 +80,10 @@ export const saveProjectScene = async(id, scene) => {
             }
         });
 
-        return res.data
+        return res.data;
     } catch (error) {
-        console.log(error.message)
-        return false
+        console.log(error.message);
+        return false;
     }
 }
 
@@ -105,8 +103,8 @@ export const saveComment = async(comment) => {
 
         return res.data;
     } catch (error) {
-        console.log(error.message)
-        return false
+        console.log(error.message);
+        return false;
     }
 }
 

@@ -52,15 +52,16 @@ export default function CommentsListPanel({ projectId }) {
     });
 
     useEffect(async () => {
-        setOpenText(true);
+        if(selectedMesh) {
+            setOpenText(true);
 
-        const response = await getCommentsByProjectIdAndPointId(projectId, selectedMesh);
-        setComments(response);
+            const response = await getCommentsByProjectIdAndPointId(projectId, selectedMesh);
+            setComments(response);
+        }
     }, [isTextOpen])
 
     const addPoint = () => {
 
-        // dispatch(setIsTextOpen(false));
         canvas.addEventListener('dblclick', onPointerClick);
     }
 
@@ -91,7 +92,9 @@ export default function CommentsListPanel({ projectId }) {
             tControls.detach();
 
             const object = JSON.stringify(sphere.toJSON());
-            const response = await saveObject(sphere.uuid, projectId, object);
+            const file = new Blob( [ object ], { type: 'application/json' } );
+
+            const response = await saveObject(sphere.uuid, projectId, file, `${sphere.name}.json`);
 
             dispatch(incrementCount());
             setOpenText(true);

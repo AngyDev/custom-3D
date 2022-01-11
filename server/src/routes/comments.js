@@ -13,6 +13,7 @@ router.get('/comments/:projectId/:pointId', async(req, res) => {
     try {
         const projectId = req.params.projectId;
         const pointId = req.params.pointId;
+
         const response = await CommentsController.getCommentsByProjectIdAndPointId(projectId, pointId);
 
         if (response) {
