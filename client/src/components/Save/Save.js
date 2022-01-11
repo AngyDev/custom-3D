@@ -27,6 +27,9 @@ export default function Save({ projectId }) {
 		console.log(objects);
 
     for (const mesh of objects) {
+			// updates the matrix position before convert to JSON
+			mesh.updateMatrixWorld(true);
+			
       const json = mesh.toJSON();
       const output = JSON.stringify(json);
       const file = new Blob([output], { type: "application/json" });

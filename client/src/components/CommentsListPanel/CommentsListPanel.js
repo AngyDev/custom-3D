@@ -91,6 +91,9 @@ export default function CommentsListPanel({ projectId }) {
 
             tControls.detach();
 
+            // updates the matrix position before convert to JSON
+            sphere.updateMatrixWorld(true);
+
             const object = JSON.stringify(sphere.toJSON());
             const file = new Blob( [ object ], { type: 'application/json' } );
 
