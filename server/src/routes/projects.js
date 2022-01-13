@@ -87,25 +87,6 @@ router.put('/project/:id', async(req, res) => {
 });
 
 /**
- * Update Scene in Project
- */
-router.post("/project-scene", async(req, res) => {
-    try {
-        const { id, scene } = req.body;
-        const project = await ProjectsController.getProjectById(id);
-
-        if (project) {
-            const response = await ProjectsController.updateProjectScene(id, scene);
-            if (response) res.send(response)
-        } else {
-            res.status(404).send('Not found');
-        }
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-/**
  * Delete project
  */
 router.delete("/project/:id", async(req, res) => {

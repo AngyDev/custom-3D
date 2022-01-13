@@ -17,7 +17,7 @@ export class ObjectsController {
      * @returns List of objects by project id only json field
      */
     static getObjectsByProjectId(projectId) {
-        return ObjectsModel.query().select('objects.object').where('objects.project_id', projectId);
+        return ObjectsModel.query().select('objects.object_path').where('objects.project_id', projectId);
     }
 
     /**

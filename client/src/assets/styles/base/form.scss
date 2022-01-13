@@ -1,0 +1,20 @@
+.form {
+  font-size: $font-size-sm;
+  &__el {
+      padding-bottom: 25px;
+  }
+  &__input {
+      padding: 5px;
+      font-size: $font-size-sm;
+      border-radius: 0.5rem;
+  }
+  &__label {
+      padding-bottom: 10px;
+  }
+  &__submit {
+      margin-top: 10px;
+      font-size: $font-size-sm;
+      padding-top: 10px;
+      padding-bottom: 10px;
+  }
+}
