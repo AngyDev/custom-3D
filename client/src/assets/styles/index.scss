@@ -1,6 +1,7 @@
 @import "./base/base";
 @import "./base/flexbox";
 @import "./base/variables";
+@import "./base/form";
 
 @import "../../features/App/app";
 
@@ -17,5 +18,4 @@
 @import "../../components/Dashboard/Projects/projects";
 @import "../../components/Dashboard/dashboard";
 @import "../../components/Modal/modal";
-@import "../../components/Dashboard/NewProject/newProject";
 @import "../../components/Export/export";

@@ -50,13 +50,9 @@ export class ProjectsController {
     /**
      * Update the project by id
      * @param {String} id Project ID
-     * @param {Object} scene Updated fields
+     * @param {Object} payload Updated fields
      * @returns 
      */
-    static updateProjectScene(id, scene) {
-        return ProjectsModel.query().patchAndFetchById(id, { scene: scene });
-    }
-
     static updateProject(id, payload) {
         return ProjectsModel.query().updateAndFetchById(id, payload);
     }
