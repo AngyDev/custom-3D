@@ -44,6 +44,6 @@ export default function AddPlane() {
     }
 
     return (
-        <Button typeClass="btn--size" text="ADD PLANE" onClick={addPlane} />
+        <Button typeClass="btn--size button" text="ADD PLANE" onClick={addPlane} />
     )
 }

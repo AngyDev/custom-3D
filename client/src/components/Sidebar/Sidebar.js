@@ -3,6 +3,7 @@ import Panel from '../Panel/Panel';
 import AddPlane from '../AddPlane/AddPlane';
 import { setSidebarWidth } from '../../features/dimensions/dimensionsSlice';
 import { useDispatch } from 'react-redux';
+import Measurements from '../Measurements/Measurements';
 
 export default function Sidebar() {
 
@@ -18,8 +19,9 @@ export default function Sidebar() {
     return (
         <div className="sidebar" ref={sidebarRef}>
 
-            <div className="sidebar__buttons">
+            <div className="sidebar__buttons flex">
                 <AddPlane />
+                <Measurements />
             </div>
 
             <div className="scene__list">
