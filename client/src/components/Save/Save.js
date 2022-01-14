@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import Button from "../Button/Button";
 import saveIcon from "../../assets/images/icons/save-solid.svg";
+import { getChildren } from "../../features/scene/sceneSlice";
 import { useSelector } from "react-redux";
 import { saveObject } from "../../utils/api";
 import Modal from "../Modal/Modal";
