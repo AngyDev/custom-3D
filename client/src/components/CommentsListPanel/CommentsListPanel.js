@@ -1,156 +1,173 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { getCanvas, getChildren, getGroup, getScene, getSceneModified, getSelectedMesh, setSceneModified, setSelectedMesh } from '../../features/scene/sceneSlice';
+import React, { useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { getCanvas, getChildren, getGroup, getScene, getSceneModified, getSelectedMesh, setSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
 import Button from "../Button/Button";
 import * as THREE from "three";
-import { useForm } from 'react-hook-form';
-import Panel from '../Panel/Panel';
-import { useDispatch } from 'react-redux';
+import { CSS2DRenderer, CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { useForm } from "react-hook-form";
+import Panel from "../Panel/Panel";
+import { useDispatch } from "react-redux";
 
-import Comments from '../Comments/Comments';
-import { getSidebarWidth } from '../../features/dimensions/dimensionsSlice';
-import { getHeaderHeight } from '../../features/dimensions/dimensionsSlice';
-import { getCountPoint, getIsTextOpen, incrementCount, setIsTextOpen } from '../../features/comments/commentsSlice';
-import AddPoint from '../AddPoint/AddPoint';
-import { UserContext } from '../../context/UserContext';
-import { getCommentsByProjectIdAndPointId, saveComment, saveObject } from '../../utils/api';
+import Comments from "../Comments/Comments";
+import { getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
+import { getHeaderHeight } from "../../features/dimensions/dimensionsSlice";
+import { getCountPoint, getIsTextOpen, incrementCount, setIsTextOpen } from "../../features/comments/commentsSlice";
+import AddPoint from "../AddPoint/AddPoint";
+import { UserContext } from "../../context/UserContext";
+import { getCommentsByProjectIdAndPointId, saveComment, saveObject } from "../../utils/api";
 
 export default function CommentsListPanel({ projectId }) {
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm();
 
-    const { handleSubmit, register, reset, formState: { errors } } = useForm();
+  const [openText, setOpenText] = useState(false);
+  const [comments, setComments] = useState([]);
 
-    const [openText, setOpenText] = useState(false);
-    const [comments, setComments] = useState([]);
+  const { user } = useContext(UserContext);
 
-    const { user } = useContext(UserContext);
+  const scene = useSelector(getScene);
+  const group = useSelector(getGroup);
+  const canvas = useSelector(getCanvas);
+  const isModified = useSelector(getSceneModified);
+  const isTextOpen = useSelector(getIsTextOpen);
+  const sidebarWidth = useSelector(getSidebarWidth);
+  const headerHeight = useSelector(getHeaderHeight);
+  const children = useSelector(getChildren);
+  const countPoint = useSelector(getCountPoint);
+  const selectedMesh = useSelector(getSelectedMesh);
 
-    const scene = useSelector(getScene);
-    const group = useSelector(getGroup);
-    const canvas = useSelector(getCanvas);
-    const isModified = useSelector(getSceneModified);
-    const isTextOpen = useSelector(getIsTextOpen);
-    const sidebarWidth = useSelector(getSidebarWidth);
-    const headerHeight = useSelector(getHeaderHeight);
-    const children = useSelector(getChildren);
-    const countPoint = useSelector(getCountPoint);
-    const selectedMesh = useSelector(getSelectedMesh);
+  const dispatch = useDispatch();
+  const camera = scene.children && scene.children.find((children) => children.type === "PerspectiveCamera");
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
 
-    const dispatch = useDispatch();
-    const camera = scene.children && scene.children.find((children) => children.type === "PerspectiveCamera");
-    const raycaster = new THREE.Raycaster();
-    const pointer = new THREE.Vector2();
-    const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
+  // Dispatch the resize event to recalculate the width of the canvas when the bar is open and close (return)
+  useEffect(() => {
+    window.dispatchEvent(new Event("resize"));
 
-    // Dispatch the resize event to recalculate the width of the canvas when the bar is open and close (return)
-    useEffect(() => {
-        window.dispatchEvent(new Event('resize'));
+    return () => {
+      canvas.removeEventListener("dblclick", onPointerClick);
+      window.dispatchEvent(new Event("resize"));
+    };
+  });
 
-        return () => {
-            canvas.removeEventListener('dblclick', onPointerClick);
-            window.dispatchEvent(new Event('resize'));
-        }
-    });
+  useEffect(async () => {
+    if (selectedMesh) {
+      setOpenText(true);
 
-    useEffect(async () => {
-        if(selectedMesh) {
-            setOpenText(true);
-
-            const response = await getCommentsByProjectIdAndPointId(projectId, selectedMesh);
-            setComments(response);
-        }
-    }, [isTextOpen])
-
-    const addPoint = () => {
-
-        canvas.addEventListener('dblclick', onPointerClick);
+      const response = await getCommentsByProjectIdAndPointId(projectId, selectedMesh);
+      setComments(response);
     }
+  }, [isTextOpen]);
 
-    /**
-     * Double Click event, the function creates a point when the user clicks on the mesh
-     * @param {Event} event 
-     */
-    const onPointerClick = async (event) => {
-        console.log("pointerClick");
+  const addPoint = () => {
+    canvas.addEventListener("dblclick", onPointerClick);
+  };
 
-        pointer.x = ((event.clientX - sidebarWidth) / canvas.offsetWidth) * 2 - 1;
-        pointer.y = - ((event.clientY - headerHeight) / canvas.offsetHeight) * 2 + 1;
-        raycaster.setFromCamera(pointer, camera);
+  /**
+   * Double Click event, the function creates a point when the user clicks on the mesh
+   * @param {Event} event
+   */
+  const onPointerClick = async (event) => {
+    console.log("pointerClick");
 
-        // Sees if the ray from the camera into the world hits one of our meshes
-        const intersects = raycaster.intersectObjects(group.children, true);
+    pointer.x = ((event.clientX - sidebarWidth) / canvas.offsetWidth) * 2 - 1;
+    pointer.y = -((event.clientY - headerHeight) / canvas.offsetHeight) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
 
-        // Creates a point
-        const geometry = new THREE.SphereGeometry(0.5, 32, 16);
-        const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-        const sphere = new THREE.Mesh(geometry, material);
+    // Sees if the ray from the camera into the world hits one of our meshes
+    const intersects = raycaster.intersectObjects(group.children, true);
 
-        if (intersects.length > 0) {
-            sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
-            sphere.name = 'Point' + countPoint;
-            scene.add(sphere);
+    // Creates a point
+    const geometry = new THREE.SphereGeometry(0.5, 32, 16);
+    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    const sphere = new THREE.Mesh(geometry, material);
 
-            tControls.detach();
+    if (intersects.length > 0) {
+      sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+      sphere.name = "Point" + countPoint;
+      scene.add(sphere);
 
-            // updates the matrix position before convert to JSON
-            sphere.updateMatrixWorld(true);
+      createLabel(sphere);
 
-            const object = JSON.stringify(sphere.toJSON());
-            const file = new Blob( [ object ], { type: 'application/json' } );
+      tControls.detach();
 
-            const response = await saveObject(sphere.uuid, projectId, file, `${sphere.name}.json`);
+      // updates the matrix position before convert to JSON
+      sphere.updateMatrixWorld(true);
 
-            dispatch(incrementCount());
-            setOpenText(true);
-            setComments([]);
+      const object = JSON.stringify(sphere.toJSON());
+      const file = new Blob([object], { type: "application/json" });
 
-            // dispatch(setIsTextOpen(true));
-            dispatch(setSelectedMesh(sphere.uuid));
-            dispatch(setSceneModified(!isModified));
-        }
+      const response = await saveObject(sphere.uuid, projectId, file, `${sphere.name}.json`);
+
+      dispatch(incrementCount());
+      setOpenText(true);
+      setComments([]);
+
+      // dispatch(setIsTextOpen(true));
+      dispatch(setSelectedMesh(sphere.uuid));
+      dispatch(setSceneModified(!isModified));
     }
+  };
 
-    const onSave = async (data, e) => {
+  const createLabel = (object) => {
+    const objectDiv = document.createElement("div");
+    objectDiv.className = "label";
+    objectDiv.textContent = object.name;
+    objectDiv.style.marginTop = "-1em";
+    const objectLabel = new CSS2DObject(objectDiv);
+    objectLabel.name = "label"
+    // earthLabel.position.set(-intersects[0].point.x, -intersects[0].point.y, -intersects[0].point.z);
+    // TODO: the position of the label is not correct
+    objectLabel.position.set(0, 0, 0);
+    object.add(objectLabel);
+  };
 
-        const comment = {
-            projectId: projectId,
-            userId: user.id,
-            text: data.text,
-            pointId: selectedMesh
-        }
+  const onSave = async (data, e) => {
+    const comment = {
+      projectId: projectId,
+      userId: user.id,
+      text: data.text,
+      pointId: selectedMesh,
+    };
 
-        const response = await saveComment(comment);
+    const response = await saveComment(comment);
 
-        setComments(response);
-        e.target.reset();
-    }
+    setComments(response);
+    e.target.reset();
+  };
 
-    return (
-        <div className="comments">
-            <h3>Comments</h3>
-            <div className="sidebar__buttons">
-                <Button typeClass="btn--size" text="ADD POINT" onClick={addPoint} />
-                {/* <AddPoint /> */}
+  return (
+    <div className="comments">
+      <h3>Comments</h3>
+      <div className="sidebar__buttons">
+        <Button typeClass="btn--size" text="ADD POINT" onClick={addPoint} />
+        {/* <AddPoint /> */}
+      </div>
+      <div className="comments__panel">
+        <h3>Points on the mesh</h3>
+        <Panel type="points" />
+      </div>
+      {openText && (
+        <div>
+          <form className="comments__text flex flex-col" onSubmit={handleSubmit(onSave)}>
+            <div>
+              <label htmlFor="comment">Add Comment</label>
+              <textarea name="comment" id="comment" cols="30" rows="5" {...register("text")} />
             </div>
-            <div className="comments__panel">
-                <h3>Points on the mesh</h3>
-                <Panel type="points" />
+            <div className="flex justify-between comments__btn">
+              <Button typeClass="btn--size" text="SAVE" />
+              <input className="btn btn--size" type="reset" value="RESET" />
             </div>
-            {
-                openText &&
-                <div>
-                    <form className="comments__text flex flex-col" onSubmit={handleSubmit(onSave)}>
-                        <div>
-                            <label htmlFor="comment">Add Comment</label>
-                            <textarea name="comment" id="comment" cols="30" rows="5" {...register("text")} />
-                        </div>
-                        <div className="flex justify-between comments__btn">
-                            <Button typeClass="btn--size" text="SAVE" />
-                            <input className="btn btn--size" type="reset" value="RESET" />
-                        </div>
-                    </form>
-                    <Comments data={comments} />
-                </div>
-            }
+          </form>
+          <Comments data={comments} />
         </div>
-    )
+      )}
+    </div>
+  );
 }
