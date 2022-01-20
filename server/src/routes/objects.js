@@ -43,16 +43,16 @@ router.get("/objects/:projectId/", async (req, res) => {
         // res.download(object["objectPath"]);
       }
 
-      const responseObject = [];
+      // const responseObject = [];
 
-      for (const path of objectsPath) {
-        responseObject.push(require(path));
-      }
+      // for (const path of objectsPath) {
+      //   responseObject.push(require(path));
+      // }
       // console.log(require(objectsPath[0]));
       // res.pipe(fs.createWriteStream(objectsPath[0])).on("close", function () {
       //   console.log("File written!");
       // });
-      res.send(responseObject);
+      res.send(objectsPath);
     } else {
       res.status(404).send("Not found");
     }
