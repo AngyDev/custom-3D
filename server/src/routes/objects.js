@@ -78,8 +78,6 @@ router.post("/upload/:projectId", async (req, res) => {
       return res.status(400).send({ message: "Please upload a file!" });
     }
 
-    console.log(req.body);
-
     const filepath = req.file.path;
     const objectId = req.body.id;
     const projectId = req.params.projectId;

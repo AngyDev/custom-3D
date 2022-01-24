@@ -95,9 +95,8 @@ export default function Main({ project }) {
 
     // if (Object.keys(project.objectsPath).length !== 0) {
     //   const loader = new THREE.ObjectLoader();
-    //   const object = await loader.load(
-    //     "/Users/angelabusato/github/custom-3D/server/src/resources/static/assets/uploads/4f40ccd1-4161-4861-9c99-0bbb2a0bba8b/5EA85E14-3C1A-407C-8012-F72833677ECE.json"
-    //   );
+    //   // "/Users/angelabusato/github/custom-3D/server/src/resources/static/assets/uploads/4f40ccd1-4161-4861-9c99-0bbb2a0bba8b/5EA85E14-3C1A-407C-8012-F72833677ECE.json"
+    //   const object = await loader.load(project.objectsPath[0]);
     //   // const object = await loader.loadAsync("http://127.0.0.1:8080/src/resources/static/assets/uploads/4f40ccd1-4161-4861-9c99-0bbb2a0bba8b/5EA85E14-3C1A-407C-8012-F72833677ECE.json");
     //   console.log(object);
     //   // for (const path of project.objectsPath) {
