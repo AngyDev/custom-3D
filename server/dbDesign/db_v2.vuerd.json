@@ -4,7 +4,7 @@
     "width": 2000,
     "height": 2000,
     "scrollTop": 0,
-    "scrollLeft": -33.33333333333337,
+    "scrollLeft": -35.33333333333337,
     "zoomLevel": 1,
     "show": {
       "tableComment": true,
@@ -616,7 +616,7 @@
           "active": false,
           "left": 620,
           "top": 434,
-          "zIndex": 8,
+          "zIndex": 4,
           "widthName": 61.9599609375,
           "widthComment": 60,
           "color": "#03A9F4"
@@ -683,7 +683,7 @@
               "autoIncrement": false,
               "primaryKey": false,
               "unique": false,
-              "notNull": true
+              "notNull": false
             },
             "ui": {
               "active": false,
@@ -695,7 +695,30 @@
               "widthDataType": 60,
               "widthDefault": 60
             },
-            "id": "ed9e8da4-0297-4688-aac4-62d218778aca"
+            "id": "a05ca891-f43d-4b99-ac98-3c61aa030e8d"
+          },
+          {
+            "name": "object_path",
+            "comment": "",
+            "dataType": "string",
+            "default": "",
+            "option": {
+              "autoIncrement": false,
+              "primaryKey": false,
+              "unique": false,
+              "notNull": false
+            },
+            "ui": {
+              "active": false,
+              "pk": false,
+              "fk": false,
+              "pfk": false,
+              "widthName": 69.2216796875,
+              "widthComment": 60,
+              "widthDataType": 60,
+              "widthDefault": 60
+            },
+            "id": "29eedb65-6cfd-4b4b-a50a-79232ee38c87"
           },
           {
             "name": "created_at",
@@ -745,10 +768,10 @@
           }
         ],
         "ui": {
-          "active": false,
+          "active": true,
           "left": 47.3333,
           "top": 403,
-          "zIndex": 5,
+          "zIndex": 20,
           "widthName": 60,
           "widthComment": 60,
           "color": "#FF9800"
@@ -860,8 +883,8 @@
           "columnIds": [
             "474aab96-e63e-411e-9e31-487c51bf3b61"
           ],
-          "x": 463.1565421875,
-          "y": 531.625,
+          "x": 465.3147453125,
+          "y": 547,
           "direction": "right"
         },
         "constraintName": "fk_projects_to_objects",
@@ -877,8 +900,8 @@
           "columnIds": [
             "da39b3b5-67ca-445b-b42f-6e60beeb8ceb"
           ],
-          "x": 463.1565421875,
-          "y": 445.875,
+          "x": 465.3147453125,
+          "y": 451,
           "direction": "right"
         },
         "end": {
