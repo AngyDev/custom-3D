@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { getIsTextOpen, setIsTextOpen } from "../../features/comments/commentsSlice";
 import { getScene, getSelectedMesh, setSelectedMesh } from "../../features/scene/sceneSlice";
+import ChangeColor from "../ChangeColor/ChangeColor";
+import Modal from "../Modal/Modal";
 
 export default function PanelItem(props) {
   const scene = useSelector(getScene);
@@ -11,6 +13,7 @@ export default function PanelItem(props) {
   const [selected, setSelected] = useState(false);
   const isTextOpen = useSelector(getIsTextOpen);
   const dispatch = useDispatch();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     // checks the selected mesh to add background to panel object
@@ -98,6 +101,24 @@ export default function PanelItem(props) {
     dispatch(setIsTextOpen(!isTextOpen));
   };
 
+  const modalColorMesh = (e) => {
+    dispatch(setSelectedMesh(e.target.id));
+    setIsOpen(true);
+  }
+
+  const changeColorMesh = (color) => {
+    scene.children.map((object) => {
+      if (object.type === "Group") {
+        object.children.map((mesh) => {
+          if (mesh.uuid === selectedMesh) {
+            mesh.material.color.set(color);
+          }
+        })
+      }
+    })
+    setIsOpen(false);
+  }
+
   return (
     <>
       <div className={selected ? "option option-active flex align-center" : "option flex align-center"}>
@@ -116,8 +137,12 @@ export default function PanelItem(props) {
             <span id={props.uuid} name={props.name} className="scale" onClick={(e) => transformPlane(e, "scale")}></span>
           </>
         )}
+        {props.type === "scene" && <span className="changeColor" id={props.uuid} onClick={modalColorMesh} />}
         <span id={props.uuid} name={props.name} className="delete" onClick={props.deleteClick}></span>
       </div>
+      <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Change mesh color" text="Change color">
+        <ChangeColor onClick={changeColorMesh}/>
+      </Modal>
     </>
   );
 }
