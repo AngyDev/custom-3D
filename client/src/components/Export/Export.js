@@ -96,7 +96,7 @@ function ExportModal({ options, closeModal }) {
   };
 
   return (
-    <div className="App">
+    <div>
       <form onSubmit={handleSubmit}>
         {options.map((item, i) => (
           <Checkbox
