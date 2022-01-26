@@ -119,11 +119,10 @@ export default function CommentsListPanel({ projectId }) {
     const objectDiv = document.createElement("div");
     objectDiv.className = "label";
     objectDiv.textContent = object.name;
-    objectDiv.style.marginTop = "-1em";
+    objectDiv.style.marginTop = "2em";
     const objectLabel = new CSS2DObject(objectDiv);
-    objectLabel.name = "label"
-    // earthLabel.position.set(-intersects[0].point.x, -intersects[0].point.y, -intersects[0].point.z);
-    // TODO: the position of the label is not correct
+    objectLabel.name = "label";
+    objectLabel.position.copy( object.position );
     objectLabel.position.set(0, 0, 0);
     object.add(objectLabel);
   };
