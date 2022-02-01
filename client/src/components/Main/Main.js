@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { TrackballControls } from "three/examples/jsm/controls/TrackballControls.js";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
 import { CSS2DRenderer, CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { getIsCommentsActive } from "../../features/comments/commentsSlice";
@@ -61,9 +62,10 @@ export default function Main({ project }) {
     canvasRef.current.appendChild(labelRenderer.domElement);
 
     // Controls
-    const oControls = new OrbitControls(camera, canvasCurrent);
+    const oControls = new TrackballControls(camera, canvasCurrent);
     oControls.enableDamping = true;
     oControls.maxDistance = 2000;
+    oControls.rotateSpeed = 4;
 
     // the light follow the camera position
     oControls.addEventListener("change", lightUpdate);
@@ -93,11 +95,11 @@ export default function Main({ project }) {
     //   }
     // }
 
-    // if (Object.keys(project.objectsPath).length !== 0) {
+    // if (Object.keys(project.paths).length !== 0) {
     //   const loader = new THREE.ObjectLoader();
-    //   // "/Users/angelabusato/github/custom-3D/server/src/resources/static/assets/uploads/4f40ccd1-4161-4861-9c99-0bbb2a0bba8b/5EA85E14-3C1A-407C-8012-F72833677ECE.json"
-    //   const object = await loader.load(project.objectsPath[0]);
+    //   const object = await loader.load(project.paths[0]);
     //   // const object = await loader.loadAsync("http://127.0.0.1:8080/src/resources/static/assets/uploads/4f40ccd1-4161-4861-9c99-0bbb2a0bba8b/5EA85E14-3C1A-407C-8012-F72833677ECE.json");
+    //   // const object = await loader.loadAsync(project.paths[0]);
     //   console.log(object);
     //   // for (const path of project.objectsPath) {
     //   //   const obj = await loader.load(path);
