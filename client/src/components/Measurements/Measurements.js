@@ -33,6 +33,7 @@ export default function Measurements() {
         // renderer.domElement.style.cursor = "crosshair";
       }
     });
+    
     window.addEventListener("keyup", function (event) {
       if (event.key === "Control") {
         ctrlDown = false;
@@ -155,8 +156,13 @@ export default function Measurements() {
   };
 
   return (
-    <>
-      <Button typeClass="btn--img" img={rulerIcon} onClick={addMeasures} title="Export" />
-    </>
+    <div className="popover__wrapper">
+      <Button typeClass="btn--img" img={rulerIcon} onClick={addMeasures} />
+      <div className="popover__content">
+        <p className="popover__message">
+          Press CTRL + Left Mouse Click to start drawing a line. Continue to hold CTRL and Left Mouse Click again to mark the end of the line
+        </p>
+      </div>
+    </div>
   );
 }
