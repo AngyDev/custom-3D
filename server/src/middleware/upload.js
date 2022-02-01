@@ -4,7 +4,7 @@ const fs = require("fs");
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const dir = __basedir + `/resources/static/assets/uploads/${req.params.projectId}`;
+    const dir = __basedir + `/public/uploads/${req.params.projectId}`;
 
     fs.exists(dir, (exist) => {
       if (!exist) {

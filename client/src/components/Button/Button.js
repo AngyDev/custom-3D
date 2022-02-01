@@ -9,7 +9,7 @@ export default function Button(props) {
             onClick={props.onClick}
             title={props.title}
         >
-            {props.text}{props.img && <img className="btn__img" src={props.img} alt="Comments" />}
+            {props.text}{props.img && <img className="btn__img" src={props.img} alt={props.title} />}
         </button>
     )
 }
