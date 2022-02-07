@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import clipping from "../../assets/images/icons/cut-solid.svg";
 import * as THREE from "three";
 import { LogLuvEncoding, Vector3 } from "three";
@@ -12,6 +12,12 @@ export default function Clipping() {
 
   const [clipped, setClipped] = useState(false);
   const [planeLists, setPlaneLists] = useState([]);
+  const [globalClipping, setGlobalClipping] = useState(false);
+
+  // The clipping button is disabled if there is only one plane
+  useEffect(() => {
+    setGlobalClipping(scene.children && scene.children.filter((object) => object.name.startsWith("Plane")).length <= 1)
+  });
 
   /**
    * Clipping of the mesh by the planes
@@ -100,7 +106,7 @@ export default function Clipping() {
 
   return (
     <>
-      <Button typeClass="btn--img" img={clipping} onClick={clipMesh} />
+      <Button typeClass="btn--img" img={clipping} onClick={clipMesh} disabled={globalClipping}/>
       {clipped && (
         <span>
           <input type="checkbox" name="" id="plane1" onChange={handleNegated} />
