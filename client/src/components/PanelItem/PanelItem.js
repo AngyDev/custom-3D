@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import * as THREE from "three";
 import { getIsTextOpen, setIsTextOpen } from "../../features/comments/commentsSlice";
-import { getScene, getSelectedMesh, setSelectedMesh } from "../../features/scene/sceneSlice";
+import { getGroup, getScene, getSelectedMesh, setSelectedMesh } from "../../features/scene/sceneSlice";
 import ChangeColor from "../ChangeColor/ChangeColor";
 import Modal from "../Modal/Modal";
 
 export default function PanelItem(props) {
   const scene = useSelector(getScene);
+  const group = useSelector(getGroup);
   const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
   const selectedMesh = useSelector(getSelectedMesh);
   const [selected, setSelected] = useState(false);
   const isTextOpen = useSelector(getIsTextOpen);
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
+  const [plane, setPlane] = useState(new THREE.Plane());
+  const [clipped, setClipped] = useState(false);
 
   useEffect(() => {
     // checks the selected mesh to add background to panel object
@@ -73,6 +77,34 @@ export default function PanelItem(props) {
     });
   };
 
+  const clippingMesh = (e) => {
+    const planeUuid = e.target.attributes.id.nodeValue;
+    const planeMesh = scene.children.filter((item) => item.uuid === planeUuid)[0];
+
+    // const plane = new THREE.Plane();
+    const normal = new THREE.Vector3();
+    const point = new THREE.Vector3();
+
+    // Create a THREE.Plane from a THREE.PlaneGeometry
+    normal.set(0, 0, 1).applyQuaternion(planeMesh.quaternion);
+    point.copy(planeMesh.position);
+    plane.setFromNormalAndCoplanarPoint(normal, point);
+
+    group.children.map((object) => {
+      if (!object.material.clippingPlanes || object.material.clippingPlanes.length === 0) {
+        object.material.clippingPlanes = [plane];
+      } else {
+        object.material.clippingPlanes = [];
+      }
+    });
+
+    setClipped((prev) => !prev);
+  };
+
+  const handleNegated = (e) => {
+    plane.negate();
+  };
+
   /**
    * Changes the color of the point
    * @param {String} uuid The uuid of the mesh
@@ -104,7 +136,7 @@ export default function PanelItem(props) {
   const modalColorMesh = (e) => {
     dispatch(setSelectedMesh(e.target.id));
     setIsOpen(true);
-  }
+  };
 
   const changeColorMesh = (color) => {
     scene.children.map((object) => {
@@ -113,11 +145,11 @@ export default function PanelItem(props) {
           if (mesh.uuid === selectedMesh) {
             mesh.material.color.set(color);
           }
-        })
+        });
       }
-    })
+    });
     setIsOpen(false);
-  }
+  };
 
   return (
     <>
@@ -135,13 +167,19 @@ export default function PanelItem(props) {
             <span id={props.uuid} name={props.name} className="translate" onClick={(e) => transformPlane(e, "translate")}></span>
             <span id={props.uuid} name={props.name} className="rotate" onClick={(e) => transformPlane(e, "rotate")}></span>
             <span id={props.uuid} name={props.name} className="scale" onClick={(e) => transformPlane(e, "scale")}></span>
+            <span id={props.uuid} name={props.name} className="clipping" onClick={(e) => clippingMesh(e)}></span>
+            {clipped && (
+              <span>
+                <input type="checkbox" name="" id="" onChange={handleNegated} />
+              </span>
+            )}
           </>
         )}
         {props.type === "scene" && <span className="changeColor" id={props.uuid} onClick={modalColorMesh} />}
         <span id={props.uuid} name={props.name} className="delete" onClick={props.deleteClick}></span>
       </div>
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Change mesh color" text="Change color">
-        <ChangeColor onClick={changeColorMesh}/>
+        <ChangeColor onClick={changeColorMesh} />
       </Modal>
     </>
   );

@@ -5,6 +5,7 @@ import { deleteObject } from "../../utils/api";
 import Button from "../Button/Button";
 import Modal from "../Modal/Modal";
 import PanelItem from "../PanelItem/PanelItem";
+import Clipping from "../Clipping/Clipping";
 
 export default function Panel(props) {
   const scene = useSelector(getScene);
@@ -102,15 +103,19 @@ export default function Panel(props) {
       <div className="panel">
         {props.type === "scene" ? (
           <div id="scene" className="">
-            {meshList.length > 0 && meshList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="scene" />)}
+            {meshList.length > 0 &&
+              meshList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="scene" />)}
           </div>
         ) : props.type === "planes" ? (
           <div id="planes" className="">
-            {planeList.length > 0 && planeList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="planes" />)}
+            <Clipping />
+            {planeList.length > 0 &&
+              planeList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="planes" />)}
           </div>
         ) : (
           <div id="points" className="">
-            {pointList.length > 0 && pointList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="points" />)}
+            {pointList.length > 0 &&
+              pointList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="points" />)}
           </div>
         )}
       </div>
