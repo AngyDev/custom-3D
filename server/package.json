@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec babel-node src/index.js",
-    "start": "node --exec babel-node src/index.js",
+    "start": "babel-node src/index.js",
     "knex": "knex --knexfile ./src/utils/knexfile.js",
     "seed": "knex seed:run --knexfile ./src/utils/knexfile.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,8 +17,10 @@
     "@babel/core": "^7.16.0",
     "@babel/node": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
+    "aws-sdk": "^2.1071.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "^4.17.1",
     "faker": "^5.5.3",
     "knex": "^0.95.14",

@@ -22,7 +22,7 @@ router.get("/projects", async (req, res) => {
 });
 
 /**
- * Get project by id
+ * Get project and objects by id
  */
 router.get("/project/:id", async (req, res) => {
   try {
@@ -33,7 +33,8 @@ router.get("/project/:id", async (req, res) => {
     const objectsPath = [];
 
     for (const object of objects) {
-      objectsPath.push(object["objectPath"]);
+      const path = process.env.AWS_S3_SERVER + "/" + process.env.AWS_BUCKET_NAME + "/" + object["objectPath"];
+      objectsPath.push(path);
     }
 
     return res.status(200).json({

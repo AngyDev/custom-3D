@@ -1,7 +1,8 @@
 import express from "express";
 import { ObjectsController } from "../controllers/ObjectsController";
 import { ProjectsController } from "../controllers/ProjectsController";
-const uploadFile = require("../middleware/upload");
+import { default as uploadFile } from "../connectors/aws_s3";
+const multer = require("multer");
 const fs = require("fs");
 
 const router = express.Router();
@@ -35,23 +36,11 @@ router.get("/objects/:projectId/", async (req, res) => {
     const objectsPath = [];
 
     if (response) {
-      //res.send(response);
-      // response return the objectPath field
-      //res.download(response[0]["objectPath"]);
       for (const object of response) {
-        objectsPath.push(object["objectPath"]);
-        // res.download(object["objectPath"]);
+        const path = process.env.AWS_S3_SERVER + "/" + process.env.AWS_BUCKET_NAME + "/" + object["objectPath"];
+        objectsPath.push(path);
       }
 
-      // const responseObject = [];
-
-      // for (const path of objectsPath) {
-      //   responseObject.push(require(path));
-      // }
-      // console.log(require(objectsPath[0]));
-      // res.pipe(fs.createWriteStream(objectsPath[0])).on("close", function () {
-      //   console.log("File written!");
-      // });
       res.send(objectsPath);
     } else {
       res.status(404).send("Not found");
@@ -61,40 +50,51 @@ router.get("/objects/:projectId/", async (req, res) => {
   }
 });
 
+const storage = multer.diskStorage({ dest: "temp/" });
+const upload = multer({ storage: storage });
+
 /**
- * Upload object file
+ * Save object on local aws
  */
-router.post("/upload/:projectId", async (req, res) => {
-  try {
-    // Checks if the project exist
-    const findProject = await ProjectsController.getProjectById(req.params.projectId);
-
-    if (!findProject) return res.status(404).send("Project not found");
-
-    // Uploads the file in the server folder
-    await uploadFile(req, res);
-
-    if (req.file === undefined) {
-      return res.status(400).send({ message: "Please upload a file!" });
-    }
-
-    const filepath = req.file.path;
-    const objectId = req.body.id;
-    const projectId = req.params.projectId;
-
-    // Saves the object in the db
-    await ObjectsController.saveObject(objectId, projectId, filepath);
-
-    res.status(200).send({
-      message: "Uploaded the file successfully: " + req.file.originalname,
-    });
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).send({
-      message: `Could not upload the file: ${req.file.originalname}. ${error}`,
-    });
+router.post("/upload/:projectId", upload.single("file"), function (req, res) {
+  if (req.file === undefined) {
+    return res.status(400).send({ message: "Please upload a file!" });
   }
+
+  const file = req.file;
+  const folder = req.params.projectId;
+  let filelocation;
+
+  // Checks if the project exist
+  const findProject = ProjectsController.getProjectById(req.params.projectId);
+
+  if (!findProject) return res.status(404).send("Project not found");
+
+  uploadFile(file, file.originalname, folder)
+    .then((response) => {
+      console.log("<<Uploaded file to S3>>");
+      console.log(response);
+      filelocation = response.Location;
+      // res.status(200).send({ filelocation });
+
+      const filepath = response.Key;
+      const objectId = req.body.id;
+      const projectId = req.params.projectId;
+
+      // Saves the object in the db
+      ObjectsController.saveObject(objectId, projectId, filepath).then((response) => {
+        res.status(200).send({
+          message: "Uploaded the file successfully: " + req.file.originalname,
+        });
+      }).catch((err) => {
+        console.error(err);
+      })
+
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(400).send("Error");
+    });
 });
 
 /**
