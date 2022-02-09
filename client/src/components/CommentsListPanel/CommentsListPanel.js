@@ -103,7 +103,7 @@ export default function CommentsListPanel({ projectId }) {
       const object = JSON.stringify(sphere.toJSON());
       const file = new Blob([object], { type: "application/json" });
 
-      const response = await saveObject(sphere.uuid, projectId, file, `${sphere.name}.json`);
+      const response = await saveObject(sphere.uuid, projectId, file, `${sphere.uuid}.json`);
 
       dispatch(incrementCount());
       setOpenText(true);

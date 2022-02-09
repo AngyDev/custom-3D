@@ -51,6 +51,7 @@ export default function Main({ project }) {
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.localClippingEnabled = true;
 
     canvasRef.current.appendChild(renderer.domElement);
 
@@ -89,23 +90,14 @@ export default function Main({ project }) {
     scene.add(axesHelper);
 
     // TODO: Remember when the user import files, checks the group mesh
-    // if (Object.keys(project.objects).length !== 0) {
-    //   for (const object of project.objects) {
-    //     scene.add(new THREE.ObjectLoader().parse(object.object));
-    //   }
-    // }
+    if (Object.keys(project.objectsPath).length !== 0) {
+      const loader = new THREE.ObjectLoader();
 
-    // if (Object.keys(project.paths).length !== 0) {
-    //   const loader = new THREE.ObjectLoader();
-    //   const object = await loader.load(project.paths[0]);
-    //   // const object = await loader.loadAsync("http://127.0.0.1:8080/src/resources/static/assets/uploads/4f40ccd1-4161-4861-9c99-0bbb2a0bba8b/5EA85E14-3C1A-407C-8012-F72833677ECE.json");
-    //   // const object = await loader.loadAsync(project.paths[0]);
-    //   console.log(object);
-    //   // for (const path of project.objectsPath) {
-    //   //   const obj = await loader.load(path);
-    //   //   console.log(obj);
-    //   // }
-    // }
+      for (const path of project.objectsPath) {
+        const object = await loader.loadAsync(path);
+        scene.add(object);
+      }
+    }
 
     const group = new THREE.Group();
     scene.add(group);
