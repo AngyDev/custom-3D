@@ -5,7 +5,8 @@ export const sceneSlice = createSlice({
     initialState: {
         scene: {},
         sceneModified: false,
-        selectedMesh: ''
+        selectedMesh: '',
+        positionVector: {}
     },
     reducers: {
         setScene: (state, action) => {
@@ -19,16 +20,19 @@ export const sceneSlice = createSlice({
         },
         setSelectedMesh: (state, action) => {
             state.selectedMesh = action.payload;
+        },
+        setPositionVector: (state, action) => {
+            state.positionVector = action.payload;
         }
     }
 })
 
 
 // Action creators are generated for each case reducer function
-export const { setScene, setSceneModified, setCanvas, setSelectedMesh } = sceneSlice.actions;
+export const { setScene, setSceneModified, setCanvas, setSelectedMesh, setPositionVector } = sceneSlice.actions;
 
 export const getScene = (state) => state.scene.scene;
-
+export const getPositionVector = (state) => state.scene.positionVector;
 export const getChildren = (state) => state.scene.scene.children;
 export const getSceneModified = (state) => state.scene.sceneModified;
 export const getCanvas = (state) => state.scene.canvas;
