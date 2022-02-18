@@ -87,3 +87,13 @@
   margin: 0 0 0 6px;
   cursor: pointer;
 }
+
+.offset::after {
+  content: "";
+  display: block;
+  background: url("../../assets/images/icons/pencil-ruler-solid.svg") no-repeat;
+  width: 18px;
+  height: 18px;
+  margin: 0 0 0 6px;
+  cursor: pointer;
+}

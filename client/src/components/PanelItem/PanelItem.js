@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
 import { getIsTextOpen, setIsTextOpen } from "../../features/comments/commentsSlice";
 import { getGroup, getScene, getSelectedMesh, setSelectedMesh } from "../../features/scene/sceneSlice";
 import ChangeColor from "../ChangeColor/ChangeColor";
 import Modal from "../Modal/Modal";
+import Offset from "../Offset/Offset";
 
 export default function PanelItem(props) {
   const scene = useSelector(getScene);
@@ -18,6 +18,8 @@ export default function PanelItem(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [plane, setPlane] = useState(new THREE.Plane());
   const [clipped, setClipped] = useState(false);
+  const [openOffset, setOpenOffset] = useState(false);
+  const [meshToOffset, setMeshToOffset] = useState();
 
   useEffect(() => {
     // checks the selected mesh to add background to panel object
@@ -151,6 +153,11 @@ export default function PanelItem(props) {
     setIsOpen(false);
   };
 
+  const handleOffset = (e) => {
+    setOpenOffset(true);
+    setMeshToOffset(e.target.id);
+  };
+
   return (
     <>
       <div className={selected ? "option option-active flex align-center" : "option flex align-center"}>
@@ -175,9 +182,15 @@ export default function PanelItem(props) {
             )}
           </>
         )}
-        {props.type === "scene" && <span className="changeColor" id={props.uuid} onClick={modalColorMesh} />}
+        {props.type === "scene" && (
+          <>
+            <span className="changeColor" id={props.uuid} onClick={modalColorMesh} />{" "}
+            <span className="offset" id={props.uuid} onClick={handleOffset} />
+          </>
+        )}
         <span id={props.uuid} name={props.name} className="delete" onClick={props.deleteClick}></span>
       </div>
+      <div>{openOffset && <Offset mesh={meshToOffset} />}</div>
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Change mesh color" text="Change color">
         <ChangeColor onClick={changeColorMesh} />
       </Modal>
