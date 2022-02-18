@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { setSceneModified, getChildrens, getGroup, getSceneModified, getScene } from "../../features/scene/sceneSlice";
-import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
+import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
-import { useDispatch } from "react-redux";
+import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
+import { getGroup, getSceneModified, setPositionVector, setSceneModified } from "../../features/scene/sceneSlice";
 
 export default function Import() {
-  const scene = useSelector(getScene);
   const group = useSelector(getGroup);
   const isModified = useSelector(getSceneModified);
   const dispatch = useDispatch();
 
   const [mesh, setMesh] = useState();
-  const [vector, setVector] = useState(new THREE.Vector3());
+  const [vector, setVector] = useState();
   const [isFirstImport, setIsFirstImport] = useState(true);
   const [files, setFiles] = useState([]);
 
+  const [imported, setImported] = useState(true);
+
   useEffect(() => {
     if (mesh !== undefined) {
-      // If it is the first file, calculates the position of the mesh otherwise create a group of mesh
       if (isFirstImport) {
-        setFirstObjPosition(mesh);
+        const position = setFirstObjPosition(mesh);
+        addPositionToMesh(mesh, position);
       } else {
-        addMeshToGroup(mesh);
+        addPositionToMesh(mesh);
       }
     }
-  }, [mesh, vector]);
+  }, [imported]);
 
   useEffect(() => {
     if (files.length > 0) {
       for (var i = 0; i < files.length; i++) {
-        loadFile(files[i]);
+        loadFile(files[i], createMeshFromFile);
       }
     }
   }, [files]);
@@ -45,7 +45,7 @@ export default function Import() {
    * Loads the file and reads the content of the file
    * @param {File} file File imported
    */
-  const loadFile = (file) => {
+  const loadFile = (file, createMeshFromFile) => {
     const filename = file.name;
     const reader = new FileReader();
 
@@ -53,8 +53,7 @@ export default function Import() {
       "load",
       (event) => {
         const contents = event.target.result;
-
-        setMesh(createMeshFromFile(filename, contents));
+        createMeshFromFile(filename, contents);
       },
       false
     );
@@ -80,26 +79,23 @@ export default function Import() {
 
     const mesh = new THREE.Mesh(geometry, material);
     mesh.name = filename;
-
-    return mesh;
+    setMesh(mesh);
+    setImported((prev) => !prev);
   };
 
   /**
-   * Adds the mesh to the group
-   * @param {Mesh} mesh THREE.Mesh
+   * Adds the position to the mesh and adds the mesh to the group
+   * @param {Object3D} mesh The mesh to be position
+   * @param {Vector3} position The positino of the mesh
    */
-  const addMeshToGroup = (mesh) => {
+  const addPositionToMesh = (mesh, position) => {
+    if (vector === undefined) {
+      mesh.position.set(-position.x, -position.y, -position.z);
+    } else {
+      mesh.position.set(-vector.x, -vector.y, -vector.z);
+    }
+
     group.add(mesh);
-
-    setGroupPosition();
-  };
-
-  /**
-   * Sets group position
-   */
-  const setGroupPosition = () => {
-    group.position.set(-vector.x, -vector.y, -vector.z);
-
     dispatch(setSceneModified(!isModified));
   };
 
@@ -114,9 +110,10 @@ export default function Import() {
     box3.getCenter(center);
 
     setVector(center);
+    dispatch(setPositionVector(center));
     setIsFirstImport(false);
 
-    addMeshToGroup(mesh);
+    return center;
   };
 
   return (
