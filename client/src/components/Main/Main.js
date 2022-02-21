@@ -100,6 +100,7 @@ export default function Main({ project }) {
     }
 
     const group = new THREE.Group();
+    group.name = "Import";
     scene.add(group);
 
     var render = function () {

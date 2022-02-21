@@ -8,7 +8,7 @@
 4. The user clicks the button
 5. The system applies the offset to the mesh
 
-### How to work the offset
+### How offset works
 
 When the user chooses the mesh, the system takes the uuid the selected mesh and searches the mesh object in the scene object through the hook useGetMesh. When the system returns the selected mesh object, the system takes the offset that the user has selected and then checks if it is the first time the offset is applied to the mesh. If it is then the system creates a new mesh cloning the geometry and the material of the selected mesh.
 
