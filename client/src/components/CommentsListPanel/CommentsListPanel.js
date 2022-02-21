@@ -1,20 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getCanvas, getChildren, getGroup, getScene, getSceneModified, getSelectedMesh, setSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
-import Button from "../Button/Button";
-import * as THREE from "three";
-import { CSS2DRenderer, CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { useForm } from "react-hook-form";
-import Panel from "../Panel/Panel";
-import { useDispatch } from "react-redux";
-
-import Comments from "../Comments/Comments";
-import { getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
-import { getHeaderHeight } from "../../features/dimensions/dimensionsSlice";
-import { getCountPoint, getIsTextOpen, incrementCount, setIsTextOpen } from "../../features/comments/commentsSlice";
-import AddPoint from "../AddPoint/AddPoint";
+import { useDispatch, useSelector } from "react-redux";
+import * as THREE from "three";
+import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { UserContext } from "../../context/UserContext";
+import { getCountPoint, getIsTextOpen, incrementCount } from "../../features/comments/commentsSlice";
+import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
+import { getCanvas, getChildren, getGroup, getScene, getSceneModified, getSelectedMesh, setSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
 import { getCommentsByProjectIdAndPointId, saveComment, saveObject } from "../../utils/api";
+import Button from "../Button/Button";
+import Comments from "../Comments/Comments";
+import Panel from "../Panel/Panel";
 
 export default function CommentsListPanel({ projectId }) {
   const {
@@ -120,6 +116,7 @@ export default function CommentsListPanel({ projectId }) {
     objectDiv.className = "label";
     objectDiv.textContent = object.name;
     objectDiv.style.marginTop = "2em";
+    objectDiv.id = object.name;
     const objectLabel = new CSS2DObject(objectDiv);
     objectLabel.name = "label";
     objectLabel.position.copy( object.position );

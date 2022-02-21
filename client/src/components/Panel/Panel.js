@@ -12,6 +12,7 @@ export default function Panel(props) {
   const [meshList, setMeshList] = useState([]);
   const [planeList, setPlaneList] = useState([]);
   const [pointList, setPointList] = useState([]);
+  const [measureList, setMeasureList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteElem, setDeleteElem] = useState();
 
@@ -25,7 +26,7 @@ export default function Panel(props) {
     setMeshList(meshList.filter((mesh) => mesh.parent !== null));
     if (scene.children) {
       scene.children.map((obj, i) => {
-        if (obj.type === "Group") {
+        if (obj.type === "Group" && obj.name === "Import") {
           obj.children.map((mesh) => {
             addMeshToList(meshList, mesh, setMeshList);
           });
@@ -33,6 +34,9 @@ export default function Panel(props) {
           addMeshToList(planeList, obj, setPlaneList);
         } else if (obj.name.startsWith("Point")) {
           addMeshToList(pointList, obj, setPointList);
+        } else if (obj.type === "Group" && obj.name.startsWith("Measure")) {
+          console.log(obj);
+          addMeshToList(measureList, obj, setMeasureList);
         }
       });
     }
@@ -73,13 +77,16 @@ export default function Panel(props) {
     setMeshList(meshList.filter((mesh) => mesh.uuid !== id));
     setPlaneList(planeList.filter((mesh) => mesh.uuid !== id));
     setPointList(pointList.filter((mesh) => mesh.uuid !== id));
+    setMeasureList(measureList.filter((mesh) => mesh.uuid !== id));
+    console.log(measureList);
+    console.log(id);
 
     // When the first element is deleted the selection go to the second, this is a workaround, pass a not existing id
     // no one mesh is selected
     dispatch(setSelectedMesh(1));
 
     scene.children.forEach((object) => {
-      if (object.type === "Group") {
+      if (object.type === "Group" && object.name === "Import") {
         object.children.forEach((item) => {
           if (item.uuid === id) {
             object.remove(item);
@@ -87,12 +94,19 @@ export default function Panel(props) {
         });
       } else if (object.type === "Mesh") {
         if (object.uuid === id) {
+          // removes the label of the point
+          document.getElementById(object.name).remove();
           scene.remove(object);
           tControls.detach();
         }
+      } else if (object.type === "Group" && object.name.startsWith("Measure")) {
+        if (object.uuid === id) {
+          // removes the label of the measure
+          document.getElementById(object.name).remove();
+          scene.remove(object);
+        }
       }
     });
-
     setIsOpen(false);
 
     // const response = deleteObject(object.uuid);
@@ -112,10 +126,15 @@ export default function Panel(props) {
             {planeList.length > 0 &&
               planeList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="planes" />)}
           </div>
-        ) : (
+        ) : props.type === "points" ? (
           <div id="points" className="">
             {pointList.length > 0 &&
               pointList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="points" />)}
+          </div>
+        ) : (
+          <div id="measure" className="">
+            {measureList.length > 0 &&
+              measureList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="measure" />)}
           </div>
         )}
       </div>
