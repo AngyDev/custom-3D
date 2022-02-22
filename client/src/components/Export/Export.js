@@ -19,7 +19,7 @@ export default function Export() {
       if (item.type === "Mesh") {
         options.push(item);
       }
-      if (item.type === "Group" && item.children.length !== 0) {
+      if (item.type === "Group" && item.name === "Import" && item.children.length !== 0) {
         item.children.forEach((obj) => options.push(obj));
       }
     });
