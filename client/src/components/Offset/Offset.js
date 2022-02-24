@@ -24,14 +24,14 @@ export default function Offset({ mesh }) {
     if (offset !== "1") {
       const center = getMeshCenter(meshToOffset);
 
-      if (newObject !== undefined && newObject.name === meshToOffset.name) {
+      if (newObject !== undefined && newObject.name.split("Offset ")[1] === meshToOffset.name) {
         newObject.geometry.center(center);
         newObject.position.copy(center);
         newObject.scale.set(offset, offset, offset);
         setNewObject(newObject);
       } else {
         const newMesh = new THREE.Mesh(meshToOffset.geometry.clone(), meshToOffset.material.clone());
-        newMesh.name = meshToOffset.name;
+        newMesh.name = "Offset " + meshToOffset.name;
 
         newMesh.geometry.center(center);
         newMesh.position.copy(center);

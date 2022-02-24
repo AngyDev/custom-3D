@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { setSidebarWidth } from "../../features/dimensions/dimensionsSlice";
 import AddPlane from "../AddPlane/AddPlane";
 import Measurements from "../Measurements/Measurements";
+import Paint from "../Paint/Paint";
 import Panel from "../Panel/Panel";
 
 export default function Sidebar() {
@@ -19,8 +20,9 @@ export default function Sidebar() {
   return (
     <div className="sidebar" ref={sidebarRef}>
       <div className="sidebar__buttons">
-        <div className="sidebar__btn-space">
+        <div className="sidebar__btn-space flex">
           <AddPlane />
+          {/* <Paint /> */}
           <Measurements setOpenPanel={setOpenMeasurePanel} openPanel={openMeausurePanel}/>
         </div>
       </div>

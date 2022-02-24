@@ -95,7 +95,7 @@ export default function Panel(props) {
       } else if (object.type === "Mesh") {
         if (object.uuid === id) {
           // removes the label of the point
-          document.getElementById(object.name).remove();
+          document.getElementById(object.name) && document.getElementById(object.name).remove();
           scene.remove(object);
           tControls.detach();
         }
