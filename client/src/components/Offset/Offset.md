@@ -20,4 +20,4 @@ It was decided to change the opacity and transparency of the mesh to render the 
 
 If in the scene is already present a mesh with the offset and if the user wants to change the offset of this mesh, the system, without creating a new mesh, will apply the same algorithm as above on the existing mesh.
 
-If the user chooses an offset equal 1, the mesh, if presents, is removed
+If the user chooses an offset equal 1, the mesh, if presents, it is removed
