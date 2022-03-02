@@ -24,25 +24,30 @@ export default function Offset({ mesh }) {
     if (offset !== "1") {
       const center = getMeshCenter(meshToOffset);
 
-      if (newObject !== undefined && newObject.name.split("Offset ")[1] === meshToOffset.name) {
-        newObject.geometry.center(center);
-        newObject.position.copy(center);
-        newObject.scale.set(offset, offset, offset);
-        setNewObject(newObject);
+      const geometry = meshToOffset.geometry;
+
+      const position = calculateOffset(geometry);
+
+      const newGeometry = new THREE.BufferGeometry();
+      newGeometry.setAttribute("position", new THREE.BufferAttribute(position, 3));
+
+      const newMaterial = new THREE.PointsMaterial({ color: 0xff0000, size: 1 });
+      const mesh2 = new THREE.Points(newGeometry, newMaterial);
+      // const mesh2 = new THREE.Mesh(newGeometry, newMaterial);
+      mesh2.position.set(meshToOffset.position.x, meshToOffset.position.y, meshToOffset.position.z);
+      mesh2.name = "Offset " + meshToOffset.name;
+
+      // Checks if the mesh is already present 
+      const offsetMesh = scene.children.filter((item) => item.name === mesh2.name);
+      if (offsetMesh.length === 0) {
+        scene.add(mesh2);
       } else {
-        const newMesh = new THREE.Mesh(meshToOffset.geometry.clone(), meshToOffset.material.clone());
-        newMesh.name = "Offset " + meshToOffset.name;
-
-        newMesh.geometry.center(center);
-        newMesh.position.copy(center);
-        newMesh.scale.set(offset, offset, offset);
-
-        newMesh.material.transparent = true;
-        newMesh.material.opacity = 0.5;
-
-        scene.add(newMesh);
-        setNewObject(newMesh);
+        scene.remove(offsetMesh[0]);
+        scene.add(mesh2);
       }
+
+      scene.add(mesh2);
+      setNewObject(mesh2);
     } else {
       if (newObject !== undefined) {
         scene.remove(newObject);
@@ -62,6 +67,26 @@ export default function Offset({ mesh }) {
     box3.getCenter(center);
 
     return center;
+  };
+
+  /**
+   * Calcuates the offset of the mesh
+   * @param {BufferGeometry} geometry The geometry of the mesh to offset
+   * @returns The position of the vertices after the offset
+   */
+  const calculateOffset = (geometry) => {
+    const vertices = geometry.attributes.position.array;
+    const normals = geometry.attributes.normal.array;
+
+    const position = new Float32Array(vertices.length * 3);
+
+    for (let i = 0; i < vertices.length; i = i + 3) {
+      position[i] = offset * normals[i] + vertices[i];
+      position[i + 1] = offset * normals[i + 1] + vertices[i + 1];
+      position[i + 2] = offset * normals[i + 2] + vertices[i + 2];
+    }
+
+    return position;
   };
 
   return (
