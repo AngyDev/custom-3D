@@ -14,7 +14,7 @@ When the user chooses the mesh, the system takes the uuid the selected mesh and 
 
 It was decided to use the following code `const newMesh = new THREE.Mesh(meshToOffset.geometry.clone(), meshToOffset.material.clone());` instead of `const newMesh = meshToOffset.clone()`, because the last command create a new mesh with references to the cloned mesh. It is problem because when we apply updates on the new mesh them are replied on the original one.
 
-To offset a mesh the system applies a scale method to the mesh. To do that the system has to take the center of the original mesh and applies it to the new mesh and set a new position based on the center of the mesh. Then it sets the offset to the scale of the mesh. At the end the system adds the mesh to the scene. 
+To offset a mesh the system applies a scale method to the mesh. To do that the system has to take the center of the original mesh and applies it to the new mesh and set a new position based on the center of the mesh. Then it sets the offset to the scale of the mesh. At the end the system adds the mesh to the scene.
 
 It was decided to change the opacity and transparency of the mesh to render the new mesh more readable.
 

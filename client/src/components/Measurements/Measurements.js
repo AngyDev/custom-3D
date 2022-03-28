@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 import * as THREE from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import rulerIcon from "../../assets/images/icons/ruler-solid.svg";
@@ -124,7 +125,7 @@ export default function Measurements({ openPanel, setOpenPanel }) {
               linewidth: 100,
               depthTest: false,
               opacity: 0.75,
-            })
+            }),
           );
           line.frustumCulled = false;
           line.name = "Measure" + count;
@@ -219,3 +220,8 @@ export default function Measurements({ openPanel, setOpenPanel }) {
     </div>
   );
 }
+
+Measurements.propTypes = {
+  setEvent: PropTypes.func,
+  setFinish: PropTypes.func,
+};

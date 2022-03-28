@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
 import * as THREE from "three";
 import offsetIcon from "../../assets/images/icons/pencil-ruler-solid.svg";
 import { getScene } from "../../features/scene/sceneSlice";
@@ -22,7 +23,7 @@ export default function Offset({ mesh }) {
    */
   const applyOffset = () => {
     if (offset !== "1") {
-      const center = getMeshCenter(meshToOffset);
+      // const center = getMeshCenter(meshToOffset);
 
       const geometry = meshToOffset.geometry;
 
@@ -37,7 +38,7 @@ export default function Offset({ mesh }) {
       mesh2.position.set(meshToOffset.position.x, meshToOffset.position.y, meshToOffset.position.z);
       mesh2.name = "Offset " + meshToOffset.name;
 
-      // Checks if the mesh is already present 
+      // Checks if the mesh is already present
       const offsetMesh = scene.children.filter((item) => item.name === mesh2.name);
       if (offsetMesh.length === 0) {
         scene.add(mesh2);
@@ -98,3 +99,7 @@ export default function Offset({ mesh }) {
     </>
   );
 }
+
+Offset.propTypes = {
+  mesh: PropTypes.string.isRequired,
+};

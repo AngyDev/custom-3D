@@ -6,11 +6,21 @@ import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { UserContext } from "../../context/UserContext";
 import { getCountPoint, getIsTextOpen, incrementCount } from "../../features/comments/commentsSlice";
 import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
-import { getCanvas, getChildren, getGroup, getScene, getSceneModified, getSelectedMesh, setSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
+import {
+  getCanvas,
+  getChildren,
+  getGroup,
+  getScene,
+  getSceneModified,
+  getSelectedMesh,
+  setSceneModified,
+  setSelectedMesh,
+} from "../../features/scene/sceneSlice";
 import { getCommentsByProjectIdAndPointId, saveComment, saveObject } from "../../utils/api";
 import Button from "../Button/Button";
 import Comments from "../Comments/Comments";
 import Panel from "../Panel/Panel";
+import PropTypes from "prop-types";
 
 export default function CommentsListPanel({ projectId }) {
   const {
@@ -32,7 +42,6 @@ export default function CommentsListPanel({ projectId }) {
   const isTextOpen = useSelector(getIsTextOpen);
   const sidebarWidth = useSelector(getSidebarWidth);
   const headerHeight = useSelector(getHeaderHeight);
-  const children = useSelector(getChildren);
   const countPoint = useSelector(getCountPoint);
   const selectedMesh = useSelector(getSelectedMesh);
 
@@ -99,7 +108,7 @@ export default function CommentsListPanel({ projectId }) {
       const object = JSON.stringify(sphere.toJSON());
       const file = new Blob([object], { type: "application/json" });
 
-      const response = await saveObject(sphere.uuid, projectId, file, `${sphere.uuid}.json`);
+      await saveObject(sphere.uuid, projectId, file, `${sphere.uuid}.json`);
 
       dispatch(incrementCount());
       setOpenText(true);
@@ -119,7 +128,7 @@ export default function CommentsListPanel({ projectId }) {
     objectDiv.id = object.name;
     const objectLabel = new CSS2DObject(objectDiv);
     objectLabel.name = "label";
-    objectLabel.position.copy( object.position );
+    objectLabel.position.copy(object.position);
     objectLabel.position.set(0, 0, 0);
     object.add(objectLabel);
   };
@@ -167,3 +176,7 @@ export default function CommentsListPanel({ projectId }) {
     </div>
   );
 }
+
+CommentsListPanel.propTypes = {
+  projectId: PropTypes.string.isRequired,
+};

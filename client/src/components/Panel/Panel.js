@@ -1,13 +1,13 @@
-import React, { Fragment, useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGroup, getSceneModified, getScene, setSelectedMesh } from "../../features/scene/sceneSlice";
-import { deleteObject } from "../../utils/api";
+import { getScene, getSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
 import Button from "../Button/Button";
+import Clipping from "../Clipping/Clipping";
 import Modal from "../Modal/Modal";
 import PanelItem from "../PanelItem/PanelItem";
-import Clipping from "../Clipping/Clipping";
 
-export default function Panel(props) {
+export default function Panel({ type }) {
   const scene = useSelector(getScene);
   const [meshList, setMeshList] = useState([]);
   const [planeList, setPlaneList] = useState([]);
@@ -16,7 +16,6 @@ export default function Panel(props) {
   const [isOpen, setIsOpen] = useState(false);
   const [deleteElem, setDeleteElem] = useState();
 
-  const group = useSelector(getGroup);
   const isModified = useSelector(getSceneModified);
   const dispatch = useDispatch();
 
@@ -35,7 +34,6 @@ export default function Panel(props) {
         } else if (obj.name.startsWith("Point")) {
           addMeshToList(pointList, obj, setPointList);
         } else if (obj.type === "Group" && obj.name.startsWith("Measure")) {
-          console.log(obj);
           addMeshToList(measureList, obj, setMeasureList);
         }
       });
@@ -70,16 +68,12 @@ export default function Panel(props) {
    * @param {Event} e
    */
   const deleteClick = () => {
-    const name = deleteElem.target.attributes.name.nodeValue;
     const id = deleteElem.target.attributes.id.nodeValue;
-    const parent = deleteElem.target.parentNode;
 
     setMeshList(meshList.filter((mesh) => mesh.uuid !== id));
     setPlaneList(planeList.filter((mesh) => mesh.uuid !== id));
     setPointList(pointList.filter((mesh) => mesh.uuid !== id));
     setMeasureList(measureList.filter((mesh) => mesh.uuid !== id));
-    console.log(measureList);
-    console.log(id);
 
     // When the first element is deleted the selection go to the second, this is a workaround, pass a not existing id
     // no one mesh is selected
@@ -115,18 +109,18 @@ export default function Panel(props) {
   return (
     <>
       <div className="panel">
-        {props.type === "scene" ? (
+        {type === "scene" ? (
           <div id="scene" className="">
             {meshList.length > 0 &&
               meshList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="scene" />)}
           </div>
-        ) : props.type === "planes" ? (
+        ) : type === "planes" ? (
           <div id="planes" className="">
             <Clipping />
             {planeList.length > 0 &&
               planeList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="planes" />)}
           </div>
-        ) : props.type === "points" ? (
+        ) : type === "points" ? (
           <div id="points" className="">
             {pointList.length > 0 &&
               pointList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="points" />)}
@@ -149,3 +143,7 @@ export default function Panel(props) {
     </>
   );
 }
+
+Panel.propTypes = {
+  type: PropTypes.string.isRequired,
+};

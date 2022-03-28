@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { getGroup, getSceneModified, setPositionVector, setSceneModified } from "../../features/scene/sceneSlice";
-import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree} from "three-mesh-bvh";
+import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-mesh-bvh";
 
 export default function Import() {
   THREE.Mesh.prototype.raycast = acceleratedRaycast;
@@ -60,7 +60,7 @@ export default function Import() {
         const contents = event.target.result;
         createMeshFromFile(filename, contents);
       },
-      false
+      false,
     );
 
     reader.readAsArrayBuffer(file);

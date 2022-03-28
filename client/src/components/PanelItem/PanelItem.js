@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 import * as THREE from "three";
 import { getIsTextOpen, setIsTextOpen } from "../../features/comments/commentsSlice";
 import { getGroup, getScene, getSelectedMesh, setSelectedMesh } from "../../features/scene/sceneSlice";
@@ -7,7 +8,7 @@ import ChangeColor from "../ChangeColor/ChangeColor";
 import Modal from "../Modal/Modal";
 import Offset from "../Offset/Offset";
 
-export default function PanelItem(props) {
+export default function PanelItem({ uuid, type, name, deleteClick }) {
   const scene = useSelector(getScene);
   const group = useSelector(getGroup);
   const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
@@ -16,14 +17,14 @@ export default function PanelItem(props) {
   const isTextOpen = useSelector(getIsTextOpen);
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const [plane, setPlane] = useState(new THREE.Plane());
+  const [plane] = useState(new THREE.Plane());
   const [clipped, setClipped] = useState(false);
   const [openOffset, setOpenOffset] = useState(false);
   const [meshToOffset, setMeshToOffset] = useState();
 
   useEffect(() => {
     // checks the selected mesh to add background to panel object
-    if (props.uuid === selectedMesh) {
+    if (uuid === selectedMesh) {
       setSelected(true);
     } else {
       setSelected(false);
@@ -103,7 +104,7 @@ export default function PanelItem(props) {
     setClipped((prev) => !prev);
   };
 
-  const handleNegated = (e) => {
+  const handleNegated = () => {
     plane.negate();
   };
 
@@ -161,20 +162,20 @@ export default function PanelItem(props) {
   return (
     <>
       <div className={selected ? "option option-active flex align-center" : "option flex align-center"}>
-        <span className="visible" id={props.uuid} onClick={handleClick}></span>
-        {props.type === "points" ? (
-          <span className="option__point" onClick={() => pointClick(props.uuid)}>
-            {props.name}
+        <span className="visible" id={uuid} onClick={handleClick}></span>
+        {type === "points" ? (
+          <span className="option__point" onClick={() => pointClick(uuid)}>
+            {name}
           </span>
         ) : (
-          <span>{props.name}</span>
+          <span>{name}</span>
         )}
-        {props.type === "planes" && (
+        {type === "planes" && (
           <>
-            <span id={props.uuid} name={props.name} className="translate" onClick={(e) => transformPlane(e, "translate")}></span>
-            <span id={props.uuid} name={props.name} className="rotate" onClick={(e) => transformPlane(e, "rotate")}></span>
-            <span id={props.uuid} name={props.name} className="scale" onClick={(e) => transformPlane(e, "scale")}></span>
-            <span id={props.uuid} name={props.name} className="clipping" onClick={(e) => clippingMesh(e)}></span>
+            <span id={uuid} name={name} className="translate" onClick={(e) => transformPlane(e, "translate")}></span>
+            <span id={uuid} name={name} className="rotate" onClick={(e) => transformPlane(e, "rotate")}></span>
+            <span id={uuid} name={name} className="scale" onClick={(e) => transformPlane(e, "scale")}></span>
+            <span id={uuid} name={name} className="clipping" onClick={(e) => clippingMesh(e)}></span>
             {clipped && (
               <span>
                 <input type="checkbox" name="" id="" onChange={handleNegated} />
@@ -182,13 +183,13 @@ export default function PanelItem(props) {
             )}
           </>
         )}
-        {props.type === "scene" && (
+        {type === "scene" && (
           <>
-            <span className="changeColor" id={props.uuid} onClick={modalColorMesh} />{" "}
-            <span className="offset" id={props.uuid} onClick={handleOffset} />
+            <span className="changeColor" id={uuid} onClick={modalColorMesh} />
+            <span className="offset" id={uuid} onClick={handleOffset} />
           </>
         )}
-        <span id={props.uuid} name={props.name} className="delete" onClick={props.deleteClick}></span>
+        <span id={uuid} name={name} className="delete" onClick={deleteClick}></span>
       </div>
       <div>{openOffset && <Offset mesh={meshToOffset} />}</div>
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Change mesh color" text="Change color">
@@ -197,3 +198,10 @@ export default function PanelItem(props) {
     </>
   );
 }
+
+PanelItem.propTypes = {
+  type: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  uuid: PropTypes.string.isRequired,
+  deleteClick: PropTypes.func.isRequired,
+};

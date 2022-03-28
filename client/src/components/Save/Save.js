@@ -1,12 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Button from "../Button/Button";
 import saveIcon from "../../assets/images/icons/save-solid.svg";
 import { getChildren } from "../../features/scene/sceneSlice";
 import { useSelector } from "react-redux";
 import { saveObject } from "../../utils/api";
 import Modal from "../Modal/Modal";
+import Spinner from "../Spinner/Spinner";
+import PropTypes from "prop-types";
 
 export default function Save({ projectId }) {
+  const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const children = useSelector(getChildren);
 
@@ -18,7 +21,7 @@ export default function Save({ projectId }) {
     const group = children.filter((item) => item.type === "Group");
     const mesh = children.filter((item) => item.type === "Mesh");
 
-    // is not possible to create a unique array of group and mesh because it adds the mesh to the group in the scene, 
+    // is not possible to create a unique array of group and mesh because it adds the mesh to the group in the scene,
     // why? I don't know
     for (const object of group[0].children) {
       await save(object);
@@ -32,6 +35,7 @@ export default function Save({ projectId }) {
   };
 
   const save = async (object) => {
+    setLoading(true);
     // updates the matrix position before convert to JSON
     object.updateMatrixWorld(true);
 
@@ -39,10 +43,18 @@ export default function Save({ projectId }) {
     const output = JSON.stringify(json);
     const file = new Blob([output], { type: "application/json" });
     await saveObject(object.uuid, projectId, file, `${object.uuid}.json`);
+    setLoading(false);
+
+    // saveObject(object.uuid, projectId, file, `${object.uuid}.json`).then((error) => {
+    //   alert(error);
+    // }).then(() => {
+    //   setLoading(false);
+    // });
   };
 
   return (
     <>
+      {loading ? <Spinner /> : ""}
       <Button typeClass="btn--img" img={saveIcon} onClick={openModal} title="Save" />
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Save Objects" text="Save">
         <div className="flex flex-col">
@@ -55,3 +67,7 @@ export default function Save({ projectId }) {
     </>
   );
 }
+
+Save.propTypes = {
+  projectId: PropTypes.string,
+};

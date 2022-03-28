@@ -9,26 +9,25 @@ import { useParams } from "react-router";
 import useGetProjectById from "../../hooks/useGetProjectById";
 
 export default function LayoutEditor() {
-    const { id } = useParams();
-    const { project } = useGetProjectById(id);
+  const { id } = useParams();
+  const { project } = useGetProjectById(id);
 
-    useEffect(() => {
-        console.log("id: " + id);
-    }, []);
+  useEffect(() => {
+    console.log("id: " + id);
+  }, []);
 
-    const isCommentsActive = useSelector(getIsCommentsActive);
+  const isCommentsActive = useSelector(getIsCommentsActive);
 
-    return (
-        Object.keys(project).length > 0 &&
-        <>
-            <Header projectId={id} />
-            <div className="flex">
-                <Sidebar />
-                <Main project={project}/>
-                {
-                    isCommentsActive && <CommentsListPanel projectId={id}/>
-                }
-            </div>
-        </>
-    );
+  return (
+    Object.keys(project).length > 0 && (
+      <>
+        <Header projectId={id} />
+        <div className="flex">
+          <Sidebar />
+          <Main project={project} />
+          {isCommentsActive && <CommentsListPanel projectId={id} />}
+        </div>
+      </>
+    )
+  );
 }

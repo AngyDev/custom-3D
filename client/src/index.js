@@ -7,7 +7,8 @@ import App from "./features/App/App";
 import "./assets/styles/index.scss";
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>
-    , document.getElementById("root"));
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root"),
+);

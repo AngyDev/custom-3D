@@ -7,7 +7,10 @@
     "build": "webpack --config webpack.config.js",
     "start": "webpack serve --open",
     "test": "jest --env=jsdom",
-    "test-coverage": "jest --coverage"
+    "test-coverage": "jest --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "repository": {
     "type": "git",
@@ -34,7 +37,10 @@
     "copy-webpack-plugin": "^9.0.1",
     "css-loader": "^5.2.6",
     "enzyme": "^3.11.0",
-    "eslint": "^8.4.1",
+    "eslint": "^8.12.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.29.4",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
     "jest": "^27.2.1",
@@ -42,6 +48,7 @@
     "postcss": "^8.3.5",
     "postcss-loader": "^6.1.1",
     "postcss-preset-env": "^6.7.0",
+    "prettier": "^2.6.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
@@ -68,6 +75,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.15.0",
     "axios": "^0.24.0",
+    "prop-types": "^15.8.1",
     "react-hook-form": "^7.21.0",
     "react-loader-spinner": "^6.0.0-0",
     "redux-mock-store": "^1.5.4",

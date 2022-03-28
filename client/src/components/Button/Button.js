@@ -1,16 +1,21 @@
-import React from 'react'
+import React from "react";
+import PropTypes from "prop-types";
 
-export default function Button(props) {
-    return (
-        <button
-            className={`btn ${props.typeClass}`}
-            type={props.type}
-            disabled={props.loading}
-            onClick={props.onClick}
-            title={props.title}
-            disabled={props.disabled}
-        >
-            {props.text}{props.img && <img className="btn__img" src={props.img} alt={props.title} />}
-        </button>
-    )
+export default function Button({ typeClass, type, onClick, title, disabled, text, img }) {
+  return (
+    <button className={`btn ${typeClass}`} type={type} onClick={onClick} title={title} disabled={disabled}>
+      {text}
+      {img && <img className="btn__img" src={img} alt={title} />}
+    </button>
+  );
 }
+
+Button.propTypes = {
+  typeClass: PropTypes.string,
+  type: PropTypes.string,
+  onClick: PropTypes.func,
+  title: PropTypes.string,
+  disabled: PropTypes.bool,
+  text: PropTypes.string,
+  img: PropTypes.string,
+};
