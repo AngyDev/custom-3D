@@ -5,11 +5,12 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { TrackballControls } from "three/examples/jsm/controls/TrackballControls.js";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
-import { CSS2DRenderer, CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { getIsCommentsActive } from "../../features/comments/commentsSlice";
-import { getSceneModified, getScene, setScene, setSceneModified, setCanvas } from "../../features/scene/sceneSlice";
+import { getSceneModified, getScene, setScene, setSceneModified, setCanvas, setControls } from "../../features/scene/sceneSlice";
 
 export default function Main({ project }) {
+
   const isCommentsActive = useSelector(getIsCommentsActive);
 
   const sceneRedux = useSelector(getScene);
@@ -70,6 +71,8 @@ export default function Main({ project }) {
 
     // the light follow the camera position
     oControls.addEventListener("change", lightUpdate);
+
+    dispatch(setControls(oControls));
 
     function lightUpdate() {
       directionalLight.position.copy(camera.position);

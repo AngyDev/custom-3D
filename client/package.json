@@ -69,8 +69,10 @@
     "@babel/plugin-transform-runtime": "^7.15.0",
     "axios": "^0.24.0",
     "react-hook-form": "^7.21.0",
+    "react-loader-spinner": "^6.0.0-0",
     "redux-mock-store": "^1.5.4",
     "three": "^0.132.2",
+    "three-mesh-bvh": "^0.5.7",
     "ts-jest": "^27.0.5"
   }
 }

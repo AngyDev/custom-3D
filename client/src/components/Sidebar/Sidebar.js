@@ -22,8 +22,10 @@ export default function Sidebar() {
       <div className="sidebar__buttons">
         <div className="sidebar__btn-space flex">
           <AddPlane />
-          {/* <Paint /> */}
-          <Measurements setOpenPanel={setOpenMeasurePanel} openPanel={openMeausurePanel}/>
+          <Measurements setOpenPanel={setOpenMeasurePanel} openPanel={openMeausurePanel} />
+        </div>
+        <div className="sidebar__btn-space flex">
+          <Paint />
         </div>
       </div>
 
