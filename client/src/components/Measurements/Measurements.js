@@ -33,7 +33,6 @@ export default function Measurements({ openPanel, setOpenPanel }) {
 
   useEffect(() => {
     if (finish) {
-      console.log(scene);
       dispatch(setSceneModified(!isModified));
       setFinish(false);
     }

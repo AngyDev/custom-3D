@@ -3,8 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { getGroup, getSceneModified, setPositionVector, setSceneModified } from "../../features/scene/sceneSlice";
+import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree} from "three-mesh-bvh";
 
 export default function Import() {
+  THREE.Mesh.prototype.raycast = acceleratedRaycast;
+  THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
+  THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
+
   const group = useSelector(getGroup);
   const isModified = useSelector(getSceneModified);
   const dispatch = useDispatch();
@@ -73,9 +78,17 @@ export default function Import() {
     geometry.computeVertexNormals();
 
     const material = new THREE.MeshStandardMaterial({
-      color: "#" + (((1 << 24) * Math.random()) | 0).toString(16),
+      // color: "#" + (((1 << 24) * Math.random()) | 0).toString(16),
+      color: "#C7AC96",
       side: THREE.DoubleSide,
+      vertexColors: true,
     });
+
+    const colorArray = new Uint8Array(geometry.attributes.position.count * 3);
+    colorArray.fill(255);
+    const colorAttr = new THREE.BufferAttribute(colorArray, 3, true);
+    colorAttr.setUsage(THREE.DynamicDrawUsage);
+    geometry.setAttribute("color", colorAttr);
 
     const mesh = new THREE.Mesh(geometry, material);
     mesh.name = filename;
@@ -94,7 +107,7 @@ export default function Import() {
     } else {
       mesh.position.set(-vector.x, -vector.y, -vector.z);
     }
-
+    mesh.geometry.computeBoundsTree();
     group.add(mesh);
     dispatch(setSceneModified(!isModified));
   };
