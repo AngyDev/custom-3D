@@ -63,6 +63,8 @@ export const saveObject = async (id, projectId, file, filename) => {
       url: `${API_URL}/upload/${projectId}`,
       data: data,
     });
+
+    return res.data;
   } catch (error) {
     return error.message;
   }

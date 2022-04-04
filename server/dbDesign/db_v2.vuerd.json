@@ -616,7 +616,7 @@
           "active": false,
           "left": 620,
           "top": 434,
-          "zIndex": 4,
+          "zIndex": 3,
           "widthName": 61.9599609375,
           "widthComment": 60,
           "color": "#03A9F4"
@@ -771,7 +771,7 @@
           "active": true,
           "left": 47.3333,
           "top": 403,
-          "zIndex": 20,
+          "zIndex": 4,
           "widthName": 60,
           "widthComment": 60,
           "color": "#FF9800"
