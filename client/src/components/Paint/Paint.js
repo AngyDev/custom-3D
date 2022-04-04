@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Button from "../Button/Button";
 import brushIcon from "../../assets/images/icons/brush-solid.svg";
 import * as THREE from "three";
@@ -189,11 +189,6 @@ export default function Paint() {
       }
     }
   };
-
-  // const pointerWheel = (event) => {
-  //   params.size += event.deltaY * 0.5;
-  //   params.size = Math.max(Math.min(params.size, 4), 0.5);
-  // }
 
   const changeBrushSize = (event) => {
     const { value } = event.target;

@@ -32,7 +32,7 @@ export default function Offset({ mesh }) {
       const newGeometry = new THREE.BufferGeometry();
       newGeometry.setAttribute("position", new THREE.BufferAttribute(position, 3));
 
-      const newMaterial = new THREE.PointsMaterial({ color: 0xff0000, size: 1 });
+      const newMaterial = new THREE.PointsMaterial({ color: 0xff0000, size: 2 });
       const mesh2 = new THREE.Points(newGeometry, newMaterial);
       // const mesh2 = new THREE.Mesh(newGeometry, newMaterial);
       mesh2.position.set(meshToOffset.position.x, meshToOffset.position.y, meshToOffset.position.z);
@@ -55,19 +55,6 @@ export default function Offset({ mesh }) {
         setNewObject();
       }
     }
-  };
-
-  /**
-   * Gets the center of the mesh to offset
-   * @param {Mesh} meshToOffset The mesh to apply the offset
-   * @returns The center of the mesh
-   */
-  const getMeshCenter = (meshToOffset) => {
-    const center = new THREE.Vector3();
-    const box3 = new THREE.Box3().setFromObject(meshToOffset);
-    box3.getCenter(center);
-
-    return center;
   };
 
   /**
