@@ -222,6 +222,6 @@ export default function Measurements({ openPanel, setOpenPanel }) {
 }
 
 Measurements.propTypes = {
-  setEvent: PropTypes.func,
-  setFinish: PropTypes.func,
+  openPanel: PropTypes.bool,
+  setOpenPanel: PropTypes.func,
 };

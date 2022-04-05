@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import * as THREE from "three";
 import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
-import downloadIcon from "../../assets/images/icons/download-solid.svg";
+import downloadIcon from "../../assets/images/icons/upload-solid.svg";
 import { getChildren } from "../../features/scene/sceneSlice";
 import Button from "../Button/Button";
 import { Checkbox } from "../Checkbox/Checkbox";

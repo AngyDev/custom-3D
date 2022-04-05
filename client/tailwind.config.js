@@ -5,6 +5,9 @@ module.exports = {
       fontFamily: {
         app: "var(--font-app)",
       },
+      colors: {
+        base: "var(--color-base-app)",
+      },
     },
   },
   plugins: [],

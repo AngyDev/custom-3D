@@ -204,10 +204,11 @@ export default function Paint() {
 
   return (
     <>
-      <Button typeClass="btn--img" img={brushIcon} onClick={handleClick} title="Paint" />
-      <div className="flex" style={{ gap: "0.5em" }}>
-        Brush size: <input type="range" min="0.5" max="4" step="0.5" defaultValue={params.size} onMouseUp={changeBrushSize} />
-        <input type="color" style={{ width: "32px" }} defaultValue="#0F4E55" onChange={changeBrushColor} />
+      <Button img={brushIcon} onClick={handleClick} title="Paint" />
+      <div className="flex gap-2 items-center">
+        <span className="text-sm">Brush size: </span>
+        <input type="range" min="0.5" max="4" step="0.5" defaultValue={params.size} onMouseUp={changeBrushSize} />
+        <input id="color" type="color" className="w-8" defaultValue="#0F4E55" onChange={changeBrushColor} />
       </div>
     </>
   );

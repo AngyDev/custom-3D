@@ -2,7 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "./base/base.css";
 @import "./base/variables.css";
 
 @import "../../components/Dashboard/dashboard.css";
 @import "../../components/Button/button.css";
+@import "../../components/Import/import.css";
+@import "../../components/Main/main.css";
+@import "../../components/Sidebar/sidebar.css";
+@import "../../components/Panel/panel.css";
+@import "../../components/PanelItem/panelItem.css";
+@import "../../components/Measurements/measurements.css";
+@import "../../components/Paint/paint.css";
+@import "../../components/CommentsListPanel/commentsListPanel.css";

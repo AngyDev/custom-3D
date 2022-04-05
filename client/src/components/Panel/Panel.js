@@ -108,7 +108,7 @@ export default function Panel({ type }) {
 
   return (
     <>
-      <div className="panel">
+      <div className="panel rounded-sm">
         {type === "scene" ? (
           <div id="scene" className="">
             {meshList.length > 0 &&

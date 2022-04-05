@@ -18,13 +18,13 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <div className="sidebar" ref={sidebarRef}>
+    <div className="sidebar bg-base text-white" ref={sidebarRef}>
       <div className="sidebar__buttons">
         <div className="sidebar__btn-space flex">
           <AddPlane />
           <Measurements setOpenPanel={setOpenMeasurePanel} openPanel={openMeausurePanel} />
         </div>
-        <div className="sidebar__btn-space flex">
+        <div className="sidebar__btn-space flex justify-between">
           <Paint />
         </div>
       </div>
