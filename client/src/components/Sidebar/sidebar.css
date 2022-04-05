@@ -1,0 +1,23 @@
+.sidebar {
+  width: 310px;
+  min-width: 310px;
+  height: 100vh;
+  background-color: $sidebar-bg-color;
+  padding: 10px;
+}
+
+.sidebar__buttons {
+  @apply mt-2;
+}
+
+.sidebar__btn-space {
+  @apply mb-4 gap-2;
+}
+
+.scene__list {
+  @apply mt-3;
+}
+
+.scene__panel {
+  @apply mb-3;
+}
