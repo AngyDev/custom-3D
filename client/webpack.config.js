@@ -29,9 +29,13 @@ module.exports = {
           },
         },
       },
+      // {
+      //   test: /\.(sa|sc|c)ss$/,
+      //   use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
+      // },
       {
-        test: /\.(sa|sc|c)ss$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, { loader: "css-loader", options: { importLoaders: 1 } }, "postcss-loader"],
       },
       {
         test: /\.(woff|woff2|ttf|otf|eot)$/,
