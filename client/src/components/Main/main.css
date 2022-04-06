@@ -1,10 +1,10 @@
 .canvas {
-    width: calc(100% - 330px);
+    width: calc(100% - 310px);
     /* To have the max height of the view */
     height: 100vh;
 }
 
 .canvas__comments {
-    width: calc(100% - 660px);
+    width: calc(100% - 620px);
     height: 100vh;
 }
