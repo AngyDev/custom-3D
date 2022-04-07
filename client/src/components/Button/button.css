@@ -15,7 +15,7 @@
 } */
 
 .btn {
-  @apply flex justify-center items-center bg-gray-400 text-black font-bold m-0 cursor-pointer outline-none uppercase rounded p-2 hover:bg-slate-500;
+  @apply border-none flex justify-center items-center bg-gray-400 text-black font-bold m-0 cursor-pointer outline-none uppercase rounded p-2 hover:bg-slate-500;
 }
 
 .btn-active {
@@ -28,4 +28,8 @@
 
 .btn--size {
   @apply text-sm;
+}
+
+input[type="reset"] {
+  @apply bg-gray-200;
 }

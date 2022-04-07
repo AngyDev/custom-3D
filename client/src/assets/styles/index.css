@@ -4,6 +4,7 @@
 
 @import "./base/base.css";
 @import "./base/variables.css";
+@import "./base/form.css";
 
 @import "../../components/Dashboard/dashboard.css";
 @import "../../components/Button/button.css";
@@ -15,3 +16,6 @@
 @import "../../components/Measurements/measurements.css";
 @import "../../components/Paint/paint.css";
 @import "../../components/CommentsListPanel/commentsListPanel.css";
+@import "../../components/Comments/comments.css";
+@import "../../components/Modal/modal.css";
+@import "../../components/ChangeColor/changeColor.css";

@@ -1,0 +1,27 @@
+.color {
+  width: fit-content;
+}
+
+.color__box {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.color__red {
+  background-color: red;
+}
+
+.color__yellow {
+  background-color: rgb(252, 186, 3);
+}
+
+.color__btn {
+  border: 0;
+}
+
+.color__container {
+  column-gap: 30px;
+}

@@ -11,8 +11,8 @@
   margin-top: 10px;
 }
 
-.comments__text > textarea {
-  @apply resize-none font-app text-sm w-full mt-1 p-1 box-border;
+#comment {
+  @apply resize-none font-app text-sm w-full mt-1 p-1 box-border text-black;
 }
 
 .comments__btn {

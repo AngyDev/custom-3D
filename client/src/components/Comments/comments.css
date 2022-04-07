@@ -1,0 +1,11 @@
+.comments_list {
+  @apply mt-2; 
+}
+
+.comments_list__box {
+  @apply mt-2;
+}
+
+.comments_list__username {
+  @apply font-bold;
+}

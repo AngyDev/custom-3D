@@ -7,6 +7,7 @@ import { getChildren } from "../../features/scene/sceneSlice";
 import Button from "../Button/Button";
 import { Checkbox } from "../Checkbox/Checkbox";
 import Modal from "../Modal/Modal";
+import PropTypes from "prop-types";
 
 export default function Export() {
   const [isOpen, setIsOpen] = useState(false);
@@ -110,3 +111,7 @@ function ExportModal({ closeModal }) {
     </div>
   );
 }
+
+ExportModal.propTypes = {
+  closeModal: PropTypes.func,
+};

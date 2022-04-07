@@ -208,7 +208,7 @@ export default function Paint() {
       <div className="flex gap-2 items-center">
         <span className="text-sm">Brush size: </span>
         <input type="range" min="0.5" max="4" step="0.5" defaultValue={params.size} onMouseUp={changeBrushSize} />
-        <input id="color" type="color" className="w-8" defaultValue="#0F4E55" onChange={changeBrushColor} />
+        <input id="color" type="color" className="w-8 border-none" defaultValue="#0F4E55" onChange={changeBrushColor} />
       </div>
     </>
   );

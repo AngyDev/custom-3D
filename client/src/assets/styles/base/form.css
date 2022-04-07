@@ -1,0 +1,20 @@
+.form__el {
+  padding-bottom: 25px;
+}
+
+.form__label {
+  @apply block mb-2 text-lg text-black dark:text-gray-300 font-bold;
+}
+
+.form__input {
+  border: 1px solid;
+  @apply bg-gray-50 border-gray-300 text-black text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white;
+}
+
+.form__submit {
+  @apply mt-2 pt-2 pb-2 text-lg;
+}
+
+.form__error {
+  @apply text-red-500 mt-2;
+}

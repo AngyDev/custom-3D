@@ -1,26 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
+import xIcon from "../../assets/images/icons/close-modal.svg";
 import Button from "../Button/Button";
 
-export default function Modal({ open, children, onClose, title, onClick, text }) {
+export default function Modal({ open, onClose, children, title, onClick }) {
   if (!open) return null;
 
   return (
-    <div className="modal__overlay">
-      <div className="modal flex flex-col">
-        <div className="modal__header">
-          <span className="modal__title">{title}</span>
-          <div className="modal__close" onClick={onClose}>
-            &times;
+    <>
+      {/* <!-- Main modal --> */}
+      <div aria-hidden="true" className="modal__container">
+        <div className="modal__container-main max-w-2xl">
+          {/* <!-- Modal content --> */}
+          <div className="modal__content">
+            {/* <!-- Modal header --> */}
+            <div className="modal__header modal__border-b">
+              <h3 className="modal__title">{title}</h3>
+              <button type="button" className="modal__x-btn" data-modal-toggle="defaultModal" onClick={onClose}>
+                <img className="w-4 h-4" src={xIcon} alt="close" />
+              </button>
+            </div>
+            {/* <!-- Modal body --> */}
+            {children}
+            {/* <!-- Modal footer --> */}
+            {/* <div className="modal__footer modal__border-t">
+              <Button type="button" typeClass="modal__btn-confirm" text="Confirm" onClick={onClick} />
+              <Button type="button" typeClass="modal__btn-cancel" text="Cancel" onClick={onClose} />
+            </div> */}
           </div>
         </div>
-        <div className="modal__body">{children}</div>
-        {/* <div className="modal__footer flex justify-end">
-                    <Button typeClass="btn--size modal__btn" onClick={onClose} text="Close" />
-                    <Button typeClass="btn--size" onClick={onClick} text={text} />
-                </div> */}
       </div>
-    </div>
+    </>
   );
 }
 
