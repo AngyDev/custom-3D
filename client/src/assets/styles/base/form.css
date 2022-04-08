@@ -18,3 +18,11 @@
 .form__error {
   @apply text-red-500 mt-2;
 }
+
+.form__checkbox {
+  @apply w-4 h-4 bg-gray-50 rounded border border-gray-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800;
+}
+
+.form__checkbox-label {
+  @apply font-medium text-black dark:text-gray-300;
+}

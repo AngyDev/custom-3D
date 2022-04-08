@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import Button from "../../Button/Button";
 import Logo from "../../Logo/Logo";
-import plus from "../../../assets/images/icons/plus.svg";
+import plus from "../../../assets/images/icons/white/plus-solid.svg";
 import Modal from "../../Modal/Modal";
 import NewProject from "../NewProject/NewProject";
 import { useHistory } from "react-router";

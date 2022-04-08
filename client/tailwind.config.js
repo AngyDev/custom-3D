@@ -7,6 +7,10 @@ module.exports = {
       },
       colors: {
         base: "var(--color-base-app)",
+        text: "var(--color-text)",
+      },
+      screens: {
+        desktop: "1680px",
       },
     },
   },

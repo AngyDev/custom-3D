@@ -6,7 +6,7 @@ import Button from "../Button/Button";
 import Import from "../Import/Import";
 import Export from "../Export/Export";
 import Save from "../Save/Save";
-import dashboardIcon from "../../assets/images/icons/th-large-solid.svg";
+import dashboardIcon from "../../assets/images/icons/white/th-large-solid.svg";
 import { useHistory } from "react-router";
 import PropTypes from "prop-types";
 
@@ -28,7 +28,7 @@ export default function Header({ projectId }) {
   return (
     <div className="h-18 flex align-center bg-base" ref={headerRef}>
       <div className="m-3">
-        <Button img={dashboardIcon} onClick={toDashboard} title="Dashboard" />
+        <Button typeClass="btn__icon" img={dashboardIcon} onClick={toDashboard} title="Dashboard" />
       </div>
       <div className="m-3">
         <Import />

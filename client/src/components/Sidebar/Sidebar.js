@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setSidebarWidth } from "../../features/dimensions/dimensionsSlice";
 import AddPlane from "../AddPlane/AddPlane";
+import Clipping from "../Clipping/Clipping";
 import Measurements from "../Measurements/Measurements";
 import Paint from "../Paint/Paint";
 import Panel from "../Panel/Panel";
@@ -19,28 +20,31 @@ export default function Sidebar() {
 
   return (
     <div className="sidebar bg-base text-white" ref={sidebarRef}>
-      <div className="sidebar__buttons">
+      <div>
+        <div className="properties">Tools</div>
         <div className="sidebar__btn-space flex">
           <AddPlane />
           <Measurements setOpenPanel={setOpenMeasurePanel} openPanel={openMeausurePanel} />
         </div>
-        <div className="sidebar__btn-space flex justify-between">
+        <div className="sidebar__btn-space">
           <Paint />
         </div>
       </div>
 
       <div className="scene__list">
         <div className="scene__panel">
-          <h3>Scene</h3>
+          <div className="properties">Scene tree</div>
           <Panel type="scene" />
         </div>
         <div className="scene__panel">
-          <h3>Planes</h3>
+          <div className="properties">Planes tree & tools</div>
+          <Clipping />
+          <div className="mb-2"></div>
           <Panel type="planes" />
         </div>
         {openMeausurePanel && (
           <div className="scene__panel">
-            <h3>Measurements</h3>
+            <div className="properties">Measurements tree</div>
             <Panel type="measure" />
           </div>
         )}

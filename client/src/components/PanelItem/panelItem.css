@@ -1,5 +1,5 @@
 .option {
-  padding: 4px;
+  padding: 6px;
 }
 
 .option__point {
@@ -7,17 +7,19 @@
 }
 
 .option-active {
-  background-color: rgba(0, 0, 0, 0.062);
+  /* background-color: rgba(0, 0, 0, 0.062); */
+  @apply rounded bg-gray-400;
 }
 
 .option:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+  /* background-color: rgba(0, 0, 0, 0.04); */
+  @apply rounded bg-gray-300;
 }
 
 .visible::after {
   content: "";
   display: block;
-  background: url("../../assets/images/icons/eye-solid.svg") no-repeat;
+  background: url("../../assets/images/icons/black/eye-solid.svg") no-repeat;
   width: 20px;
   height: 20px;
   /* float: left; */
@@ -26,13 +28,13 @@
 }
 
 .visible.active::after {
-  content: url("../../assets/images/icons/eye-slash-solid.svg");
+  content: url("../../assets/images/icons/black/eye-slash-solid.svg");
 }
 
 .delete::after {
   content: "";
   display: block;
-  background: url("../../assets/images/icons/trash-solid.svg") no-repeat;
+  background: url("../../assets/images/icons/black/trash-solid.svg") no-repeat;
   width: 18px;
   height: 18px;
   margin: 0 0 0 6px;
@@ -42,7 +44,7 @@
 .translate::after {
   content: "";
   display: block;
-  background: url("../../assets/images/icons/arrows-alt-solid.svg") no-repeat;
+  background: url("../../assets/images/icons/black/arrows-alt-solid.svg") no-repeat;
   width: 18px;
   height: 18px;
   margin: 0 0 0 6px;
@@ -52,7 +54,7 @@
 .rotate::after {
   content: "";
   display: block;
-  background: url("../../assets/images/icons/sync-alt-solid.svg") no-repeat;
+  background: url("../../assets/images/icons/black/sync-alt-solid.svg") no-repeat;
   width: 18px;
   height: 18px;
   margin: 0 0 0 6px;
@@ -62,7 +64,7 @@
 .scale::after {
   content: "";
   display: block;
-  background: url("../../assets/images/icons/expand-alt-solid.svg") no-repeat;
+  background: url("../../assets/images/icons/black/expand-alt-solid.svg") no-repeat;
   width: 18px;
   height: 18px;
   margin: 0 0 0 6px;
@@ -72,7 +74,7 @@
 .changeColor::after {
   content: "";
   display: block;
-  background: url("../../assets/images/icons/palette-solid.svg") no-repeat;
+  background: url("../../assets/images/icons/black/palette-solid.svg") no-repeat;
   width: 18px;
   height: 18px;
   margin: 0 0 0 6px;
@@ -82,7 +84,7 @@
 .clipping::after {
   content: "";
   display: block;
-  background: url("../../assets/images/icons/cut-solid.svg") no-repeat;
+  background: url("../../assets/images/icons/black/cut-solid-b.svg") no-repeat;
   width: 18px;
   height: 18px;
   margin: 0 0 0 6px;
@@ -92,7 +94,7 @@
 .offset::after {
   content: "";
   display: block;
-  background: url("../../assets/images/icons/pencil-ruler-solid.svg") no-repeat;
+  background: url("../../assets/images/icons/black/pencil-ruler-solid.svg") no-repeat;
   width: 18px;
   height: 18px;
   margin: 0 0 0 6px;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import importIcon from "../../assets/images/icons/download-solid.svg";
+import importIcon from "../../assets/images/icons/white/download-solid.svg";
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { getGroup, getSceneModified, setPositionVector, setSceneModified } from "../../features/scene/sceneSlice";
@@ -132,8 +132,8 @@ export default function Import() {
 
   return (
     <div>
-      <label htmlFor="input_import" className="btn">
-        <img className="w-4 h-4" src={importIcon} alt="Import" />
+      <label htmlFor="input_import" className="btn btn__icon">
+        <img className="w-4 h-4 icon" src={importIcon} alt="Import" />
       </label>
       <input type="file" multiple id="input_import" accept=".stl" onChange={handleChange} />
     </div>

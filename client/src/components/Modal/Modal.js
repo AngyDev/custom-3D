@@ -1,9 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import xIcon from "../../assets/images/icons/close-modal.svg";
-import Button from "../Button/Button";
+import xIcon from "../../assets/images/icons/black/close-modal.svg";
 
-export default function Modal({ open, onClose, children, title, onClick }) {
+export default function Modal({ open, onClose, children, title }) {
   if (!open) return null;
 
   return (

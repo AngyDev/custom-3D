@@ -21,3 +21,7 @@ body {
 .center {
   @apply flex items-center justify-center;
 }
+
+.properties {
+  @apply bg-gray-600 text-white w-full p-1 rounded mb-2;
+}

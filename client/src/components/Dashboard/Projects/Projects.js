@@ -13,7 +13,7 @@ export default function Projects() {
 
   return (
     <div className="container-component bg-base h-screen">
-      <div className="grid xl:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="grid desktop:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         {Object.keys(projects).length > 0 &&
           projects.map((project) => <Card key={project.id} project={project} onClick={() => openProject(project.id)} />)}
       </div>

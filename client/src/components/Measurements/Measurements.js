@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import * as THREE from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
-import rulerIcon from "../../assets/images/icons/ruler-solid.svg";
+import rulerIcon from "../../assets/images/icons/white/ruler-solid.svg";
 import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
 import { getCanvas, getChildren, getGroup, getScene, getSceneModified, setSceneModified } from "../../features/scene/sceneSlice";
 import Button from "../Button/Button";
@@ -211,7 +211,7 @@ export default function Measurements({ openPanel, setOpenPanel }) {
 
   return (
     <div className="popover__wrapper">
-      <Button typeClass="btn--img button" img={rulerIcon} onClick={addMeasures} />
+      <Button typeClass="btn--img btn__icon button" img={rulerIcon} onClick={addMeasures} />
       <div className="popover__content">
         <p className="popover__message">
           Press CTRL + Left Mouse Click to start drawing a line. Continue to hold CTRL and Left Mouse Click again to mark the end of the line

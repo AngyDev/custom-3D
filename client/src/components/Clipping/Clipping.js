@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import clipping from "../../assets/images/icons/cut-solid.svg";
+import clipping from "../../assets/images/icons/white/cut-solid.svg";
 import * as THREE from "three";
 import Button from "../Button/Button";
 import { useSelector } from "react-redux";
-import { getGroup, getScene } from "../../features/scene/sceneSlice";
+import { getGroup, getScene, getSceneModified } from "../../features/scene/sceneSlice";
+import { Checkbox } from "../Checkbox/Checkbox";
 
 export default function Clipping() {
   const scene = useSelector(getScene);
   const group = useSelector(getGroup);
+  const sceneModified = useSelector(getSceneModified);
 
   const [clipped, setClipped] = useState(false);
   const [planeLists, setPlaneLists] = useState([]);
@@ -16,12 +18,13 @@ export default function Clipping() {
   // The clipping button is disabled if there is only one plane
   useEffect(() => {
     setGlobalClipping(scene.children && scene.children.filter((object) => object.name.startsWith("Plane")).length <= 1);
-  });
+  }, [sceneModified]);
 
   /**
    * Clipping of the mesh by the planes
    */
   const clipMesh = () => {
+    console.log("clipping");
     const planes = scene.children.filter((object) => object.name.startsWith("Plane"));
     const normals = [];
     const centers = [];
@@ -104,12 +107,13 @@ export default function Clipping() {
   };
 
   return (
-    <div className="flex align-center">
-      <Button typeClass="btn--img" img={clipping} onClick={clipMesh} disabled={globalClipping} />
+    <div className="flex items-center">
+      <Button typeClass="btn--img btn__icon" img={clipping} onClick={clipMesh} disabled={globalClipping} />
       {clipped && (
         <span style={{ marginLeft: "10px" }}>
-          <input type="checkbox" name="" id="plane1" onChange={handleNegated} />
-          <label htmlFor="plane1">Negated</label>
+          <Checkbox label="Negated" onChange={handleNegated} className="text-white" />
+          {/* <input type="checkbox" name="" id="plane1" onChange={handleNegated} />
+          <label htmlFor="plane1">Negated</label> */}
         </span>
       )}
     </div>

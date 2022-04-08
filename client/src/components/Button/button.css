@@ -15,7 +15,16 @@
 } */
 
 .btn {
-  @apply border-none flex justify-center items-center bg-gray-400 text-black font-bold m-0 cursor-pointer outline-none uppercase rounded p-2 hover:bg-slate-500;
+  /* border: solid; */
+  /* background-color: #4c5c61; */
+  background-color: #4f556d;
+  color: #e2e1ea;
+  /* focus:ring-4 focus:outline-none focus:ring-gray-200 */
+  @apply border-none flex justify-center items-center font-normal text-text hover:bg-slate-600 cursor-pointer outline-none uppercase rounded-lg px-5 py-2.5;
+}
+
+.btn__icon {
+  @apply px-3 py-2.5;
 }
 
 .btn-active {
@@ -31,5 +40,5 @@
 }
 
 input[type="reset"] {
-  @apply bg-gray-200;
+  @apply bg-gray-200 text-gray-500;
 }
