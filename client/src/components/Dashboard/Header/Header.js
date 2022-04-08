@@ -7,6 +7,7 @@ import NewProject from "../NewProject/NewProject";
 import { useHistory } from "react-router";
 import { UserContext } from "../../../context/UserContext";
 import { saveProject } from "../../../utils/api";
+import Theme from "../../Theme/Theme";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,10 +33,11 @@ export default function Header() {
   };
 
   return (
-    <div className="container-component flex w-full h-18 bg-base text-white p-3">
+    <div className="container-component flex w-full h-18 bg-baseLight dark:bg-base text-white p-3">
       <div className="flex gap-5">
         <Logo />
         <Button text="Nuovo" img={plus} onClick={openModal} title="Nuovo" active={active} />
+        <Theme />
       </div>
       {isOpen && (
         <div>

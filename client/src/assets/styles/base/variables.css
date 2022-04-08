@@ -1,11 +1,13 @@
 :root {
   --font-app: Arial, Helvetica, sans-serif;
 
+  --color-base-light-app: #9ca3af; /* gray-400 */
+
   /* --color-base-app: #24292e; */
   /* --color-base-app: #1e293a; */
   /* --color-base-app: #a8a29e; */
 
-  --color-base-app: #191E2A;
+  --color-base-app: #191e2a;
   /* --color-base-app: #a1a1aa; */
-  --color-text: #E2E1EA;
+  --color-text: #e2e1ea;
 }
