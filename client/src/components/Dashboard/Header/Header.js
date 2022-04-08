@@ -34,10 +34,14 @@ export default function Header() {
 
   return (
     <div className="container-component flex w-full h-18 bg-baseLight dark:bg-base text-white p-3">
-      <div className="flex gap-5">
-        <Logo />
-        <Button text="Nuovo" img={plus} onClick={openModal} title="Nuovo" active={active} />
-        <Theme />
+      <div className="flex gap-5 w-full justify-between">
+        <div className="flex flex-row gap-5 items-center">
+          <Logo />
+          <Button text="Nuovo" img={plus} onClick={openModal} title="Nuovo" active={active} />
+        </div>
+        <div>
+          <Theme />
+        </div>
       </div>
       {isOpen && (
         <div>

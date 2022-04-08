@@ -1,19 +1,26 @@
-import React from "react";
-import useDarkMode from "../../hooks/useDarkMode";
+import React, { useContext } from "react";
 import sunIcon from "../../assets/images/icons/white/sun.svg";
 import moonIcon from "../../assets/images/icons/white/moon.svg";
+import { ThemeContext } from "../../context/ThemeContext";
 
 export default function Theme() {
-  const [colorTheme, setTheme] = useDarkMode();
+  const [theme, setTheme] = useContext(ThemeContext);
+
+  const changeTheme = (e) => {
+    localStorage.setItem("theme", e.target.alt);
+
+    setTheme(e.target.alt);
+  };
 
   return (
     <div className="flex items-center">
-      <span
-        onClick={() => setTheme(colorTheme)}
-        className="w-10 h-10 rounded-full bg-base dark:bg-white shadow-lg cursor-pointer flex items-center justify-center"
-      >
-        {colorTheme === "light" ? <img src={sunIcon} alt="Sun" /> : <img src={moonIcon} alt="Moon" />}
-      </span>
+      <button className="border-none hover:bg-slate-700 w-10 h-10 rounded-full bg-button shadow-lg cursor-pointer flex items-center justify-center">
+        {theme === "dark" ? (
+          <img src={sunIcon} alt="light" value="light" onClick={changeTheme} />
+        ) : (
+          <img src={moonIcon} alt="dark" value="dark" onClick={changeTheme} />
+        )}
+      </button>
     </div>
   );
 }

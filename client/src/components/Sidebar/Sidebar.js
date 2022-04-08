@@ -19,7 +19,7 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <div className="sidebar bg-base text-white" ref={sidebarRef}>
+    <div className="sidebar text-white bg-baseLight dark:bg-base" ref={sidebarRef}>
       <div>
         <div className="properties">Tools</div>
         <div className="sidebar__btn-space flex">

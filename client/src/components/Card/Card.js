@@ -5,7 +5,7 @@ import moment from "moment";
 
 export default function Card({ color, project, onClick }) {
   return (
-    <div className="bg-white rounded overflow-hidden shadow-md relative hover:shadow-lg">
+    <div className="bg-canvas rounded overflow-hidden shadow-md relative hover:shadow-lg">
       <div className={`center w-full h-32 sm:h-38 object-cover ${color ? color : "bg-yellow-400"} p-8 text-justify`}>
         <h1 className="font-bold text-lg">{project.projectName}</h1>
       </div>
@@ -13,7 +13,7 @@ export default function Card({ color, project, onClick }) {
         <span className="font-bold">{project.patientCode}</span>
         <div className="mt-4 mb-4">
           <div className="pb-2">
-            <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+            <div className="w-full bg-gray-300 rounded-full">
               <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: "50%" }}>
                 50%
               </div>

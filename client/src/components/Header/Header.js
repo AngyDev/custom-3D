@@ -26,20 +26,12 @@ export default function Header({ projectId }) {
   };
 
   return (
-    <div className="h-18 flex align-center bg-base" ref={headerRef}>
-      <div className="m-3">
+    <div className="h-18 flex items-center bg-baseLight dark:bg-base flex-row w-full justify-between p-3" ref={headerRef}>
+      <div className="flex flex-row gap-5">
         <Button typeClass="btn__icon" img={dashboardIcon} onClick={toDashboard} title="Dashboard" />
-      </div>
-      <div className="m-3">
         <Import />
-      </div>
-      <div className="m-3">
         <Export />
-      </div>
-      <div className="m-3">
         <Save projectId={projectId} />
-      </div>
-      <div className="m-3">
         <AddComment />
       </div>
     </div>
