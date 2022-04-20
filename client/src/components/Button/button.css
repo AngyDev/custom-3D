@@ -25,6 +25,10 @@
   @apply px-3 py-2.5;
 }
 
+.btn__icon-sm {
+  @apply px-2.5 py-2;
+}
+
 .btn-active {
   @apply bg-slate-500;
 }

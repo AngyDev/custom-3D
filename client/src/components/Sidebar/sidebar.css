@@ -2,8 +2,9 @@
   width: 310px;
   min-width: 310px;
   height: 100vh;
-  background-color: $sidebar-bg-color;
   padding: 10px;
+  overflow: auto;
+  padding-bottom: 58px;
 }
 
 .sidebar__buttons {

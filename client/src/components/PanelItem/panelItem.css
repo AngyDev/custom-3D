@@ -1,5 +1,5 @@
 .option {
-  padding: 6px;
+  @apply p-1;
 }
 
 .option__point {
