@@ -102,8 +102,8 @@ function ExportModal({ onClose }) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div className="modal__body">
-          <div className="mb-4 grid grid-cols-2 gap-2 overflow-y-scroll h-36">
+        <div className="modal__body h-64">
+          <div className="mb-4 grid grid-cols-2 gap-2 content-start overflow-y-scroll h-36">
             {meshes.map((item, i) => (
               <Checkbox key={i} label={item.name} value={item.name} name="files" onChange={(e) => handleChange(e, "array")} />
             ))}

@@ -191,7 +191,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
         )}
         <span id={uuid} name={name} className="delete" onClick={deleteClick}></span>
       </div>
-      <div>{openOffset && <Offset mesh={meshToOffset} />}</div>
+      <div className="p-1">{openOffset && <Offset mesh={meshToOffset} />}</div>
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Change mesh color" text="Change color">
         <ChangeColor onClick={changeColorMesh} onClose={() => setIsOpen(false)} />
       </Modal>

@@ -146,7 +146,7 @@ export default function CommentsListPanel({ projectId }) {
         {/* <AddPoint /> */}
       </div>
       <div className="comments__panel">
-      <div className="properties">Points tree</div>
+        <div className="properties">Points tree</div>
         <Panel type="points" />
       </div>
       {openText && (
