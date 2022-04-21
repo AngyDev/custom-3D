@@ -4,13 +4,11 @@ import PropTypes from "prop-types";
 export const ThemeContext = React.createContext({});
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(localStorage.theme ? "light" : "dark");
+  const [theme, setTheme] = useState(localStorage.theme ? localStorage.theme : "dark");
   const colorTheme = theme === "dark" ? "light" : "dark";
 
   useEffect(() => {
     const root = window.document.documentElement;
-
-    console.log(theme);
 
     root.classList.remove(colorTheme);
     root.classList.add(theme);
