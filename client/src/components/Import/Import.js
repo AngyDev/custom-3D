@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { getGroup, getSceneModified, setPositionVector, setSceneModified } from "../../features/scene/sceneSlice";
 import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-mesh-bvh";
+import Alert from "../Alert/Alert";
 
 export default function Import() {
   THREE.Mesh.prototype.raycast = acceleratedRaycast;
@@ -21,6 +22,7 @@ export default function Import() {
   const [files, setFiles] = useState([]);
 
   const [imported, setImported] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (mesh !== undefined) {
@@ -36,7 +38,11 @@ export default function Import() {
   useEffect(() => {
     if (files.length > 0) {
       for (var i = 0; i < files.length; i++) {
-        loadFile(files[i], createMeshFromFile);
+        if (files[i].name.split(".").pop() === "stl") {
+          loadFile(files[i], createMeshFromFile);
+        } else {
+          setError(true);
+        }
       }
     }
   }, [files]);
@@ -131,11 +137,14 @@ export default function Import() {
   };
 
   return (
-    <div>
-      <label htmlFor="input_import" className="btn btn__icon">
-        <img className="w-4 h-4 icon" src={importIcon} alt="Import" />
-      </label>
-      <input type="file" multiple id="input_import" accept=".stl" onChange={handleChange} />
-    </div>
+    <>
+      <div>
+        <label htmlFor="input_import" className="btn btn__icon">
+          <img className="w-4 h-4 icon" src={importIcon} alt="Import" />
+        </label>
+        <input type="file" multiple id="input_import" accept=".stl" onChange={handleChange} />
+      </div>
+      {error && <Alert open={error} onClose={() => setError(false)} text="Import only STL file" />}
+    </>
   );
 }
