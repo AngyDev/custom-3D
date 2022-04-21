@@ -80,8 +80,8 @@ export default function Offset({ mesh }) {
   return (
     <>
       <div className="flex">
-        <input type="text" onChange={changeScale} />
-        <Button typeClass="btn--img btn__icon" img={offsetIcon} onClick={applyOffset} />
+        <input type="number" className="mr-2 form__input px-1 py-0 text-base" step="0.1" onChange={changeScale} />
+        <Button typeClass="btn--img btn__icon-sm" img={offsetIcon} onClick={applyOffset} />
       </div>
     </>
   );
