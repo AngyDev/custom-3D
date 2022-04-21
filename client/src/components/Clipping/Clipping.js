@@ -24,7 +24,6 @@ export default function Clipping() {
    * Clipping of the mesh by the planes
    */
   const clipMesh = () => {
-    console.log("clipping");
     const planes = scene.children.filter((object) => object.name.startsWith("Plane"));
     const normals = [];
     const centers = [];
