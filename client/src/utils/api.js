@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000";
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const getProjectById = async (id) => {
   try {
     const res = await axios({
       method: "GET",
-      url: `${API_URL}/project/${id}`,
+      url: `${process.env.REACT_APP_API_URL}/project/${id}`,
     });
 
     return res.data;
@@ -20,12 +20,11 @@ export const getProjectsByUserId = async (userId) => {
   try {
     const res = await axios({
       method: "GET",
-      url: `${API_URL}/project-user/${userId}`,
+      url: `${process.env.REACT_APP_API_URL}/project-user/${userId}`,
     });
 
     return res.data;
   } catch (error) {
-    console.log(error.message);
     return false;
   }
 };
