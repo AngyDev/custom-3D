@@ -2,9 +2,7 @@ import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getScene, getSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
-import Button from "../Button/Button";
-import Clipping from "../Clipping/Clipping";
-import Modal from "../Modal/Modal";
+import ModalDelete from "../Modal/ModalDelete";
 import PanelItem from "../PanelItem/PanelItem";
 
 export default function Panel({ type }) {
@@ -24,7 +22,7 @@ export default function Panel({ type }) {
   useEffect(() => {
     setMeshList(meshList.filter((mesh) => mesh.parent !== null));
     if (scene.children) {
-      scene.children.map((obj, i) => {
+      scene.children.map((obj) => {
         if (obj.type === "Group" && obj.name === "Import") {
           obj.children.map((mesh) => {
             addMeshToList(meshList, mesh, setMeshList);
@@ -108,7 +106,7 @@ export default function Panel({ type }) {
 
   return (
     <>
-      <div className="panel">
+      <div className="panel rounded">
         {type === "scene" ? (
           <div id="scene" className="">
             {meshList.length > 0 &&
@@ -116,7 +114,6 @@ export default function Panel({ type }) {
           </div>
         ) : type === "planes" ? (
           <div id="planes" className="">
-            <Clipping />
             {planeList.length > 0 &&
               planeList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="planes" />)}
           </div>
@@ -132,14 +129,15 @@ export default function Panel({ type }) {
           </div>
         )}
       </div>
-      <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Delete Object" text="Delete">
+      {/* <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Delete Object" text="Delete">
         <div className="flex flex-col">
           <h3>Are you Sure?</h3>
           <div className="flex justify-end">
             <Button typeClass="btn--size" text="OK" onClick={deleteClick} />
           </div>
         </div>
-      </Modal>
+      </Modal> */}
+      <ModalDelete open={isOpen} onClose={() => setIsOpen(false)} onClick={deleteClick} />
     </>
   );
 }

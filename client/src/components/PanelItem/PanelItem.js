@@ -161,7 +161,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
 
   return (
     <>
-      <div className={selected ? "option option-active flex align-center" : "option flex align-center"}>
+      <div className={`option flex items-center text-black ${selected ? "option-active" : ""}`}>
         <span className="visible" id={uuid} onClick={handleClick}></span>
         {type === "points" ? (
           <span className="option__point" onClick={() => pointClick(uuid)}>
@@ -191,9 +191,9 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
         )}
         <span id={uuid} name={name} className="delete" onClick={deleteClick}></span>
       </div>
-      <div>{openOffset && <Offset mesh={meshToOffset} />}</div>
+      <div className="p-1">{openOffset && <Offset mesh={meshToOffset} />}</div>
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Change mesh color" text="Change color">
-        <ChangeColor onClick={changeColorMesh} />
+        <ChangeColor onClick={changeColorMesh} onClose={() => setIsOpen(false)} />
       </Modal>
     </>
   );

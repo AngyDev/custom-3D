@@ -1,0 +1,28 @@
+.comments {
+  right: 0;
+  width: 310px;
+  min-width: 310px;
+  height: 100vh;
+  padding: 10px;
+  position: sticky;
+}
+
+.comments__text {
+  margin-top: 10px;
+}
+
+#comment {
+  @apply resize-none font-app text-sm w-full mt-1 p-1 box-border text-black;
+}
+
+.comments__btn {
+  margin-top: 10px;
+}
+
+.comments__panel {
+  margin-top: 10px;
+}
+
+.comments__list {
+  margin-top: 10px;
+}

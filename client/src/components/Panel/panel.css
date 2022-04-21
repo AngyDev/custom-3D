@@ -1,0 +1,8 @@
+.panel {
+    padding: 10px;
+    /* cursor: pointer; */
+    height: 140px;
+    overflow: auto;
+    resize: vertical;
+    @apply bg-canvas;
+}

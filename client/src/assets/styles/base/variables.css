@@ -1,0 +1,17 @@
+:root {
+  --font-app: Arial, Helvetica, sans-serif;
+
+  --color-base-light-app: #9ca3af; /* gray-400 */
+  --color-text-light: #191e2a;
+
+  /* --color-base-app: #24292e; */
+  /* --color-base-app: #1e293a; */
+  /* --color-base-app: #a8a29e; */
+
+  --color-base-app: #191e2a;
+  /* --color-base-app: #a1a1aa; */
+  --color-text: #e2e1ea;
+
+  --color-bg-canvas: #f0f0f0;
+  --color-bg-button: #4f556d;
+}

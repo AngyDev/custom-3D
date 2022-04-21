@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getIsCommentsActive, setCommentsActive } from "../../features/comments/commentsSlice";
 import Button from "../Button/Button";
-import commentIcon from "../../assets/images/icons/comment-regular.svg";
+import commentIcon from "../../assets/images/icons/white/comment-regular.svg";
 
 export default function AddComment() {
   const isCommentsActive = useSelector(getIsCommentsActive);
@@ -16,7 +16,7 @@ export default function AddComment() {
 
   return (
     <div>
-      <Button typeClass="btn--img" img={commentIcon} onClick={handleClick} title="Add comment" />
+      <Button typeClass="btn--img btn__icon" img={commentIcon} onClick={handleClick} title="Add comment" />
     </div>
   );
 }

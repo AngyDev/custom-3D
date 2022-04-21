@@ -7,7 +7,7 @@ import { AppWrapper } from "../../context/AppContext";
 export default function App() {
   return (
     <AppWrapper>
-      <div className="app">
+      <div className="font-app">
         <BrowserRouter>
           <Switch>
             <Route exact path="/">

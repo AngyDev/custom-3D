@@ -1,0 +1,102 @@
+.option {
+  @apply p-1;
+}
+
+.option__point {
+  cursor: pointer;
+}
+
+.option-active {
+  /* background-color: rgba(0, 0, 0, 0.062); */
+  @apply rounded bg-gray-400;
+}
+
+.option:hover {
+  /* background-color: rgba(0, 0, 0, 0.04); */
+  @apply rounded bg-gray-300;
+}
+
+.visible::after {
+  content: "";
+  display: block;
+  background: url("../../assets/images/icons/black/eye-solid.svg") no-repeat;
+  width: 20px;
+  height: 20px;
+  /* float: left; */
+  margin: 0 6px 0 0;
+  cursor: pointer;
+}
+
+.visible.active::after {
+  content: url("../../assets/images/icons/black/eye-slash-solid.svg");
+}
+
+.delete::after {
+  content: "";
+  display: block;
+  background: url("../../assets/images/icons/black/trash-solid.svg") no-repeat;
+  width: 18px;
+  height: 18px;
+  margin: 0 0 0 6px;
+  cursor: pointer;
+}
+
+.translate::after {
+  content: "";
+  display: block;
+  background: url("../../assets/images/icons/black/arrows-alt-solid.svg") no-repeat;
+  width: 18px;
+  height: 18px;
+  margin: 0 0 0 6px;
+  cursor: pointer;
+}
+
+.rotate::after {
+  content: "";
+  display: block;
+  background: url("../../assets/images/icons/black/sync-alt-solid.svg") no-repeat;
+  width: 18px;
+  height: 18px;
+  margin: 0 0 0 6px;
+  cursor: pointer;
+}
+
+.scale::after {
+  content: "";
+  display: block;
+  background: url("../../assets/images/icons/black/expand-alt-solid.svg") no-repeat;
+  width: 18px;
+  height: 18px;
+  margin: 0 0 0 6px;
+  cursor: pointer;
+}
+
+.changeColor::after {
+  content: "";
+  display: block;
+  background: url("../../assets/images/icons/black/palette-solid.svg") no-repeat;
+  width: 18px;
+  height: 18px;
+  margin: 0 0 0 6px;
+  cursor: pointer;
+}
+
+.clipping::after {
+  content: "";
+  display: block;
+  background: url("../../assets/images/icons/black/cut-solid-b.svg") no-repeat;
+  width: 18px;
+  height: 18px;
+  margin: 0 0 0 6px;
+  cursor: pointer;
+}
+
+.offset::after {
+  content: "";
+  display: block;
+  background: url("../../assets/images/icons/black/pencil-ruler-solid.svg") no-repeat;
+  width: 18px;
+  height: 18px;
+  margin: 0 0 0 6px;
+  cursor: pointer;
+}

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import * as THREE from "three";
-import offsetIcon from "../../assets/images/icons/pencil-ruler-solid.svg";
+import offsetIcon from "../../assets/images/icons/black/pencil-ruler-solid.svg";
 import { getScene } from "../../features/scene/sceneSlice";
 import useGetMesh from "../../hooks/useGetMesh";
 import Button from "../Button/Button";
@@ -80,8 +80,8 @@ export default function Offset({ mesh }) {
   return (
     <>
       <div className="flex">
-        <input type="text" onChange={changeScale} />
-        <Button typeClass="btn--img" img={offsetIcon} onClick={applyOffset} />
+        <input type="number" className="mr-2 form__input px-1 py-0 text-base" step="0.1" onChange={changeScale} />
+        <Button typeClass="btn--img btn__icon-sm" img={offsetIcon} onClick={applyOffset} />
       </div>
     </>
   );

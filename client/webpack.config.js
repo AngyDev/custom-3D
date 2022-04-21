@@ -2,6 +2,7 @@ const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   entry: "./src/index.js",
@@ -15,6 +16,7 @@ module.exports = {
   devtool: "cheap-module-source-map",
   devServer: {
     port: 9000,
+    disableHostCheck: true,
   },
 
   module: {
@@ -29,9 +31,13 @@ module.exports = {
           },
         },
       },
+      // {
+      //   test: /\.(sa|sc|c)ss$/,
+      //   use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
+      // },
       {
-        test: /\.(sa|sc|c)ss$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, { loader: "css-loader", options: { importLoaders: 1 } }, "postcss-loader"],
       },
       {
         test: /\.(woff|woff2|ttf|otf|eot)$/,
@@ -68,5 +74,6 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [{ from: path.resolve(__dirname, "./src/assets"), to: "./assets" }],
     }),
+    new Dotenv(),
   ],
 };

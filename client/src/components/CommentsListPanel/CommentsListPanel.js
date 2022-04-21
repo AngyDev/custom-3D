@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,21 +7,11 @@ import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { UserContext } from "../../context/UserContext";
 import { getCountPoint, getIsTextOpen, incrementCount } from "../../features/comments/commentsSlice";
 import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
-import {
-  getCanvas,
-  getChildren,
-  getGroup,
-  getScene,
-  getSceneModified,
-  getSelectedMesh,
-  setSceneModified,
-  setSelectedMesh,
-} from "../../features/scene/sceneSlice";
+import { getCanvas, getGroup, getScene, getSceneModified, getSelectedMesh, setSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
 import { getCommentsByProjectIdAndPointId, saveComment, saveObject } from "../../utils/api";
 import Button from "../Button/Button";
 import Comments from "../Comments/Comments";
 import Panel from "../Panel/Panel";
-import PropTypes from "prop-types";
 
 export default function CommentsListPanel({ projectId }) {
   const {
@@ -148,14 +139,14 @@ export default function CommentsListPanel({ projectId }) {
   };
 
   return (
-    <div className="comments">
-      <h3>Comments</h3>
+    <div className="comments  bg-baseLight dark:bg-base text-white">
+      <div className="properties">Comments</div>
       <div className="sidebar__buttons">
         <Button typeClass="btn--size" text="ADD POINT" onClick={addPoint} />
         {/* <AddPoint /> */}
       </div>
       <div className="comments__panel">
-        <h3>Points on the mesh</h3>
+        <div className="properties">Points tree</div>
         <Panel type="points" />
       </div>
       {openText && (

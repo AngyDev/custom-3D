@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "../Button/Button";
-import saveIcon from "../../assets/images/icons/save-solid.svg";
+import saveIcon from "../../assets/images/icons/white/save-solid.svg";
 import { getChildren } from "../../features/scene/sceneSlice";
 import { useSelector } from "react-redux";
 import { saveObject } from "../../utils/api";
@@ -55,13 +55,14 @@ export default function Save({ projectId }) {
   return (
     <>
       {loading ? <Spinner /> : ""}
-      <Button typeClass="btn--img" img={saveIcon} onClick={openModal} title="Save" />
+      <Button typeClass="btn--img btn__icon" img={saveIcon} onClick={openModal} title="Save" />
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Save Objects" text="Save">
-        <div className="flex flex-col">
+        <div className="modal__body flex flex-col">
           <h3>Are you Sure?</h3>
-          <div className="flex justify-end">
-            <Button typeClass="btn--size" text="OK" onClick={saveObjects} />
-          </div>
+        </div>
+        <div className="modal__footer modal__border-t">
+          <Button type="button" typeClass="modal__btn-confirm" text="Save" onClick={saveObjects} />
+          <Button type="button" typeClass="modal__btn-cancel" text="Cancel" onClick={() => setIsOpen(false)} />
         </div>
       </Modal>
     </>

@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import * as THREE from "three";
 import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
-import downloadIcon from "../../assets/images/icons/download-solid.svg";
+import downloadIcon from "../../assets/images/icons/white/upload-solid.svg";
 import { getChildren } from "../../features/scene/sceneSlice";
 import Button from "../Button/Button";
 import { Checkbox } from "../Checkbox/Checkbox";
 import Modal from "../Modal/Modal";
+import PropTypes from "prop-types";
 
 export default function Export() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,15 +22,15 @@ export default function Export() {
 
   return (
     <>
-      <Button typeClass="btn--img" img={downloadIcon} onClick={openModal} title="Export" />
+      <Button typeClass="btn--img btn__icon" img={downloadIcon} onClick={openModal} title="Export" />
       <Modal open={isOpen} onClose={closeModal} title="Export Objects" text="Export">
-        <ExportModal closeModal={closeModal} />
+        <ExportModal onClose={closeModal} />
       </Modal>
     </>
   );
 }
 
-function ExportModal({ closeModal }) {
+function ExportModal({ onClose }) {
   const children = useSelector(getChildren);
   const [values, setValues] = useState({ files: [], filename: "" });
   const [meshes, setMeshes] = useState([]);
@@ -85,7 +86,7 @@ function ExportModal({ closeModal }) {
     });
     const result = exporter.parse(group, { binary: true });
     save(new Blob([result], { type: "application/octet-stream" }), `${values.filename}.stl`);
-    closeModal();
+    onClose();
   };
 
   const save = (blob, filename) => {
@@ -101,12 +102,28 @@ function ExportModal({ closeModal }) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        {meshes.map((item, i) => (
-          <Checkbox key={i} label={item.name} value={item.name} name="files" onChange={(e) => handleChange(e, "array")} />
-        ))}
-        <input className="form__input" type="input" placeholder="Enter filename" name="filename" onChange={handleChange} />
-        <Button typeClass="btn--size" text="Save" />
+        <div className="modal__body h-64">
+          <div className="mb-4 grid grid-cols-2 gap-2 content-start overflow-y-scroll h-36">
+            {meshes.map((item, i) => (
+              <Checkbox key={i} label={item.name} value={item.name} name="files" onChange={(e) => handleChange(e, "array")} />
+            ))}
+          </div>
+          <div className="flex items-center">
+            <label className="form__label pr-2" htmlFor="filename">
+              Name:
+            </label>
+            <input className="form__input" type="input" placeholder="Enter filename" name="filename" onChange={handleChange} />
+          </div>
+        </div>
+        <div className="modal__footer modal__border-t">
+          <Button type="submit" typeClass="modal__btn-confirm" text="Export" />
+          <Button type="button" typeClass="modal__btn-cancel" text="Cancel" onClick={onClose} />
+        </div>
       </form>
     </div>
   );
 }
+
+ExportModal.propTypes = {
+  onClose: PropTypes.func,
+};
