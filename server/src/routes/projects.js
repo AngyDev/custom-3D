@@ -61,6 +61,7 @@ router.get("/project-user/:userId", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+    res.status(400).json({error: "Error on loading data"});
   }
 });
 
