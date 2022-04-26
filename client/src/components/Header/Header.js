@@ -9,6 +9,7 @@ import Save from "../Save/Save";
 import dashboardIcon from "../../assets/images/icons/white/th-large-solid.svg";
 import { useHistory } from "react-router";
 import PropTypes from "prop-types";
+import Screenshot from "../Screenshot/Screenshot";
 
 export default function Header({ projectId }) {
   const headerRef = useRef(null);
@@ -33,6 +34,7 @@ export default function Header({ projectId }) {
         <Export />
         <Save projectId={projectId} />
         <AddComment />
+        <Screenshot />
       </div>
     </div>
   );
