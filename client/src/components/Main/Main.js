@@ -6,7 +6,7 @@ import { TrackballControls } from "three/examples/jsm/controls/TrackballControls
 import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { getIsCommentsActive } from "../../features/comments/commentsSlice";
-import { getSceneModified, setCanvas, setControls, setScene, setSceneModified } from "../../features/scene/sceneSlice";
+import { getSceneModified, setCamera, setCanvas, setControls, setRenderer, setScene, setSceneModified } from "../../features/scene/sceneSlice";
 
 export default function Main({ project }) {
   const isCommentsActive = useSelector(getIsCommentsActive);
@@ -50,13 +50,14 @@ export default function Main({ project }) {
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.localClippingEnabled = true;
+    renderer.preserveDrawingBuffer = true;
 
     canvasRef.current.appendChild(renderer.domElement);
 
     const labelRenderer = new CSS2DRenderer();
     labelRenderer.setSize(sizes.width, sizes.height);
     labelRenderer.domElement.style.position = "absolute";
-    labelRenderer.domElement.style.top = "0px";
+    labelRenderer.domElement.style.top = "60px";
 
     canvasRef.current.appendChild(labelRenderer.domElement);
 
@@ -134,12 +135,14 @@ export default function Main({ project }) {
     render();
 
     dispatch(setScene(scene));
+    dispatch(setRenderer(renderer));
+    dispatch(setCamera(camera));
     dispatch(setSceneModified(!sceneModified));
 
     return () => canvasRef.current.removeChild(renderer.domElement);
   }, []);
 
-  return <div ref={canvasRef} className={isCommentsActive ? "canvas__comments" : "canvas"} />;
+  return <div id="canvas" ref={canvasRef} className={isCommentsActive ? "canvas__comments" : "canvas"} />;
 }
 
 Main.propTypes = {
