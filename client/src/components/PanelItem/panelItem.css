@@ -100,3 +100,13 @@
   margin: 0 0 0 6px;
   cursor: pointer;
 }
+
+.opacity::after {
+  content: "";
+  display: block;
+  background: url("../../assets/images/icons/black/opacity-icon.svg") no-repeat;
+  width: 18px;
+  height: 18px;
+  margin: 0 0 0 6px;
+  cursor: pointer;
+}

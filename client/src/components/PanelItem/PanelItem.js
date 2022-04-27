@@ -80,6 +80,10 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
     });
   };
 
+  /**
+   * Clipping the selected mesh
+   * @param {Event} e
+   */
   const clippingMesh = (e) => {
     const planeUuid = e.target.attributes.id.nodeValue;
     const planeMesh = scene.children.filter((item) => item.uuid === planeUuid)[0];
@@ -104,6 +108,9 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
     setClipped((prev) => !prev);
   };
 
+  /**
+   * Handles the negated clipping
+   */
   const handleNegated = () => {
     plane.negate();
   };
@@ -136,11 +143,19 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
     dispatch(setIsTextOpen(!isTextOpen));
   };
 
+  /**
+   * Set the selected mesh and opens the offset modal
+   * @param {Event} e
+   */
   const modalColorMesh = (e) => {
     dispatch(setSelectedMesh(e.target.id));
     setIsOpen(true);
   };
 
+  /**
+   * Changes the color of the selected mesh
+   * @param {String} color The color to set the mesh
+   */
   const changeColorMesh = (color) => {
     scene.children.map((object) => {
       if (object.type === "Group") {
@@ -154,9 +169,30 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
     setIsOpen(false);
   };
 
+  /**
+   * Handles the offset of the mesh
+   * @param {Event} e
+   */
   const handleOffset = (e) => {
     setOpenOffset(true);
     setMeshToOffset(e.target.id);
+  };
+
+  /**
+   * Adds/Removes opacity to the selected mesh
+   * @param {Event} e
+   */
+  const handleOpacity = (e) => {
+    scene.children.map((object) => {
+      if (object.type === "Group") {
+        object.children.map((mesh) => {
+          if (mesh.uuid === e.target.attributes.id.nodeValue) {
+            mesh.material.transparent = !mesh.material.transparent;
+            mesh.material.opacity = mesh.material.opacity === 1 ? 0.5 : 1;
+          }
+        });
+      }
+    });
   };
 
   return (
@@ -187,6 +223,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
           <>
             <span className="changeColor" id={uuid} onClick={modalColorMesh} />
             <span className="offset" id={uuid} onClick={handleOffset} />
+            <span className="opacity" id={uuid} onClick={handleOpacity} />
           </>
         )}
         <span id={uuid} name={name} className="delete" onClick={deleteClick}></span>
