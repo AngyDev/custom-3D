@@ -178,21 +178,17 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
     setMeshToOffset(e.target.id);
   };
 
+  const findById = (id) => (list) => list.flatMap((item) => (item.children ? [item, ...item.children] : item)).find((item) => item.uuid === id);
+
   /**
    * Adds/Removes opacity to the selected mesh
    * @param {Event} e
    */
   const handleOpacity = (e) => {
-    scene.children.map((object) => {
-      if (object.type === "Group") {
-        object.children.map((mesh) => {
-          if (mesh.uuid === e.target.attributes.id.nodeValue) {
-            mesh.material.transparent = !mesh.material.transparent;
-            mesh.material.opacity = mesh.material.opacity === 1 ? 0.5 : 1;
-          }
-        });
-      }
-    });
+    const object = findById(e.target.attributes.id.nodeValue)(scene.children);
+
+    object.material.transparent = !object.material.transparent;
+    object.material.opacity = object.material.opacity === 1 ? 0.5 : 1;
   };
 
   return (
@@ -212,6 +208,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
             <span id={uuid} name={name} className="rotate" onClick={(e) => transformPlane(e, "rotate")}></span>
             <span id={uuid} name={name} className="scale" onClick={(e) => transformPlane(e, "scale")}></span>
             <span id={uuid} name={name} className="clipping" onClick={(e) => clippingMesh(e)}></span>
+            <span id={uuid} name={name} className="opacity" onClick={handleOpacity} />
             {clipped && (
               <span>
                 <input type="checkbox" name="" id="" onChange={handleNegated} />
