@@ -208,12 +208,12 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
             <span id={uuid} name={name} className="rotate" onClick={(e) => transformPlane(e, "rotate")}></span>
             <span id={uuid} name={name} className="scale" onClick={(e) => transformPlane(e, "scale")}></span>
             <span id={uuid} name={name} className="clipping" onClick={(e) => clippingMesh(e)}></span>
-            <span id={uuid} name={name} className="opacity" onClick={handleOpacity} />
             {clipped && (
               <span>
                 <input type="checkbox" name="" id="" onChange={handleNegated} />
               </span>
             )}
+            <span id={uuid} name={name} className="opacity" onClick={handleOpacity} />
           </>
         )}
         {type === "scene" && (
