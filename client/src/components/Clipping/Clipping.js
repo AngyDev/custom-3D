@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
-import clipping from "../../assets/images/icons/white/cut-solid.svg";
-import * as THREE from "three";
-import Button from "../Button/Button";
 import { useSelector } from "react-redux";
-import { getGroup, getScene, getSceneModified } from "../../features/scene/sceneSlice";
+import * as THREE from "three";
+import clipping from "../../assets/images/icons/white/cut-solid.svg";
+import { getGroup, getPositionVector, getScene, getSceneModified } from "../../features/scene/sceneSlice";
+import { addColorToClippedMesh } from "../../utils/functions/clippingObject";
+import Button from "../Button/Button";
 import { Checkbox } from "../Checkbox/Checkbox";
 
 export default function Clipping() {
   const scene = useSelector(getScene);
   const group = useSelector(getGroup);
   const sceneModified = useSelector(getSceneModified);
+  const positionVector = useSelector(getPositionVector);
 
   const [clipped, setClipped] = useState(false);
-  const [planeLists, setPlaneLists] = useState([]);
+  const [planes, setPlanes] = useState([]);
+  const [planesOriginal, setPlanesOriginal] = useState([]);
   const [globalClipping, setGlobalClipping] = useState(false);
 
   // The clipping button is disabled if there is only one plane
@@ -24,62 +27,78 @@ export default function Clipping() {
    * Clipping of the mesh by the planes
    */
   const clipMesh = () => {
-    const planes = scene.children.filter((object) => object.name.startsWith("Plane"));
-    const normals = [];
-    const centers = [];
+    const result = scene.children.filter((object) => object.name.startsWith("Clipping"));
 
-    const planeList = [];
+    if (result.length === 0) {
+      const planesGeometry = scene.children.filter((object) => object.name.startsWith("Plane"));
+      const normals = [];
+      const centers = [];
 
-    planes.forEach((item) => {
-      const plane = new THREE.Plane();
-      const normal = new THREE.Vector3();
-      const point = new THREE.Vector3();
+      const planes = [];
 
-      // Gets the ceters of the planes
-      const center = getCenterPoint(item);
-      centers.push(center);
+      planesGeometry.forEach((item) => {
+        const plane = new THREE.Plane();
+        const normal = new THREE.Vector3();
+        const point = new THREE.Vector3();
 
-      // Creates the THREE.Plane from THREE.PlaneGeometry
-      normal.set(0, 0, 1).applyQuaternion(item.quaternion);
-      point.copy(item.position);
-      plane.setFromNormalAndCoplanarPoint(normal, point);
+        // Gets the ceters of the planes
+        const center = getCenterPoint(item);
+        centers.push(center);
 
-      // Saves the normals of the planes
-      normals.push(plane.normal);
+        // Creates the THREE.Plane from THREE.PlaneGeometry
+        normal.set(0, 0, 1).applyQuaternion(item.quaternion);
+        point.copy(item.position);
+        plane.setFromNormalAndCoplanarPoint(normal, point);
 
-      planeList.push(plane);
-    });
+        // Saves the normals of the planes
+        normals.push(plane.normal);
 
-    // Calculates the barycenter of the planes
-    const pointx = centers.reduce((prev, curr) => prev + curr.x, 0) / centers.length;
-    const pointy = centers.reduce((prev, curr) => prev + curr.y, 0) / centers.length;
-    const pointz = centers.reduce((prev, curr) => prev + curr.z, 0) / centers.length;
-    const barycenter = new THREE.Vector3(pointx, pointy, pointz);
+        planes.push(plane);
+      });
 
-    const distances = [];
+      // Calculates the barycenter of the planes
+      const pointx = centers.reduce((prev, curr) => prev + curr.x, 0) / centers.length;
+      const pointy = centers.reduce((prev, curr) => prev + curr.y, 0) / centers.length;
+      const pointz = centers.reduce((prev, curr) => prev + curr.z, 0) / centers.length;
+      const barycenter = new THREE.Vector3(pointx, pointy, pointz);
 
-    // Gets the distance from the plane and the barycenter
-    planeList.forEach((item) => {
-      distances.push(item.distanceToPoint(barycenter));
-    });
+      const distances = [];
 
-    // Negates only the plane with negative distance
-    distances.forEach((distance, index) => {
-      if (distance < 0) {
-        planeList[index].negate();
-      }
-    });
+      // Gets the distance from the plane and the barycenter
+      planes.forEach((item) => {
+        distances.push(item.distanceToPoint(barycenter));
+      });
 
-    group.children.map((object) => {
-      if (!object.material.clippingPlanes || object.material.clippingPlanes.length === 0) {
-        object.material.clippingPlanes = planeList;
-        object.material.clipIntersection = false;
-      } else {
-        object.material.clippingPlanes = [];
-      }
-    });
+      // Negates only the plane with negative distance
+      distances.forEach((distance, index) => {
+        if (distance < 0) {
+          planes[index].negate();
+        }
+      });
 
-    setPlaneLists(planeList);
+      // Creates the clipping object with colors
+      addColorToClippedMesh(scene, group, positionVector, planes, planes);
+
+      // Saves the planes in another array to use it in the handleNegate function
+      const planesOriginal = [];
+      planes.map((item) => {
+        planesOriginal.push(item.clone());
+      });
+
+      setPlanes(planes);
+      setPlanesOriginal(planesOriginal);
+    } else {
+      scene.children
+        .filter((object) => object.name.startsWith("Clipping"))
+        .map((object) => {
+          scene.remove(object);
+        });
+
+      group.children.map((mesh) => {
+        mesh.material.clippingPlanes = [];
+      });
+    }
+
     setClipped((prev) => !prev);
   };
 
@@ -98,7 +117,21 @@ export default function Clipping() {
   };
 
   const handleNegated = () => {
-    planeLists.forEach((item) => item.negate());
+    planes.forEach((item) => item.negate());
+
+    const result = scene.children.filter((object) => object.name.startsWith("Clipping"));
+
+    if (result.length > 0) {
+      // removes the previous clipping object
+      scene.children
+        .filter((object) => object.name.startsWith("Clipping"))
+        .map((object) => {
+          scene.remove(object);
+        });
+
+      // removes the previous clipping planes with negated planes for the mesh and original planes for the colored planes
+      addColorToClippedMesh(scene, group, positionVector, planes, planesOriginal);
+    }
 
     group.children.map((object) => {
       object.material.clipIntersection = !object.material.clipIntersection;
@@ -111,8 +144,6 @@ export default function Clipping() {
       {clipped && (
         <span style={{ marginLeft: "10px" }}>
           <Checkbox label="Negated" onChange={handleNegated} className="text-white" />
-          {/* <input type="checkbox" name="" id="plane1" onChange={handleNegated} />
-          <label htmlFor="plane1">Negated</label> */}
         </span>
       )}
     </div>

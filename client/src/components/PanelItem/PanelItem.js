@@ -3,18 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import * as THREE from "three";
 import { getIsTextOpen, setIsTextOpen } from "../../features/comments/commentsSlice";
-import { getGroup, getScene, getSelectedMesh, setSelectedMesh } from "../../features/scene/sceneSlice";
+import { getGroup, getPositionVector, getScene, getSelectedMesh, setSelectedMesh } from "../../features/scene/sceneSlice";
 import ChangeColor from "../ChangeColor/ChangeColor";
 import Modal from "../Modal/Modal";
 import Offset from "../Offset/Offset";
-
+import { addColorToClippedMesh } from "../../utils/functions/clippingObject";
 export default function PanelItem({ uuid, type, name, deleteClick }) {
   const scene = useSelector(getScene);
   const group = useSelector(getGroup);
-  const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
   const selectedMesh = useSelector(getSelectedMesh);
-  const [selected, setSelected] = useState(false);
+  const positionVector = useSelector(getPositionVector);
   const isTextOpen = useSelector(getIsTextOpen);
+  const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
+  const [selected, setSelected] = useState(false);
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [plane] = useState(new THREE.Plane());
@@ -85,25 +86,35 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
    * @param {Event} e
    */
   const clippingMesh = (e) => {
-    const planeUuid = e.target.attributes.id.nodeValue;
-    const planeMesh = scene.children.filter((item) => item.uuid === planeUuid)[0];
+    const result = scene.children.filter((object) => object.name.startsWith("Clipping"));
 
-    // const plane = new THREE.Plane();
-    const normal = new THREE.Vector3();
-    const point = new THREE.Vector3();
+    if (result.length === 0) {
+      const planeUuid = e.target.attributes.id.nodeValue;
+      const planeMesh = scene.children.filter((item) => item.uuid === planeUuid)[0];
 
-    // Create a THREE.Plane from a THREE.PlaneGeometry
-    normal.set(0, 0, 1).applyQuaternion(planeMesh.quaternion);
-    point.copy(planeMesh.position);
-    plane.setFromNormalAndCoplanarPoint(normal, point);
+      // const plane = new THREE.Plane();
+      const normal = new THREE.Vector3();
+      const point = new THREE.Vector3();
 
-    group.children.map((object) => {
-      if (!object.material.clippingPlanes || object.material.clippingPlanes.length === 0) {
-        object.material.clippingPlanes = [plane];
-      } else {
-        object.material.clippingPlanes = [];
-      }
-    });
+      // Create a THREE.Plane from a THREE.PlaneGeometry
+      normal.set(0, 0, 1).applyQuaternion(planeMesh.quaternion);
+      point.copy(planeMesh.position);
+      plane.setFromNormalAndCoplanarPoint(normal, point);
+
+      let planes = [plane];
+
+      addColorToClippedMesh(scene, group, positionVector, planes);
+    } else {
+      scene.children
+        .filter((object) => object.name.startsWith("Clipping"))
+        .map((object) => {
+          scene.remove(object);
+        });
+
+      group.children.map((mesh) => {
+        mesh.material.clippingPlanes = [];
+      });
+    }
 
     setClipped((prev) => !prev);
   };

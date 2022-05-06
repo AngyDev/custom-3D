@@ -115,6 +115,7 @@ export default function Import() {
       mesh.position.set(-vector.x, -vector.y, -vector.z);
     }
     mesh.geometry.computeBoundsTree();
+    mesh.renderOrder = 6;
     group.add(mesh);
     dispatch(setSceneModified(!isModified));
   };
