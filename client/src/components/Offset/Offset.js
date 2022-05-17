@@ -1,10 +1,11 @@
+import PropTypes from "prop-types";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import * as THREE from "three";
+import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 import offsetIcon from "../../assets/images/icons/black/pencil-ruler-solid.svg";
 import { getScene } from "../../features/scene/sceneSlice";
 import useGetMesh from "../../hooks/useGetMesh";
+import { createOffsetMesh } from "../../utils/functions/offsetObject";
 import Button from "../Button/Button";
 
 export default function Offset({ mesh }) {
@@ -18,63 +19,35 @@ export default function Offset({ mesh }) {
     setOffset(value);
   };
 
-  /**
-   * Applies the offset to the mesh
-   */
   const applyOffset = () => {
     if (offset !== "1") {
-      // const center = getMeshCenter(meshToOffset);
+      console.time();
+      // 1. Export mesh as an ascii file
+      const exporter = new STLExporter();
+      const result = exporter.parse(meshToOffset, { binary: false });
 
-      const geometry = meshToOffset.geometry;
+      // 2. Creates mesh with offset
+      const mesh = createOffsetMesh(result, offset);
 
-      const position = calculateOffset(geometry);
+      mesh.name = "Offset " + meshToOffset.name;
 
-      const newGeometry = new THREE.BufferGeometry();
-      newGeometry.setAttribute("position", new THREE.BufferAttribute(position, 3));
+      console.timeEnd();
 
-      const newMaterial = new THREE.PointsMaterial({ color: 0xff0000, size: 2 });
-      const mesh2 = new THREE.Points(newGeometry, newMaterial);
-      // const mesh2 = new THREE.Mesh(newGeometry, newMaterial);
-      mesh2.position.set(meshToOffset.position.x, meshToOffset.position.y, meshToOffset.position.z);
-      mesh2.name = "Offset " + meshToOffset.name;
-
-      // Checks if the mesh is already present
-      const offsetMesh = scene.children.filter((item) => item.name === mesh2.name);
+      const offsetMesh = scene.children.filter((item) => item.name === mesh.name);
       if (offsetMesh.length === 0) {
-        scene.add(mesh2);
+        scene.add(mesh);
       } else {
         scene.remove(offsetMesh[0]);
-        scene.add(mesh2);
+        scene.add(mesh);
       }
 
-      scene.add(mesh2);
-      setNewObject(mesh2);
+      setNewObject(mesh);
     } else {
       if (newObject !== undefined) {
         scene.remove(newObject);
         setNewObject();
       }
     }
-  };
-
-  /**
-   * Calcuates the offset of the mesh
-   * @param {BufferGeometry} geometry The geometry of the mesh to offset
-   * @returns The position of the vertices after the offset
-   */
-  const calculateOffset = (geometry) => {
-    const vertices = geometry.attributes.position.array;
-    const normals = geometry.attributes.normal.array;
-
-    const position = new Float32Array(vertices.length * 3);
-
-    for (let i = 0; i < vertices.length; i = i + 3) {
-      position[i] = offset * normals[i] + vertices[i];
-      position[i + 1] = offset * normals[i + 1] + vertices[i + 1];
-      position[i + 2] = offset * normals[i + 2] + vertices[i + 2];
-    }
-
-    return position;
   };
 
   return (
