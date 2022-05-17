@@ -86,6 +86,8 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
    * @param {Event} e
    */
   const clippingMesh = (e) => {
+    setClipped((prev) => !prev);
+
     const result = scene.children.filter((object) => object.name.startsWith("Clipping"));
 
     if (result.length === 0) {
@@ -103,7 +105,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
 
       let planes = [plane];
 
-      addColorToClippedMesh(scene, group, positionVector, planes);
+      addColorToClippedMesh(scene, group, positionVector, planes, planes);
     } else {
       scene.children
         .filter((object) => object.name.startsWith("Clipping"))
@@ -115,8 +117,6 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
         mesh.material.clippingPlanes = [];
       });
     }
-
-    setClipped((prev) => !prev);
   };
 
   /**

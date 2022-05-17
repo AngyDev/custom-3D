@@ -78,7 +78,7 @@ export const addColorToClippedMesh = (scene, group, positionVector, planesNegate
   });
 
   // Set up clip plane rendering
-  const planeGeom = new THREE.PlaneGeometry(300, 300);
+  const planeGeom = new THREE.PlaneGeometry(1000, 1000);
 
   for (let i = 0; i < planesNegated.length; i++) {
     const poGroup = new THREE.Group();
