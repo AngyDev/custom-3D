@@ -3,11 +3,11 @@
  * @param {File} file The file to read
  * @param {Function} callback The callback to execute
  */
-export const handleFile = (file, callback) => {
+export const handleFile = (file, offset, callback) => {
   const reader = new FileReader();
   let data;
   let initialObjects;
-  const offset = 2;
+  // const offset = 2;
 
   reader.addEventListener(
     "load",
