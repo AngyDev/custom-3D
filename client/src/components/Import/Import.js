@@ -6,6 +6,7 @@ import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { getGroup, getSceneModified, setPositionVector, setSceneModified } from "../../features/scene/sceneSlice";
 import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-mesh-bvh";
 import Alert from "../Alert/Alert";
+import PanelInfo from "../Panel/PanelInfo/PanelInfo";
 
 export default function Import() {
   THREE.Mesh.prototype.raycast = acceleratedRaycast;
@@ -81,7 +82,6 @@ export default function Import() {
    */
   const createMeshFromFile = (filename, contents) => {
     const geometry = new STLLoader().parse(contents);
-    //geometry.center();
     geometry.computeVertexNormals();
 
     const material = new THREE.MeshStandardMaterial({
@@ -122,7 +122,7 @@ export default function Import() {
 
   /**
    * Sets the position of the first object of the group
-   * @param {Mesh} mesh THREE.Mesh
+   * @param {THREE.Mesh} mesh THREE.Mesh
    */
   const setFirstObjPosition = (mesh) => {
     const center = new THREE.Vector3();
@@ -146,6 +146,7 @@ export default function Import() {
         <input type="file" multiple id="input_import" accept=".stl" onChange={handleChange} />
       </div>
       {error && <Alert open={error} onClose={() => setError(false)} text="Import only STL file" />}
+      <PanelInfo />
     </>
   );
 }
