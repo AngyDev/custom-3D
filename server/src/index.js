@@ -31,6 +31,7 @@ app.use("/", require("./routes/users"));
 app.use("/", require("./routes/projects"));
 app.use("/", require("./routes/comments"));
 app.use("/", require("./routes/objects"));
+app.use("/", require("./routes/threeCalculations"));
 
 app.listen(port, host, () => {
   console.log(`App listening at http://${host}:${port}`);

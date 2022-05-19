@@ -116,3 +116,20 @@ export const deleteObject = async (objectId) => {
     return false;
   }
 };
+
+export const getOffsetMesh = async (data, offset) => {
+  try {
+    const response = await axios({
+      method: "POST",
+      url: `${API_URL}/offset`,
+      data: {
+        data,
+        offset,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
