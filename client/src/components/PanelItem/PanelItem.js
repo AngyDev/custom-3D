@@ -8,6 +8,7 @@ import ChangeColor from "../ChangeColor/ChangeColor";
 import Modal from "../Modal/Modal";
 import Offset from "../Offset/Offset";
 import { addColorToClippedMesh } from "../../utils/functions/clippingObject";
+import PanelPlaneInfo from "../Panel/PanelPlaneInfo/PanelPlaneInfo";
 export default function PanelItem({ uuid, type, name, deleteClick }) {
   const scene = useSelector(getScene);
   const group = useSelector(getGroup);
@@ -22,6 +23,8 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   const [clipped, setClipped] = useState(false);
   const [openOffset, setOpenOffset] = useState(false);
   const [meshToOffset, setMeshToOffset] = useState();
+  const [openPlaneInfo, setOpenPlaneInfo] = useState(false);
+  const [selectedPlane, setSelectedPlane] = useState();
 
   useEffect(() => {
     // checks the selected mesh to add background to panel object
@@ -202,6 +205,12 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
     object.material.opacity = object.material.opacity === 1 ? 0.5 : 1;
   };
 
+  const handleInfo = (e) => {
+    const plane = findById(e.target.attributes.id.nodeValue)(scene.children);
+    setSelectedPlane(plane);
+    setOpenPlaneInfo(!openPlaneInfo);
+  };
+
   return (
     <>
       <div className={`option flex items-center text-black ${selected ? "option-active" : ""}`}>
@@ -225,6 +234,8 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
               </span>
             )}
             <span id={uuid} name={name} className="opacity" onClick={handleOpacity} />
+            <span id={uuid} name={name} className="infoIcon" onClick={handleInfo} />
+            {openPlaneInfo && <PanelPlaneInfo plane={selectedPlane} />}
           </>
         )}
         {type === "scene" && (
