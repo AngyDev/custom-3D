@@ -1,18 +1,10 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { getCenter, getNormal } from "../../../utils/functions/objectCalc";
 
 export default function PanelPlaneInfo({ plane }) {
-  console.log(plane);
-  const [center, setCenter] = useState();
-  const [normal, setNormal] = useState();
-
-  useEffect(() => {
-    if (Object.keys(plane).length > 0) {
-      setCenter(getCenter(plane));
-      setNormal(getNormal(plane));
-    }
-  }, [plane]);
+  const center = getCenter(plane);
+  const normal = getNormal(plane);
 
   return (
     <div className="inline-block absolute left-80 z-10 py-2 px-3 text-sm font-medium text-white rounded-lg shadow-sm bg-gray-600 dark:bg-base">
