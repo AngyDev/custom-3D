@@ -29,7 +29,7 @@ export default function Panel({ type }) {
           });
         } else if (obj.name.startsWith("Plane")) {
           addMeshToList(planeList, obj, setPlaneList);
-        } else if (obj.name.startsWith("Point")) {
+        } else if (obj.name.startsWith("Comment")) {
           addMeshToList(pointList, obj, setPointList);
         } else if (obj.type === "Group" && obj.name.startsWith("Measure")) {
           addMeshToList(measureList, obj, setMeasureList);

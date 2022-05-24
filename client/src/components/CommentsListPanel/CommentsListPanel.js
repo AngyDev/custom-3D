@@ -86,7 +86,7 @@ export default function CommentsListPanel({ projectId }) {
 
     if (intersects.length > 0) {
       sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
-      sphere.name = "Point" + countPoint;
+      sphere.name = "Comment" + countPoint;
       scene.add(sphere);
 
       createLabel(sphere);
