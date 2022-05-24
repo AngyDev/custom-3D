@@ -73,15 +73,22 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
    * @param {*} mode Transformation mode
    */
   const transformPlane = (e, mode) => {
-    dispatch(setSelectedMesh(e.target.attributes.id.nodeValue));
+    const node = e.target.attributes.id.nodeValue;
     const name = e.target.attributes.name.nodeValue;
 
-    scene.children.forEach((object) => {
-      if (object.name === name) {
-        tControls.attach(object);
-        tControls.setMode(mode);
-      }
-    });
+    dispatch(setSelectedMesh(node));
+
+    // Checks created to control the transformControls to remove if present and add if not
+    if (tControls.visible && tControls.mode === mode && selectedMesh === node) {
+      tControls.detach();
+    } else {
+      scene.children.forEach((object) => {
+        if (object.name === name) {
+          tControls.attach(object);
+          tControls.setMode(mode);
+        }
+      });
+    }
   };
 
   /**
@@ -171,15 +178,12 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
    * @param {String} color The color to set the mesh
    */
   const changeColorMesh = (color) => {
-    scene.children.map((object) => {
-      if (object.type === "Group") {
-        object.children.map((mesh) => {
-          if (mesh.uuid === selectedMesh) {
-            mesh.material.color.set(color);
-          }
-        });
+    group.children.map((mesh) => {
+      if (mesh.uuid === selectedMesh) {
+        mesh.material.color.set(color);
       }
     });
+
     setIsOpen(false);
   };
 
