@@ -8,6 +8,7 @@ import Button from "../Button/Button";
 import { Checkbox } from "../Checkbox/Checkbox";
 import Modal from "../Modal/Modal";
 import PropTypes from "prop-types";
+import { downloadObject } from "../../utils/functions/downloadObject";
 
 export default function Export() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +35,7 @@ function ExportModal({ onClose }) {
   const children = useSelector(getChildren);
   const [values, setValues] = useState({ files: [], filename: "" });
   const [meshes, setMeshes] = useState([]);
+  const [errors, setErros] = useState({});
 
   useEffect(() => {
     if (children !== undefined) {
@@ -79,40 +81,48 @@ function ExportModal({ onClose }) {
 
     const exporter = new STLExporter();
     const group = new THREE.Group();
-    values.files.map((obj) => {
-      const mesh = meshes.filter((option) => option.name === obj)[0];
-      // Clone the mesh otherwise the meshes disappear from the scene
-      group.add(mesh.clone());
-    });
-    const result = exporter.parse(group, { binary: true });
-    save(new Blob([result], { type: "application/octet-stream" }), `${values.filename}.stl`);
-    onClose();
-  };
 
-  const save = (blob, filename) => {
-    const link = document.createElement("a");
-    link.style.display = "none";
-    document.body.appendChild(link);
+    // Checks if the user has selected any objects
+    if (values.files.length !== 0) {
+      // Checks if the user has inserted a filename
+      if (values.filename !== "") {
+        values.files.map((obj) => {
+          const mesh = meshes.filter((option) => option.name === obj)[0];
 
-    link.href = URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
+          // Clone the mesh otherwise the meshes disappear from the scene
+          group.add(mesh.clone());
+        });
+        const result = exporter.parse(group, { binary: true });
+        downloadObject(new Blob([result], { type: "application/octet-stream" }), `${values.filename}.stl`);
+        onClose();
+      } else {
+        setErros({ filename: "Please enter a filename" });
+      }
+    } else {
+      setErros({ check: "Please select at least one object" });
+    }
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div className="modal__body h-64">
-          <div className="mb-4 grid grid-cols-2 gap-2 content-start overflow-y-scroll h-36">
-            {meshes.map((item, i) => (
-              <Checkbox key={i} label={item.name} value={item.name} name="files" onChange={(e) => handleChange(e, "array")} />
-            ))}
+        <div className="modal__body h-72">
+          <div>
+            <div className="mb-4 grid grid-cols-2 gap-2 content-start overflow-y-scroll h-36">
+              {meshes.map((item, i) => (
+                <Checkbox key={i} label={item.name} value={item.name} name="files" onChange={(e) => handleChange(e, "array")} />
+              ))}
+            </div>
+            {errors.check ? <p className="h-5 text-red-500">{errors.check}</p> : <p className="h-5"></p>}
           </div>
-          <div className="flex items-center">
-            <label className="form__label pr-2" htmlFor="filename">
-              Name:
-            </label>
-            <input className="form__input" type="input" placeholder="Enter filename" name="filename" onChange={handleChange} />
+          <div>
+            <div className="flex items-center">
+              <label className="form__label pr-2" htmlFor="filename">
+                Name:
+              </label>
+              <input className="form__input" type="input" placeholder="Enter filename" name="filename" id="filename" onChange={handleChange} />
+            </div>
+            {errors.filename ? <div className="h-5 text-red-500">{errors.filename}</div> : <p className="h-5"></p>}
           </div>
         </div>
         <div className="modal__footer modal__border-t">
