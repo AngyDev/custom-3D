@@ -68,6 +68,9 @@ export default function Panel({ type }) {
   const deleteClick = () => {
     const id = deleteElem.target.attributes.id.nodeValue;
 
+    // removes the active class on visibility before delete the node
+    deleteElem.target.parentNode.firstChild.classList.remove("active");
+
     setMeshList(meshList.filter((mesh) => mesh.uuid !== id));
     setPlaneList(planeList.filter((mesh) => mesh.uuid !== id));
     setPointList(pointList.filter((mesh) => mesh.uuid !== id));
