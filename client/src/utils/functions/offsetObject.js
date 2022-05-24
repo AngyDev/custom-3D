@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { mergeVertices } from "three/examples/jsm/utils/BufferGeometryUtils";
