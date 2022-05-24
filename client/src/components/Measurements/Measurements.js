@@ -203,7 +203,7 @@ export default function Measurements({ openPanel, setOpenPanel }) {
         positions[5] = intersects[0].point.z;
         line.geometry.attributes.position.needsUpdate = true;
         const distance = v0.distanceTo(v1);
-        measurementLabels[lineId].element.innerText = distance.toFixed(2) + "mm";
+        measurementLabels[lineId].element.innerText = "M" + count + ": " + distance.toFixed(2) + "mm";
         measurementLabels[lineId].position.lerpVectors(v0, v1, 0.5);
       }
     }
