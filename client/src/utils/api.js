@@ -35,12 +35,12 @@ export const saveProject = async (userId, project) => {
       method: "POST",
       url: `${API_URL}/project`,
       data: {
-        project_name: project.projectName,
-        patient_code: project.patientCode,
+        projectName: project.projectName,
+        patientCode: project.patientCode,
         status: project.status,
         scene: project.scene,
-        assigned_at: project.assignedAt,
-        user_id: userId,
+        assignedAt: project.assignedAt,
+        userId: userId,
       },
     });
 
@@ -75,10 +75,10 @@ export const saveComment = async (comment) => {
       method: "POST",
       url: `${API_URL}/comment`,
       data: {
-        project_id: comment.projectId,
-        user_id: comment.userId,
+        projectId: comment.projectId,
+        userId: comment.userId,
         text: comment.text,
-        point_id: comment.pointId,
+        pointId: comment.pointId,
       },
     });
 
