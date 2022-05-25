@@ -42,7 +42,7 @@ const getProjectById = errorHandler(async (req, res) => {
 /**
  * Get project by userId
  */
-const getProjectByUserId = errorHandler(async (req, res) => {
+const getProjectsByUserId = errorHandler(async (req, res) => {
   const userId = req.params.userId;
   const projects = await ProjectsController.getProjectsByUserId(userId);
 
@@ -104,4 +104,4 @@ const deleteProject = errorHandler(async (req, res) => {
   }
 });
 
-module.exports = { getProjects, getProjectById, getProjectByUserId, createProject, updateProject, deleteProject };
+module.exports = { getProjects, getProjectById, getProjectsByUserId, createProject, updateProject, deleteProject };
