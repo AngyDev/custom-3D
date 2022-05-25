@@ -46,7 +46,7 @@ const createUser = errorHandler(async (req, res) => {
     lastName,
     email,
     password: encryptedPassword,
-    role
+    role,
   });
 
   return createdUser;
@@ -59,9 +59,9 @@ const deleteUser = errorHandler(async (req, res) => {
 
   if (deletedUser === 0) {
     throw new HttpError(404, "User not found");
-  } else {
-    return {message: "User deleted"};
   }
+
+  return { message: "User deleted" };
 });
 
 module.exports = { getUsers, getUserById, createUser, deleteUser };

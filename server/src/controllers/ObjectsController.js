@@ -30,15 +30,15 @@ export class ObjectsController {
    */
   static createObject(object) {
     return ObjectsModel.query().insert({
-      id: object.object_id,
-      project_id: object.project_id,
+      id: object.objectId,
+      project_id: object.projectId,
       object: object.object,
     });
   }
 
   /**
    * Saves the object in the db
-   * @param {Object} object Id
+   * @param {Object} object The id of the mesh
    * @param {String} projectId
    * @param {String} filepath
    * @returns

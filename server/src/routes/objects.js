@@ -4,51 +4,14 @@ import { ProjectsController } from "../controllers/ProjectsController";
 import { default as uploadFile } from "../connectors/aws_s3";
 const multer = require("multer");
 const fs = require("fs");
+const api = require("../api/objects");
 
 const router = express.Router();
 
-/**
- * Get Object by id
- */
-router.get("/object/:objectId", async (req, res) => {
-  try {
-    const objectId = req.params.objectId;
-    const response = await ObjectsController.getObjectById(objectId);
-
-    if (response) {
-      res.send(response);
-    } else {
-      res.status(404).send("Not found");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-/**
- * Get objects by project id
- */
-router.get("/objects/:projectId/", async (req, res) => {
-  try {
-    const projectId = req.params.projectId;
-    const response = await ObjectsController.getObjectsPathByProjectId(projectId);
-
-    const objectsPath = [];
-
-    if (response) {
-      for (const object of response) {
-        const path = process.env.AWS_S3_SERVER + "/" + process.env.AWS_BUCKET_NAME + "/" + object["objectPath"];
-        objectsPath.push(path);
-      }
-
-      res.send(objectsPath);
-    } else {
-      res.status(404).send("Not found");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-});
+router.get("/object/:id", api.getObjectById);
+router.get("/objects/:projectId/", api.getObjectsPathByProjectId);
+router.post("/upload/:projectId", api.createObject);
+router.delete("/object/:id", api.deleteObject);
 
 const storage = multer.diskStorage({ dest: "temp/" });
 const upload = multer({ storage: storage });
@@ -95,36 +58,6 @@ router.post("/upload/:projectId", upload.single("file"), function (req, res) {
       console.log(err);
       res.status(400).send("Error");
     });
-});
-
-/**
- * Save object
- */
-router.post("/object", async (req, res) => {
-  try {
-    const findProject = await ProjectsController.getProjectById(req.body.project_id);
-
-    if (!findProject) return res.status(404).send("Project not found");
-
-    const createObject = await ObjectsController.createObject(req.body);
-    return res.status(200).json(createObject);
-  } catch (error) {
-    res.status(400).json(error.message);
-    console.error(error);
-  }
-});
-
-/**
- * Deletes object and comments
- */
-router.delete("/object/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const deleteObject = await ObjectsController.deleteObject(id);
-    res.send("The object sucessfully deleted");
-  } catch (error) {
-    console.error(error);
-  }
 });
 
 module.exports = router;
