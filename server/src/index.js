@@ -28,10 +28,10 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 app.use("/api/", require("./routes/users"));
-app.use("/", require("./routes/projects"));
-app.use("/", require("./routes/comments"));
-app.use("/", require("./routes/objects"));
-app.use("/", require("./routes/threeCalculations"));
+app.use("/api/", require("./routes/projects"));
+app.use("/api/", require("./routes/comments"));
+app.use("/api/", require("./routes/objects"));
+app.use("/api/", require("./routes/threeCalculations"));
 
 // Catch the error and print it in console
 app.use((err, req, res, next) => {
