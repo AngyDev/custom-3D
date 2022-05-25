@@ -41,12 +41,11 @@ export class ProjectsController {
   static createProject(payload) {
     return ProjectsModel.query().insert({
       id: v4(),
-      project_name: payload.project_name,
-      patient_code: payload.patient_code,
+      project_name: payload.projectName,
+      patient_code: payload.patientCode,
       status: payload.status,
-      scene: payload.scene,
-      assigned_at: payload.assigned_at,
-      user_id: payload.user_id,
+      assigned_at: payload.assignedAt,
+      user_id: payload.userId,
     });
   }
 
