@@ -2,6 +2,7 @@ import { UsersController } from "../controllers/UsersControllers";
 import { HttpError } from "../error";
 import { errorHandler } from "../utils";
 import bcrypt from "bcryptjs";
+import { validateUser } from "../validation/validate";
 
 const getUsers = errorHandler(async (req, res) => {
   const users = await UsersController.getUsers();
@@ -11,10 +12,6 @@ const getUsers = errorHandler(async (req, res) => {
 
 const getUserById = errorHandler(async (req, res) => {
   const { id } = req.params;
-
-  if (!id) {
-    throw new HttpError(400, "Missing id");
-  }
 
   const user = await UsersController.getUserById(id);
 
@@ -30,9 +27,7 @@ const createUser = errorHandler(async (req, res) => {
   const { firstName, lastName, email, password, role } = req.body;
 
   // Validate user input
-  if (!(firstName && lastName && email && password && role)) {
-    throw new HttpError(400, "Missing required fields");
-  }
+  validateUser(firstName, lastName, email, password, role);
 
   // Checks if the user already exists
   // TODO: Use only the email for the checks?
@@ -60,13 +55,9 @@ const createUser = errorHandler(async (req, res) => {
 const deleteUser = errorHandler(async (req, res) => {
   const { id } = req.params;
 
-  if (!id) {
-    throw new HttpError(400, "Missing id");
-  }
-
   const deletedUser = await UsersController.deleteUser(id);
 
-  if (deleteUser === 0) {
+  if (deletedUser === 0) {
     throw new HttpError(404, "User not found");
   } else {
     return {message: "User deleted"};
