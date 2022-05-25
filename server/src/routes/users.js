@@ -1,50 +1,12 @@
 import express from 'express';
 import { UsersController } from '../controllers/UsersControllers';
+import api from "../api/users";
 
 const router = express.Router();
 
-router.get("/users", async (req, res) => {
-    try {
-        const response = await UsersController.getUsers();
-
-        if (response) {
-            res.send(response);
-        } else {
-            res.status(404).send('Not found');
-        }
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-router.get("/user/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const response = await UsersController.getUserById(id);
-        res.send(response);
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-router.post("/user", async (req, res) => {
-    try {
-        const user = req.body;
-        const createUser = await UsersController.createUser(user);
-        return res.status(200).json(createUser);
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-router.delete("/user/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const deleteUser = await UsersController.deleteUser(id);
-        res.send("The user sucessfully deleted");
-    } catch (error) {
-        console.error(error);
-    }
-})
+router.get("/users", api.getUsers);
+router.get("/user/:id", api.getUserById);
+router.post("/user", api.createUser);
+router.delete("/user/:id", api.deleteUser);
 
 module.exports = router;

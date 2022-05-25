@@ -27,11 +27,22 @@ app.use(express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 5000
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
-app.use("/", require("./routes/users"));
+app.use("/api/", require("./routes/users"));
 app.use("/", require("./routes/projects"));
 app.use("/", require("./routes/comments"));
 app.use("/", require("./routes/objects"));
 app.use("/", require("./routes/threeCalculations"));
+
+// Catch the error and print it in console
+app.use((err, req, res, next) => {
+  console.error(err);
+  next(err);
+});
+
+// Catch the error and return on client
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).send({ error: err.message });
+});
 
 app.listen(port, host, () => {
   console.log(`App listening at http://${host}:${port}`);
