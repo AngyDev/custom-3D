@@ -44,7 +44,6 @@ export class ProjectsController {
       project_name: payload.projectName,
       patient_code: payload.patientCode,
       status: payload.status,
-      scene: payload.scene,
       assigned_at: payload.assignedAt,
       user_id: payload.userId,
     });
