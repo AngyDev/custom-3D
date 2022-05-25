@@ -1,5 +1,5 @@
-import express from 'express';
-import api from "../api/users";
+const express = require("express");
+const api = require("../api/users");
 
 const router = express.Router();
 

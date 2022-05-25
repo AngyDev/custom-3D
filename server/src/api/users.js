@@ -1,8 +1,8 @@
-import { UsersController } from "../controllers/UsersControllers";
-import { HttpError } from "../error";
-import { errorHandler } from "../utils";
-import bcrypt from "bcryptjs";
-import { validateUser } from "../validation/validate";
+const { validateUser } = require("../validation/validate");
+const bcrypt = require("bcryptjs");
+const { errorHandler } = require("../utils");
+const { HttpError } = require("../error");
+const { UsersController } = require("../controllers/UsersControllers");
 
 const getUsers = errorHandler(async (req, res) => {
   const users = await UsersController.getUsers();

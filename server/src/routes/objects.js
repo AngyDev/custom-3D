@@ -31,7 +31,7 @@ router.get("/object/:objectId", async (req, res) => {
 router.get("/objects/:projectId/", async (req, res) => {
   try {
     const projectId = req.params.projectId;
-    const response = await ObjectsController.getObjectsByProjectId(projectId);
+    const response = await ObjectsController.getObjectsPathByProjectId(projectId);
 
     const objectsPath = [];
 

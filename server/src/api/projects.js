@@ -1,8 +1,8 @@
-import { errorHandler } from "../utils";
-import { ProjectsController } from "../controllers/ProjectsController";
-import { ObjectsController } from "../controllers/ObjectsController";
-import { validateProject } from "../validation/validate";
-import { HttpError } from "../error";
+const { ProjectsController } = require("../controllers/ProjectsController");
+const { ObjectsController } = require("../controllers/ObjectsController");
+const { validateProject } = require("../validation/validate");
+const { errorHandler } = require("../utils");
+const { HttpError } = require("../error");
 
 /**
  * Get projects
@@ -25,7 +25,7 @@ const getProjectById = errorHandler(async (req, res) => {
     throw new HttpError(404, "Project not found");
   }
 
-  const objects = await ObjectsController.getObjectsByProjectId(id);
+  const objects = await ObjectsController.getObjectsPathByProjectId(id);
   const objectsPath = [];
 
   for (const object of objects) {
@@ -53,7 +53,7 @@ const getProjectByUserId = errorHandler(async (req, res) => {
  * Creates project
  */
 const createProject = errorHandler(async (req, res) => {
-  const { project } = req.body;
+  const project = req.body;
 
   // Validate the body input
   validateProject(project);
@@ -71,7 +71,7 @@ const createProject = errorHandler(async (req, res) => {
  */
 const updateProject = errorHandler(async (req, res) => {
   const { id } = req.params;
-  const { project } = req.body;
+  const project = req.body;
 
   // Validate the body input
   validateProject(project);
@@ -100,7 +100,7 @@ const deleteProject = errorHandler(async (req, res) => {
   if (deletedProject === 0) {
     throw new HttpError(404, "Project not found");
   } else {
-    return {message: "Project deleted"};
+    return { message: "Project deleted" };
   }
 });
 

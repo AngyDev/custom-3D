@@ -1,7 +1,5 @@
-import express from "express";
-import { ObjectsController } from "../controllers/ObjectsController";
-import { ProjectsController } from "../controllers/ProjectsController";
-import api from "../api/projects";
+const express = require("express");
+const api = require("../api/projects");
 
 const router = express.Router();
 
