@@ -1,85 +1,64 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
 import importIcon from "../../assets/images/icons/white/download-solid.svg";
-import * as THREE from "three";
-import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
-import { getGroup, getSceneModified, setPositionVector, setSceneModified } from "../../features/scene/sceneSlice";
-import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-mesh-bvh";
 import Alert from "../Alert/Alert";
 import PanelInfo from "../Panel/PanelInfo/PanelInfo";
+import * as THREE from "three";
+import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
+import { useDispatch, useSelector } from "react-redux";
+import { getGroup, getSceneModified, setSceneModified } from "../../features/scene/sceneSlice";
+import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-mesh-bvh";
+import { getCenter } from "../../utils/functions/objectCalc";
 
 export default function Import() {
   THREE.Mesh.prototype.raycast = acceleratedRaycast;
   THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
   THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree;
 
-  const group = useSelector(getGroup);
+  const [error, setError] = useState(false);
+  const [isFirstImport, setIsFirstImport] = useState(true);
+  const [position, setPosition] = useState();
+
   const isModified = useSelector(getSceneModified);
+  const group = useSelector(getGroup);
   const dispatch = useDispatch();
 
-  const [mesh, setMesh] = useState();
-  const [vector, setVector] = useState();
-  const [isFirstImport, setIsFirstImport] = useState(true);
-  const [files, setFiles] = useState([]);
+  const handleChange = async (e) => {
+    const files = e.target.files;
 
-  const [imported, setImported] = useState(true);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    if (mesh !== undefined) {
-      if (isFirstImport) {
-        const position = setFirstObjPosition(mesh);
-        addPositionToMesh(mesh, position);
-      } else {
-        addPositionToMesh(mesh);
-      }
-    }
-  }, [imported]);
-
-  useEffect(() => {
     if (files.length > 0) {
+      let firstPosition;
       for (var i = 0; i < files.length; i++) {
         if (files[i].name.split(".").pop() === "stl") {
-          loadFile(files[i], createMeshFromFile);
+          let modified = modified ? !modified : isModified;
+
+          const contents = await loadFile(files[i]);
+          const mesh = createMeshFromFile(files[i].name, contents);
+
+          if (i === 0 && isFirstImport) {
+            firstPosition = getCenter(mesh);
+            setPosition(firstPosition);
+            setIsFirstImport(false);
+          }
+
+          addPositionToMesh(mesh, position ? position : firstPosition);
+          dispatch(setSceneModified(!modified));
         } else {
           setError(true);
         }
       }
     }
-  }, [files]);
-
-  const handleChange = (e) => {
-    const files = e.target.files;
-
-    setFiles(files);
   };
 
-  /**
-   * Loads the file and reads the content of the file
-   * @param {File} file File imported
-   */
-  const loadFile = (file, createMeshFromFile) => {
-    const filename = file.name;
-    const reader = new FileReader();
+  const loadFile = (file) =>
+    new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const contents = e.target.result;
+        resolve(contents);
+      };
+      reader.readAsArrayBuffer(file);
+    });
 
-    reader.addEventListener(
-      "load",
-      (event) => {
-        const contents = event.target.result;
-        createMeshFromFile(filename, contents);
-      },
-      false,
-    );
-
-    reader.readAsArrayBuffer(file);
-  };
-
-  /**
-   * Creates a mesh from file
-   * @param {FileName} filename The name of the file
-   * @param {FileReader} contents Result of FileReader
-   * @returns mesh
-   */
   const createMeshFromFile = (filename, contents) => {
     const geometry = new STLLoader().parse(contents);
     geometry.computeVertexNormals();
@@ -99,42 +78,17 @@ export default function Import() {
 
     const mesh = new THREE.Mesh(geometry, material);
     mesh.name = filename;
-    setMesh(mesh);
-    setImported((prev) => !prev);
+
+    console.log(mesh);
+
+    return mesh;
   };
 
-  /**
-   * Adds the position to the mesh and adds the mesh to the group
-   * @param {Object3D} mesh The mesh to be position
-   * @param {Vector3} position The positino of the mesh
-   */
   const addPositionToMesh = (mesh, position) => {
-    if (vector === undefined) {
-      mesh.position.set(-position.x, -position.y, -position.z);
-    } else {
-      mesh.position.set(-vector.x, -vector.y, -vector.z);
-    }
+    mesh.position.set(-position.x, -position.y, -position.z);
     mesh.geometry.computeBoundsTree();
     mesh.renderOrder = 6;
     group.add(mesh);
-    dispatch(setSceneModified(!isModified));
-  };
-
-  /**
-   * Sets the position of the first object of the group
-   * @param {THREE.Mesh} mesh THREE.Mesh
-   */
-  const setFirstObjPosition = (mesh) => {
-    const center = new THREE.Vector3();
-
-    const box3 = new THREE.Box3().setFromObject(mesh);
-    box3.getCenter(center);
-
-    setVector(center);
-    dispatch(setPositionVector(center));
-    setIsFirstImport(false);
-
-    return center;
   };
 
   return (
