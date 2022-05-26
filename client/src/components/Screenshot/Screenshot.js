@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import screenshotIcon from "../../assets/images/icons/white/screenshot.svg";
 import { getCamera, getRenderer, getScene } from "../../features/scene/sceneSlice";
+import { downloadObject } from "../../utils/functions/downloadObject";
 import Button from "../Button/Button";
 
 export default function Screenshot() {
@@ -13,11 +14,7 @@ export default function Screenshot() {
     renderer.render(scene, camera);
     renderer.domElement.toBlob(
       function (blob) {
-        var a = document.createElement("a");
-        var url = URL.createObjectURL(blob);
-        a.href = url;
-        a.download = "screenshot.png";
-        a.click();
+        downloadObject(blob, "screenshot.png");
       },
       "image/png",
       1.0,

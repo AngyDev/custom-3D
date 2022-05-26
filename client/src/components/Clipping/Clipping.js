@@ -41,7 +41,7 @@ export default function Clipping() {
         const normal = new THREE.Vector3();
         const point = new THREE.Vector3();
 
-        // Gets the ceters of the planes
+        // Gets the centers of the planes
         const center = getCenterPoint(item);
         centers.push(center);
 
