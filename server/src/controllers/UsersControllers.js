@@ -1,7 +1,7 @@
 const { v4 } = require("uuid");
-import { UsersModel } from "../models/UsersModel";
+const { UsersModel } = require("../models/UsersModel");
 
-export class UsersController {
+class UsersController {
   static getUsers() {
     return UsersModel.query().select().orderBy("created_at");
   }
@@ -33,3 +33,5 @@ export class UsersController {
     return UsersModel.query().deleteById(id);
   }
 }
+
+module.exports = { UsersController };

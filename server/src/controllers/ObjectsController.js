@@ -1,6 +1,6 @@
-import { ObjectsModel } from "../models/ObjectsModel";
+const { ObjectsModel } = require("../models/ObjectsModel");
 
-export class ObjectsController {
+class ObjectsController {
   /**
    * Gets the object by uuid
    * @param {String} objectId The uuid of the object
@@ -56,3 +56,5 @@ export class ObjectsController {
     return ObjectsModel.query().deleteById(id);
   }
 }
+
+module.exports = { ObjectsController };

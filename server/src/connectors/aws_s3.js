@@ -16,8 +16,7 @@ const s3client = new AWS.S3({
   s3ForcePathStyle: true,
 });
 
-export default function uploadFile(data, fileName, folder) {
-  
+function uploadFile(data, fileName, folder) {
   return new Promise((resolve, reject) => {
     s3client.upload(
       {
@@ -33,3 +32,5 @@ export default function uploadFile(data, fileName, folder) {
     );
   });
 }
+
+module.exports = { uploadFile };

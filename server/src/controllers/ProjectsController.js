@@ -1,7 +1,7 @@
 const { v4 } = require("uuid");
-import { ProjectsModel } from "../models/ProjectsModel";
+const { ProjectsModel } = require("../models/ProjectsModel");
 
-export class ProjectsController {
+class ProjectsController {
   /**
    * Get projects
    * @returns List of projects
@@ -68,3 +68,5 @@ export class ProjectsController {
     return ProjectsModel.query().deleteById(id);
   }
 }
+
+module.exports = { ProjectsController };

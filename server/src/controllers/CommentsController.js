@@ -1,7 +1,7 @@
-import { CommentsModel } from "../models/CommentsModel";
+const { CommentsModel } = require("../models/CommentsModel");
 const { v4 } = require("uuid");
 
-export class CommentsController {
+class CommentsController {
   /**
    * Get comments by project id
    * @param {String} projectId Project ID
@@ -49,3 +49,5 @@ export class CommentsController {
     return CommentsModel.query().deleteById(id);
   }
 }
+
+module.exports = { CommentsController };

@@ -2,6 +2,8 @@ const { ObjectsController } = require("../controllers/ObjectsController");
 const { ProjectsController } = require("../controllers/ProjectsController");
 const { errorHandler } = require("../utils");
 const { HttpError } = require("../error");
+const uploadFile = require("../middleware/upload");
+const fs = require("fs");
 
 /**
  * Get Object by id
@@ -26,19 +28,24 @@ const getObjectsPathByProjectId = errorHandler(async (req, res) => {
   const objectsPath = [];
 
   for (const object of objects) {
-    const path = process.env.AWS_S3_SERVER + "/" + process.env.AWS_BUCKET_NAME + "/" + object["objectPath"];
+    // const path = process.env.AWS_S3_SERVER + "/" + process.env.AWS_BUCKET_NAME + "/" + object["objectPath"];
+    const path = `${process.env.FILE_PATH}/public/uploads/${object["objectPath"]}`;
     objectsPath.push(path);
   }
 
   return objectsPath;
 });
 
-const createObject = errorHandler(async (req, res) => {
-  // const { projectId } = req.params;
-  // const findProject = await ProjectsController.getProjectById(projectId);
-  // if (!findProject) throw new HttpError(404, "Project not found");
-  // const createObject = await ObjectsController.createObject();
-});
+const getObjectsByProjectId = async (req, res) => {
+  const { projectId } = req.params;
+
+  const objects = await ObjectsController.getObjectsByProjectId(projectId);
+
+  for (const object of objects) {
+    const stream = fs.createReadStream(`${process.env.FILE_PATH}/public/uploads/${object["objectPath"]}`);
+    stream.pipe(res);
+  }
+};
 
 /**
  * Deletes object and comments
@@ -55,4 +62,30 @@ const deleteObject = errorHandler(async (req, res) => {
   return { message: "Object deleted" };
 });
 
-module.exports = { getObjectById, getObjectsPathByProjectId, createObject, deleteObject };
+/**
+ * Upload object file and save object
+ */
+const uploadFileAndSaveObject = errorHandler(async (req, res) => {
+  // Checks if the project exist
+  const findProject = await ProjectsController.getProjectById(req.params.projectId);
+
+  if (!findProject) throw new HttpError(404, "Project not found");
+
+  // Uploads the file in the server folder
+  await uploadFile(req, res);
+
+  if (req.file === undefined) {
+    throw new HttpError(400, "Please upload a file!");
+  }
+
+  const filepath = req.params.projectId + "/" + req.file.originalname;
+  const object = req.body.id;
+  const projectId = req.params.projectId;
+
+  // Saves the object in the db
+  await ObjectsController.saveObject(object, projectId, filepath);
+
+  return { message: "Uploaded the file successfully: " + req.file.originalname };
+});
+
+module.exports = { getObjectById, getObjectsPathByProjectId, deleteObject, uploadFileAndSaveObject, getObjectsByProjectId };

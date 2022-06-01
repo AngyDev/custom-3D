@@ -1,4 +1,4 @@
-import express from 'express';
+const express = require('express');
 const api = require("../api/comments");
 
 const router = express.Router();

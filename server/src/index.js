@@ -7,8 +7,8 @@ const { Model } = require("objection");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.NODE_PORT;
-const host = process.env.NODE_HOST;
+const port = process.env.NODE_PORT || 3000;
+const host = process.env.NODE_HOST || "0.0.0.0";
 
 // var corsOption = { origin: ["http://c880-93-51-213-243.ngrok.io/", "http://localhost:9000"] };
 // app.use(cors(corsOption));

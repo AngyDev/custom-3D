@@ -1,4 +1,4 @@
-export const memoize = (fn) => {
+const memoize = (fn) => {
   const cache = new Map();
 
   return (opt1, opt2) => {
@@ -14,3 +14,5 @@ export const memoize = (fn) => {
     return result;
   };
 };
+
+module.exports = { memoize };

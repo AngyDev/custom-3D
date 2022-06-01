@@ -3,7 +3,7 @@
  * @param {String} data The data to read
  * @param {Number} offset The offset number to offset the mesh
  */
-export const createOffsetMesh = (data, offset) => {
+const createOffsetMesh = (data, offset) => {
   const initialObjects = parseASCII(data);
 
   const newObjects = createNewObjects(initialObjects, offset);
@@ -232,3 +232,5 @@ const calculateNewNormal = (v1, v2, v3) => {
 
   return normalizedNormal;
 };
+
+module.exports = { createOffsetMesh };
