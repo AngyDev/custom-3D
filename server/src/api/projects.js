@@ -29,7 +29,7 @@ const getProjectById = errorHandler(async (req, res) => {
   const objectsPath = [];
 
   for (const object of objects) {
-    const path = process.env.AWS_S3_SERVER + "/" + process.env.AWS_BUCKET_NAME + "/" + object["objectPath"];
+    const path =  "uploads/" + object["objectPath"];
     objectsPath.push(path);
   }
 

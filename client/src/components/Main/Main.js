@@ -95,7 +95,7 @@ export default function Main({ project }) {
       const loader = new THREE.ObjectLoader();
 
       for (const path of project.objectsPath) {
-        const object = await loader.loadAsync(path);
+        const object = await loader.loadAsync("http://localhost:8080/" + path);
         scene.add(object);
       }
     }
