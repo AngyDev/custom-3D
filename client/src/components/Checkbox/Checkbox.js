@@ -18,7 +18,7 @@ export function Checkbox(props) {
       </div>
       <div className="ml-3 text-lg">
         <label className={`form__checkbox-label ${props.className}`} htmlFor="">
-          {props.label}
+          {props.label.startsWith("Group") ? props.label.slice(5) : props.label}
         </label>
       </div>
     </div>

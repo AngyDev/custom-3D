@@ -58,7 +58,7 @@ export default function Save({ projectId }) {
       <Button typeClass="btn--img btn__icon" img={saveIcon} onClick={openModal} title="Save" />
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Save Objects" text="Save">
         <div className="modal__body flex flex-col">
-          <h3>Are you Sure?</h3>
+          <h3 className="text-white">Are you Sure?</h3>
         </div>
         <div className="modal__footer modal__border-t">
           <Button type="button" typeClass="modal__btn-confirm" text="Save" onClick={saveObjects} />

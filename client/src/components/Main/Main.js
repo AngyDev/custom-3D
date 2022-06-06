@@ -6,11 +6,19 @@ import { TrackballControls } from "three/examples/jsm/controls/TrackballControls
 import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { getIsCommentsActive } from "../../features/comments/commentsSlice";
-import { getSceneModified, setCamera, setCanvas, setControls, setRenderer, setScene, setSceneModified } from "../../features/scene/sceneSlice";
+import {
+  getSceneModified,
+  setCamera,
+  setCanvas,
+  setControls,
+  setPositionVector,
+  setRenderer,
+  setScene,
+  setSceneModified,
+} from "../../features/scene/sceneSlice";
 
 export default function Main({ project }) {
   const isCommentsActive = useSelector(getIsCommentsActive);
-
   const sceneModified = useSelector(getSceneModified);
 
   const dispatch = useDispatch();
@@ -90,19 +98,25 @@ export default function Main({ project }) {
     const axesHelper = new THREE.AxesHelper(5);
     scene.add(axesHelper);
 
-    // TODO: Remember when the user import files, checks the group mesh
+    const group = new THREE.Group();
+    group.name = "Import";
+    scene.add(group);
+
     if (Object.keys(project.objectsPath).length !== 0) {
       const loader = new THREE.ObjectLoader();
 
       for (const path of project.objectsPath) {
         const object = await loader.loadAsync("http://localhost:8080/" + path);
-        scene.add(object);
+        if (object.name.startsWith("Group")) {
+          dispatch(setPositionVector(object.position));
+          group.add(object);
+        } else {
+          scene.add(object);
+        }
       }
     }
 
-    const group = new THREE.Group();
-    group.name = "Import";
-    scene.add(group);
+    console.log(scene);
 
     var render = function () {
       // Render

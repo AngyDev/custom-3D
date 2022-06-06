@@ -5,7 +5,7 @@ import PanelInfo from "../Panel/PanelInfo/PanelInfo";
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import { useDispatch, useSelector } from "react-redux";
-import { getGroup, getSceneModified, setSceneModified } from "../../features/scene/sceneSlice";
+import { getGroup, getPositionVector, getSceneModified, setPositionVector, setSceneModified } from "../../features/scene/sceneSlice";
 import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-mesh-bvh";
 import { getCenter } from "../../utils/functions/objectCalc";
 
@@ -20,13 +20,16 @@ export default function Import() {
 
   const isModified = useSelector(getSceneModified);
   const group = useSelector(getGroup);
+  const positionVector = useSelector(getPositionVector);
   const dispatch = useDispatch();
 
   const handleChange = async (e) => {
     const files = e.target.files;
 
     if (files.length > 0) {
-      let firstPosition;
+      // If an object is saved, the position of the imported object is set to the center of the saved object
+      let firstPosition = positionVector ? new THREE.Vector3(-positionVector.x, -positionVector.y, -positionVector.z) : null;
+
       for (var i = 0; i < files.length; i++) {
         if (files[i].name.split(".").pop() === "stl") {
           let modified = modified ? !modified : isModified;
@@ -34,10 +37,11 @@ export default function Import() {
           const contents = await loadFile(files[i]);
           const mesh = createMeshFromFile(files[i].name, contents);
 
-          if (i === 0 && isFirstImport) {
+          if (i === 0 && isFirstImport && firstPosition !== null) {
             firstPosition = getCenter(mesh);
             setPosition(firstPosition);
             setIsFirstImport(false);
+            dispatch(setPositionVector(firstPosition));
           }
 
           addPositionToMesh(mesh, position ? position : firstPosition);
@@ -77,9 +81,7 @@ export default function Import() {
     geometry.setAttribute("color", colorAttr);
 
     const mesh = new THREE.Mesh(geometry, material);
-    mesh.name = filename;
-
-    console.log(mesh);
+    mesh.name = "Group" + filename.slice(0, -4);
 
     return mesh;
   };
