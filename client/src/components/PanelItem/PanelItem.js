@@ -9,6 +9,8 @@ import Modal from "../Modal/Modal";
 import Offset from "../Offset/Offset";
 import { addColorToClippedMesh } from "../../utils/functions/clippingObject";
 import PanelPlaneInfo from "../Panel/PanelPlaneInfo/PanelPlaneInfo";
+import { findById } from "../../utils/common-utils";
+
 export default function PanelItem({ uuid, type, name, deleteClick }) {
   const scene = useSelector(getScene);
   const group = useSelector(getGroup);
@@ -60,7 +62,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
           object.visible = !object.visible;
           // checks if the object has a label and makes it visible or invisible
           object.children.length > 0 && (object.children[0].visible = !object.children[0].visible);
-          if (tControls.visible) tControls.detach();
+          if (tControls.visible && selectedMesh === e.target.id) tControls.detach();
           // else tControls.attach();
         }
       }
@@ -142,7 +144,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
    */
   const selectedPoints = (uuid) => {
     scene.children.map((mesh) => {
-      if (mesh.name.startsWith("Point")) {
+      if (mesh.name.startsWith("Comment")) {
         if (mesh.uuid === uuid) {
           mesh.material.color.setHex(0xffff00); // yellow selected
         } else {
@@ -196,8 +198,6 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
     setMeshToOffset(e.target.id);
   };
 
-  const findById = (id) => (list) => list.flatMap((item) => (item.children ? [item, ...item.children] : item)).find((item) => item.uuid === id);
-
   /**
    * Adds/Removes opacity to the selected mesh
    * @param {Event} e
@@ -224,7 +224,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
             {name}
           </span>
         ) : (
-          <span>{name}</span>
+          <span>{name.startsWith("Group") ? name.slice(5) : name}</span>
         )}
         {type === "planes" && (
           <>

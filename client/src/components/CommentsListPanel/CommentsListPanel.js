@@ -161,7 +161,7 @@ export default function CommentsListPanel({ projectId }) {
               <input className="btn btn--size" type="reset" value="RESET" />
             </div>
           </form>
-          <Comments data={comments} />
+          <Comments comments={comments} />
         </div>
       )}
     </div>

@@ -3,7 +3,7 @@
 }
 
 .comments_list__box {
-  @apply mt-2;
+  @apply mt-2 bg-canvas text-black rounded p-1;
 }
 
 .comments_list__username {
