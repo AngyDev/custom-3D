@@ -3,6 +3,7 @@ const { HttpError } = require("../error");
 const { CommentsController } = require("../controllers/CommentsController");
 const { ObjectsController } = require("../controllers/ObjectsController");
 const { ProjectsController } = require("../controllers/ProjectsController");
+const { UsersController } = require("../controllers/UsersController");
 
 /**
  * Get comments by project id and point id

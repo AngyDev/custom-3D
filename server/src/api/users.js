@@ -2,7 +2,7 @@ const { validateUser } = require("../validation/validate");
 const bcrypt = require("bcryptjs");
 const { errorHandler } = require("../utils");
 const { HttpError } = require("../error");
-const { UsersController } = require("../controllers/UsersControllers");
+const { UsersController } = require("../controllers/UsersController");
 
 const getUsers = errorHandler(async (req, res) => {
   const users = await UsersController.getUsers();
