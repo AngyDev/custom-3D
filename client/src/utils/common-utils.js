@@ -1,1 +1,21 @@
+/**
+ * Get element by id
+ * @param {String} id Uuid of element
+ * @returns Element with the given id
+ */
 export const findById = (id) => (list) => list.flatMap((item) => (item.children ? [item, ...item.children] : item)).find((item) => item.uuid === id);
+
+/**
+ * Filter a list of objects with the name that starts with the given string.
+ * @param {String} name The name of the objects to find
+ * @returns {Array} A list of objects with the given name
+ */
+export const filterStartsWithName = (name) => (list) =>
+  list.flatMap((item) => (item.children ? [item, ...item.children] : item)).filter((item) => item.name.startsWith(name));
+
+/**
+ * Get the maximum counter of the objects with the given name.
+ * @param {Array} list
+ * @returns {Number} The highest counter of the given list
+ */
+export const getMaxCounter = (list) => list.map((item) => item.name[item.name.length - 1]).reduce((a, b) => (a > b ? a : b), 0);

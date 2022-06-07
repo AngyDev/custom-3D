@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getScene, getSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
+import { deleteObject } from "../../utils/api";
+import { findById } from "../../utils/common-utils";
 import ModalDelete from "../Modal/ModalDelete";
 import PanelItem from "../PanelItem/PanelItem";
 
@@ -80,6 +82,8 @@ export default function Panel({ type }) {
     // no one mesh is selected
     dispatch(setSelectedMesh(1));
 
+    const mesh = findById(id)(scene.children);
+
     scene.children.forEach((object) => {
       if (object.type === "Group" && object.name === "Import") {
         object.children.forEach((item) => {
@@ -104,7 +108,9 @@ export default function Panel({ type }) {
     });
     setIsOpen(false);
 
-    // const response = deleteObject(object.uuid);
+    console.log(mesh);
+    const response = deleteObject(mesh.uuid);
+    console.log(response);
   };
 
   return (

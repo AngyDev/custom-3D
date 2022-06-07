@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import Button from "../Button/Button";
-import * as THREE from "three";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import * as THREE from "three";
+import { getPlaneCounter, setPlaneCounter } from "../../features/counters/countersSlice";
 import { getScene, getSceneModified, setSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
+import Button from "../Button/Button";
 
 export default function AddPlane() {
-  const [counter, setCounter] = useState(1);
+  const planeCounter = useSelector(getPlaneCounter);
   const scene = useSelector(getScene);
   const isModified = useSelector(getSceneModified);
   const dispatch = useDispatch();
@@ -37,9 +38,9 @@ export default function AddPlane() {
       side: THREE.DoubleSide,
     });
     var mesh = new THREE.Mesh(geometry, material);
-    mesh.name = "Plane" + counter;
+    mesh.name = "Plane" + (planeCounter + 1);
 
-    setCounter((counter) => counter + 1);
+    dispatch(setPlaneCounter(planeCounter + 1));
 
     return mesh;
   };

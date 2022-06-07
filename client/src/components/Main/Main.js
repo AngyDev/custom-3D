@@ -16,6 +16,8 @@ import {
   setScene,
   setSceneModified,
 } from "../../features/scene/sceneSlice";
+import { filterStartsWithName, getMaxCounter } from "../../utils/common-utils";
+import { setCommentCounter, setPlaneCounter } from "../../features/counters/countersSlice";
 
 export default function Main({ project }) {
   const isCommentsActive = useSelector(getIsCommentsActive);
@@ -116,7 +118,11 @@ export default function Main({ project }) {
       }
     }
 
-    console.log(scene);
+    const planeCounter = getMaxCounter(filterStartsWithName("Plane")(scene.children));
+    planeCounter > 0 && dispatch(setPlaneCounter(Number(planeCounter)));
+
+    const commentCounter = getMaxCounter(filterStartsWithName("Comment")(scene.children));
+    commentCounter > 0 && dispatch(setCommentCounter(Number(commentCounter)));
 
     var render = function () {
       // Render

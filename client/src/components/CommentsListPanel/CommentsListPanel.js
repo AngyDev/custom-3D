@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { UserContext } from "../../context/UserContext";
-import { getCountPoint, getIsTextOpen, incrementCount } from "../../features/comments/commentsSlice";
+import { getIsTextOpen } from "../../features/comments/commentsSlice";
+import { getCommentCounter, setCommentCounter } from "../../features/counters/countersSlice";
 import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
 import { getCanvas, getGroup, getScene, getSceneModified, getSelectedMesh, setSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
 import { getCommentsByProjectIdAndPointId, saveComment, saveObject } from "../../utils/api";
@@ -33,7 +34,7 @@ export default function CommentsListPanel({ projectId }) {
   const isTextOpen = useSelector(getIsTextOpen);
   const sidebarWidth = useSelector(getSidebarWidth);
   const headerHeight = useSelector(getHeaderHeight);
-  const countPoint = useSelector(getCountPoint);
+  const commentCounter = useSelector(getCommentCounter);
   const selectedMesh = useSelector(getSelectedMesh);
 
   const dispatch = useDispatch();
@@ -86,7 +87,7 @@ export default function CommentsListPanel({ projectId }) {
 
     if (intersects.length > 0) {
       sphere.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
-      sphere.name = "Comment" + countPoint;
+      sphere.name = "Comment" + (commentCounter + 1);
       scene.add(sphere);
 
       createLabel(sphere);
@@ -101,11 +102,11 @@ export default function CommentsListPanel({ projectId }) {
 
       await saveObject(sphere.uuid, projectId, file, `${sphere.uuid}.json`);
 
-      dispatch(incrementCount());
       setOpenText(true);
       setComments([]);
 
       // dispatch(setIsTextOpen(true));
+      dispatch(setCommentCounter(commentCounter + 1));
       dispatch(setSelectedMesh(sphere.uuid));
       dispatch(setSceneModified(!isModified));
     }
