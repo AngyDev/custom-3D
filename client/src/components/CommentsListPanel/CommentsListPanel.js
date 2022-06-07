@@ -3,13 +3,22 @@ import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
-import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { UserContext } from "../../context/UserContext";
 import { getIsTextOpen } from "../../features/comments/commentsSlice";
 import { getCommentCounter, setCommentCounter } from "../../features/counters/countersSlice";
 import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
-import { getCanvas, getGroup, getScene, getSceneModified, getSelectedMesh, setSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
+import {
+  getCamera,
+  getCanvas,
+  getGroup,
+  getScene,
+  getSceneModified,
+  getSelectedMesh,
+  setSceneModified,
+  setSelectedMesh,
+} from "../../features/scene/sceneSlice";
 import { getCommentsByProjectIdAndPointId, saveComment, saveObject } from "../../utils/api";
+import { createLabel } from "../../utils/functions/objectLabel";
 import Button from "../Button/Button";
 import Comments from "../Comments/Comments";
 import Panel from "../Panel/Panel";
@@ -36,9 +45,9 @@ export default function CommentsListPanel({ projectId }) {
   const headerHeight = useSelector(getHeaderHeight);
   const commentCounter = useSelector(getCommentCounter);
   const selectedMesh = useSelector(getSelectedMesh);
+  const camera = useSelector(getCamera);
 
   const dispatch = useDispatch();
-  const camera = scene.children && scene.children.find((children) => children.type === "PerspectiveCamera");
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
@@ -92,6 +101,8 @@ export default function CommentsListPanel({ projectId }) {
 
       createLabel(sphere);
 
+      console.log(sphere);
+
       tControls.detach();
 
       // updates the matrix position before convert to JSON
@@ -110,19 +121,6 @@ export default function CommentsListPanel({ projectId }) {
       dispatch(setSelectedMesh(sphere.uuid));
       dispatch(setSceneModified(!isModified));
     }
-  };
-
-  const createLabel = (object) => {
-    const objectDiv = document.createElement("div");
-    objectDiv.className = "label";
-    objectDiv.textContent = object.name;
-    objectDiv.style.marginTop = "2em";
-    objectDiv.id = object.name;
-    const objectLabel = new CSS2DObject(objectDiv);
-    objectLabel.name = "label";
-    objectLabel.position.copy(object.position);
-    objectLabel.position.set(0, 0, 0);
-    object.add(objectLabel);
   };
 
   const onSave = async (data, e) => {

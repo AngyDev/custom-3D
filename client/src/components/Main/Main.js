@@ -1,11 +1,12 @@
+import PropTypes from "prop-types";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import PropTypes from "prop-types";
 import * as THREE from "three";
 import { TrackballControls } from "three/examples/jsm/controls/TrackballControls.js";
 import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { getIsCommentsActive } from "../../features/comments/commentsSlice";
+import { setCommentCounter, setPlaneCounter } from "../../features/counters/countersSlice";
 import {
   getSceneModified,
   setCamera,
@@ -17,7 +18,7 @@ import {
   setSceneModified,
 } from "../../features/scene/sceneSlice";
 import { filterStartsWithName, getMaxCounter } from "../../utils/common-utils";
-import { setCommentCounter, setPlaneCounter } from "../../features/counters/countersSlice";
+import { createLabel } from "../../utils/functions/objectLabel";
 
 export default function Main({ project }) {
   const isCommentsActive = useSelector(getIsCommentsActive);
@@ -67,7 +68,7 @@ export default function Main({ project }) {
     const labelRenderer = new CSS2DRenderer();
     labelRenderer.setSize(sizes.width, sizes.height);
     labelRenderer.domElement.style.position = "absolute";
-    labelRenderer.domElement.style.top = "60px";
+    labelRenderer.domElement.style.top = "40px";
 
     canvasRef.current.appendChild(labelRenderer.domElement);
 
@@ -118,10 +119,17 @@ export default function Main({ project }) {
       }
     }
 
+    // If present sets the plane counter
     const planeCounter = getMaxCounter(filterStartsWithName("Plane")(scene.children));
     planeCounter > 0 && dispatch(setPlaneCounter(Number(planeCounter)));
 
-    const commentCounter = getMaxCounter(filterStartsWithName("Comment")(scene.children));
+    const comments = filterStartsWithName("Comment")(scene.children);
+    for (const comment of comments) {
+      comment.children = [];
+      createLabel(comment);
+    }
+    // If present sets the comment counter
+    const commentCounter = getMaxCounter(comments);
     commentCounter > 0 && dispatch(setCommentCounter(Number(commentCounter)));
 
     var render = function () {
