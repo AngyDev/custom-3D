@@ -1,5 +1,6 @@
 const { ObjectsController } = require("../controllers/ObjectsController");
 const { ProjectsController } = require("../controllers/ProjectsController");
+const { CommentsController } = require("../controllers/CommentsController");
 const { errorHandler } = require("../utils");
 const { HttpError } = require("../error");
 const uploadFile = require("../middleware/upload");
@@ -53,13 +54,31 @@ const getObjectsByProjectId = async (req, res) => {
 const deleteObject = errorHandler(async (req, res) => {
   const { id } = req.params;
 
-  const deleteObject = await ObjectsController.deleteObject(id);
+  const object = await ObjectsController.getObjectById(id);
 
-  if (deleteObject === 0) {
+  if (object) {
+    fs.unlink(`${process.env.FILE_PATH}/public/uploads/${object["objectPath"]}`, async () => {
+      console.log("File deleted");
+
+      const comments = await CommentsController.getCommentsByObjectId(id);
+
+      if (comments) {
+        for (const comment of comments) {
+          await CommentsController.deleteComment(comment["id"]);
+        }
+      }
+
+      const deleteObject = await ObjectsController.deleteObject(id);
+
+      if (deleteObject === 0) {
+        throw new HttpError(404, "Object not found");
+      }
+
+      return { message: "Object deleted" };
+    })
+  } else {
     throw new HttpError(404, "Object not found");
   }
-
-  return { message: "Object deleted" };
 });
 
 /**

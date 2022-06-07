@@ -12,6 +12,15 @@ class CommentsController {
   }
 
   /**
+   * Get comments by point id
+   * @param {String} objectId The object id
+   * @returns list of comments by point id
+   */
+  static getCommentsByObjectId(objectId) {
+    return CommentsModel.query().select().where("comments.point_id", objectId);
+  }
+
+  /**
    * Get comments by projectId and pointId
    * @param {String} projectId Project ID
    * @param {String} pointId Point ID

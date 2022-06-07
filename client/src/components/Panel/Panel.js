@@ -84,31 +84,20 @@ export default function Panel({ type }) {
 
     const mesh = findById(id)(scene.children);
 
-    scene.children.forEach((object) => {
-      if (object.type === "Group" && object.name === "Import") {
-        object.children.forEach((item) => {
-          if (item.uuid === id) {
-            object.remove(item);
-          }
-        });
-      } else if (object.type === "Mesh") {
-        if (object.uuid === id) {
-          // removes the label of the point
-          document.getElementById(object.name) && document.getElementById(object.name).remove();
-          scene.remove(object);
-          tControls.detach();
-        }
-      } else if (object.type === "Group" && object.name.startsWith("Measure")) {
-        if (object.uuid === id) {
-          // removes the label of the measure
-          document.getElementById(object.name).remove();
-          scene.remove(object);
-        }
-      }
-    });
+    if (mesh.parent.name === "Import") {
+      mesh.parent.remove(mesh);
+    } else if (mesh.name.startsWith("Measure")) {
+      document.getElementById(mesh.name).remove();
+      scene.remove(mesh);
+    } else if (mesh.name.startsWith("Plane") || mesh.name.startsWith("Comment")) {
+      document.getElementById(mesh.name) && document.getElementById(mesh.name).remove();
+      tControls.detach();
+      scene.remove(mesh);
+    }
+
     setIsOpen(false);
 
-    console.log(mesh);
+    // TODO: handle error
     const response = deleteObject(mesh.uuid);
     console.log(response);
   };
@@ -138,14 +127,6 @@ export default function Panel({ type }) {
           </div>
         )}
       </div>
-      {/* <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Delete Object" text="Delete">
-        <div className="flex flex-col">
-          <h3>Are you Sure?</h3>
-          <div className="flex justify-end">
-            <Button typeClass="btn--size" text="OK" onClick={deleteClick} />
-          </div>
-        </div>
-      </Modal> */}
       <ModalDelete open={isOpen} onClose={() => setIsOpen(false)} onClick={deleteClick} />
     </>
   );
