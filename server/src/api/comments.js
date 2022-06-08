@@ -43,4 +43,18 @@ const createComment = errorHandler(async (req, res) => {
   return comments;
 });
 
-module.exports = { getCommentsByProjectIdAndPointId, createComment };
+const deleteComment = errorHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const deleteComment = await CommentsController.deleteComment(id);
+
+  console.log(deleteComment);
+
+  if (!deleteComment) {
+    throw new HttpError(400, "Comment not deleted");
+  } else {
+    return { message: "Comment deleted" };
+  }
+});
+
+module.exports = { getCommentsByProjectIdAndPointId, createComment, deleteComment };

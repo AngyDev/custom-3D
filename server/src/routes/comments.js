@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.get('/comments/:projectId/:pointId', api.getCommentsByProjectIdAndPointId);
 router.post('/comment', api.createComment);
+router.delete('/comment/:id', api.deleteComment);
 
 module.exports = router;
