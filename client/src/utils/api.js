@@ -100,6 +100,19 @@ export const saveComment = async (comment) => {
   }
 };
 
+// export const saveComment = async (comment) => {
+//   return await axios({
+//     method: "POST",
+//     url: `${API_URL}/comment`,
+//     data: {
+//       projectId: comment.projectId,
+//       userId: comment.userId,
+//       text: comment.text,
+//       pointId: comment.pointId,
+//     },
+//   });
+// };
+
 export const getCommentsByProjectIdAndPointId = async (projectId, pointId) => {
   try {
     const res = await axios({
