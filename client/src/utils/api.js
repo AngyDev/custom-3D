@@ -28,16 +28,10 @@ export const getObjectsByProjectId = async (projectId) => {
 };
 
 export const getProjectsByUserId = async (userId) => {
-  try {
-    const res = await axios({
-      method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/project-user/${userId}`,
-    });
-
-    return res.data;
-  } catch (error) {
-    return false;
-  }
+  return await axios({
+    method: "GET",
+    url: `${process.env.REACT_APP_API_URL}/project-user/${userId}`,
+  });
 };
 
 export const saveProject = async (userId, project) => {
