@@ -17,10 +17,11 @@ import {
   setSceneModified,
   setSelectedMesh,
 } from "../../features/scene/sceneSlice";
-import { getCommentsByProjectIdAndPointId, saveComment, saveObject } from "../../utils/api";
+import { deleteComment, getCommentsByProjectIdAndPointId, saveComment, saveObject } from "../../utils/api";
 import { createLabel } from "../../utils/functions/objectLabel";
 import Button from "../Button/Button";
 import Comments from "../Comments/Comments";
+import ModalDelete from "../Modal/ModalDelete";
 import Panel from "../Panel/Panel";
 
 export default function CommentsListPanel({ projectId }) {
@@ -33,6 +34,8 @@ export default function CommentsListPanel({ projectId }) {
 
   const [openText, setOpenText] = useState(false);
   const [comments, setComments] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [deleteElem, setDeleteElem] = useState();
 
   const { user } = useContext(UserContext);
 
@@ -101,8 +104,6 @@ export default function CommentsListPanel({ projectId }) {
 
       createLabel(sphere);
 
-      console.log(sphere);
-
       tControls.detach();
 
       // updates the matrix position before convert to JSON
@@ -137,6 +138,21 @@ export default function CommentsListPanel({ projectId }) {
     e.target.reset();
   };
 
+  const deleteElement = (e) => {
+    setDeleteElem(e.target.attributes.id);
+    setIsOpen(true);
+  };
+
+  const deleteClick = async () => {
+    await deleteComment(deleteElem.value);
+
+    const comments = await getCommentsByProjectIdAndPointId(projectId, selectedMesh);
+
+    setComments(comments);
+
+    setIsOpen(false);
+  };
+
   return (
     <div className="comments  bg-baseLight dark:bg-base text-white">
       <div className="properties">Comments</div>
@@ -160,7 +176,8 @@ export default function CommentsListPanel({ projectId }) {
               <input className="btn btn--size" type="reset" value="RESET" />
             </div>
           </form>
-          <Comments comments={comments} />
+          <Comments comments={comments} deleteElement={deleteElement} />
+          <ModalDelete open={isOpen} onClose={() => setIsOpen(false)} onClick={deleteClick} />
         </div>
       )}
     </div>
