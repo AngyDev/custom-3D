@@ -48,7 +48,8 @@ const createUser = errorHandler(async (req, res) => {
     password: encryptedPassword,
     role,
   });
-
+  
+  // TODO: Have to return the created user? Check that the model return first_name instead of firstName
   return createdUser;
 });
 

@@ -24,6 +24,7 @@ describe("User CRUD", () => {
       .send(user)
       .end((err, res) => {
         expect(res.statusCode).to.equal(200);
+        expect(res.body.first_name).to.equal(user.firstName);
         done();
       });
   });
