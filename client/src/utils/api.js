@@ -3,17 +3,28 @@ import axios from "axios";
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const getProjectById = async (id) => {
-  try {
-    const res = await axios({
-      method: "GET",
-      url: `${process.env.REACT_APP_API_URL}/project/${id}`,
-    });
+  // try {
+  //   const res = await axios({
+  //     method: "GET",
+  //     url: `${process.env.REACT_APP_API_URL}/project/${id}`,
+  //   });
 
-    return res.data;
-  } catch (error) {
-    console.log(error.message);
-    return false;
-  }
+  //   return res.data;
+  // } catch (error) {
+  //   console.log(error.message);
+  //   return false;
+  // }
+  return await axios({
+    method: "GET",
+    url: `${process.env.REACT_APP_API_URL}/project/${id}`,
+  });
+};
+
+export const getObjectsByProjectId = async (projectId) => {
+  return await axios({
+    method: "GET",
+    url: `${process.env.REACT_APP_API_URL}/objects/${projectId}`,
+  });
 };
 
 export const getProjectsByUserId = async (userId) => {
@@ -131,5 +142,19 @@ export const getOffsetMesh = async (data, offset) => {
     return response.data;
   } catch (error) {
     console.log(error.message);
+  }
+};
+
+export const deleteComment = async (commentId) => {
+  try {
+    const res = await axios({
+      method: "DELETE",
+      url: `${API_URL}/comment/${commentId}`,
+    });
+
+    return res.data;
+  } catch (error) {
+    console.log(error.message);
+    return false;
   }
 };
