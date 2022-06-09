@@ -34,7 +34,6 @@ export default function CommentsListPanel({ projectId }) {
   } = useForm();
 
   const [openText, setOpenText] = useState(false);
-  // const [comments, setComments] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteElem, setDeleteElem] = useState();
 

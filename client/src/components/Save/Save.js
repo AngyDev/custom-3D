@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "../Button/Button";
 import saveIcon from "../../assets/images/icons/white/save-solid.svg";
-import { getChildren } from "../../features/scene/sceneSlice";
+import { getChildren, getGroup } from "../../features/scene/sceneSlice";
 import { useSelector } from "react-redux";
 import { saveObject } from "../../utils/api";
 import Modal from "../Modal/Modal";
@@ -12,26 +12,26 @@ export default function Save({ projectId }) {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const children = useSelector(getChildren);
+  const group = useSelector(getGroup);
 
   const openModal = () => {
     setIsOpen(true);
   };
 
   const saveObjects = async () => {
-    const group = children.filter((item) => item.type === "Group");
     const mesh = children.filter((item) => item.type === "Mesh");
+
+    setIsOpen(false);
 
     // is not possible to create a unique array of group and mesh because it adds the mesh to the group in the scene,
     // why? I don't know
-    for (const object of group[0].children) {
+    for (const object of group.children) {
       await save(object);
     }
 
     for (const item of mesh) {
       await save(item);
     }
-
-    setIsOpen(false);
   };
 
   const save = async (object) => {
