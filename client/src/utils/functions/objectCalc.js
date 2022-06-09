@@ -15,3 +15,15 @@ export const getNormal = (object) => {
 
   return normal;
 };
+
+export const negative = (num) => {
+  return Math.sign(num) > 0 ? (num = -num) : num;
+};
+
+export const negativeVector = (vector) => {
+  return {
+    x: negative(vector.x),
+    y: negative(vector.y),
+    z: negative(vector.z),
+  };
+};

@@ -28,8 +28,7 @@ export default function Import() {
 
     if (files.length > 0) {
       // If an object is saved, the position of the imported object is set to the center of the saved object
-      let firstPosition =
-        Object.keys(positionVector).length !== 0 ? new THREE.Vector3(-positionVector.x, -positionVector.y, -positionVector.z) : null;
+      let firstPosition = Object.keys(positionVector).length !== 0 ? positionVector : null;
 
       for (var i = 0; i < files.length; i++) {
         if (files[i].name.split(".").pop() === "stl") {

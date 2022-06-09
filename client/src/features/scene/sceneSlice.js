@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { negativeVector } from "../../utils/functions/objectCalc";
 
 export const sceneSlice = createSlice({
   name: "scene",
@@ -31,7 +32,7 @@ export const sceneSlice = createSlice({
       state.selectedMesh = action.payload;
     },
     setPositionVector: (state, action) => {
-      state.positionVector = action.payload;
+      state.positionVector = negativeVector(action.payload);
     },
     setControls: (state, action) => {
       state.controls = action.payload;
