@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
 import { UserContext } from "../../context/UserContext";
-import { getIsTextOpen } from "../../features/comments/commentsSlice";
+import { getIsTextOpen, setComments } from "../../features/comments/commentsSlice";
 import { getCommentCounter, setCommentCounter } from "../../features/counters/countersSlice";
 import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
 import {
@@ -17,7 +17,9 @@ import {
   setSceneModified,
   setSelectedMesh,
 } from "../../features/scene/sceneSlice";
-import { deleteComment, getCommentsByProjectIdAndPointId, saveComment, saveObject } from "../../utils/api";
+import { useGetCommentsByProjectIdAndPointId } from "../../hooks/useGetCommentsByProjectIdAndPointId";
+import useSaveComment from "../../hooks/useSaveComment";
+import { deleteComment, saveObject } from "../../utils/api";
 import { createLabel } from "../../utils/functions/objectLabel";
 import Button from "../Button/Button";
 import Comments from "../Comments/Comments";
@@ -28,16 +30,18 @@ export default function CommentsListPanel({ projectId }) {
   const {
     handleSubmit,
     register,
-    reset,
     formState: { errors },
   } = useForm();
 
   const [openText, setOpenText] = useState(false);
-  const [comments, setComments] = useState([]);
+  // const [comments, setComments] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteElem, setDeleteElem] = useState();
 
   const { user } = useContext(UserContext);
+
+  const { saveComment } = useSaveComment();
+  const { fecthGetCommentsByProjectIdPointId, comments } = useGetCommentsByProjectIdAndPointId();
 
   const scene = useSelector(getScene);
   const group = useSelector(getGroup);
@@ -69,8 +73,7 @@ export default function CommentsListPanel({ projectId }) {
     if (selectedMesh) {
       setOpenText(true);
 
-      const response = await getCommentsByProjectIdAndPointId(projectId, selectedMesh);
-      setComments(response);
+      fecthGetCommentsByProjectIdPointId(projectId, selectedMesh);
     }
   }, [isTextOpen]);
 
@@ -115,7 +118,7 @@ export default function CommentsListPanel({ projectId }) {
       await saveObject(sphere.uuid, projectId, file, `${sphere.uuid}.json`);
 
       setOpenText(true);
-      setComments([]);
+      dispatch(setComments([]));
 
       // dispatch(setIsTextOpen(true));
       dispatch(setCommentCounter(commentCounter + 1));
@@ -132,9 +135,10 @@ export default function CommentsListPanel({ projectId }) {
       pointId: selectedMesh,
     };
 
-    const response = await saveComment(comment);
+    await saveComment(comment);
 
-    setComments(response);
+    fecthGetCommentsByProjectIdPointId(projectId, selectedMesh);
+
     e.target.reset();
   };
 
@@ -146,9 +150,7 @@ export default function CommentsListPanel({ projectId }) {
   const deleteClick = async () => {
     await deleteComment(deleteElem.value);
 
-    const comments = await getCommentsByProjectIdAndPointId(projectId, selectedMesh);
-
-    setComments(comments);
+    fecthGetCommentsByProjectIdPointId(projectId, selectedMesh);
 
     setIsOpen(false);
   };
@@ -169,7 +171,8 @@ export default function CommentsListPanel({ projectId }) {
           <form className="comments__text flex flex-col" onSubmit={handleSubmit(onSave)}>
             <div>
               <label htmlFor="comment">Add Comment</label>
-              <textarea name="comment" id="comment" cols="30" rows="5" {...register("text")} />
+              <textarea name="comment" id="comment" cols="30" rows="5" {...register("text", { required: "This field is required" })} />
+              {errors.text && <div className="form__error">{errors.text.message}</div>}
             </div>
             <div className="flex justify-between comments__btn">
               <Button typeClass="btn--size" text="SAVE" />

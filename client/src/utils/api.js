@@ -75,50 +75,23 @@ export const saveObject = async (id, projectId, file, filename) => {
 };
 
 export const saveComment = async (comment) => {
-  try {
-    const res = await axios({
-      method: "POST",
-      url: `${API_URL}/comment`,
-      data: {
-        projectId: comment.projectId,
-        userId: comment.userId,
-        text: comment.text,
-        pointId: comment.pointId,
-      },
-    });
-
-    return res.data;
-  } catch (error) {
-    console.log(error.message);
-    return false;
-  }
+  return await axios({
+    method: "POST",
+    url: `${API_URL}/comment`,
+    data: {
+      projectId: comment.projectId,
+      userId: comment.userId,
+      text: comment.text,
+      pointId: comment.pointId,
+    },
+  });
 };
 
-// export const saveComment = async (comment) => {
-//   return await axios({
-//     method: "POST",
-//     url: `${API_URL}/comment`,
-//     data: {
-//       projectId: comment.projectId,
-//       userId: comment.userId,
-//       text: comment.text,
-//       pointId: comment.pointId,
-//     },
-//   });
-// };
-
 export const getCommentsByProjectIdAndPointId = async (projectId, pointId) => {
-  try {
-    const res = await axios({
-      method: "GET",
-      url: `${API_URL}/comments/${projectId}/${pointId}`,
-    });
-
-    return res.data;
-  } catch (error) {
-    console.log(error.message);
-    return false;
-  }
+  return await axios({
+    method: "GET",
+    url: `${API_URL}/comments/${projectId}/${pointId}`,
+  });
 };
 
 export const deleteObject = async (objectId) => {

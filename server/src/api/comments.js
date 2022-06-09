@@ -38,9 +38,7 @@ const createComment = errorHandler(async (req, res) => {
 
   if (!createComment) throw new HttpError(400, "Comment not created");
 
-  const comments = await CommentsController.getCommentsByProjectIdAndPointId(projectId, pointId);
-
-  return comments;
+  return { message: "Comment created" };
 });
 
 const deleteComment = errorHandler(async (req, res) => {
