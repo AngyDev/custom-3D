@@ -49,7 +49,7 @@ const getObjectsByProjectId = async (req, res) => {
 };
 
 /**
- * Deletes object and comments
+ * Deletes object and comments, the comments are deleted by the foreign key
  */
 const deleteObject = errorHandler(async (req, res) => {
   const { id } = req.params;
@@ -59,14 +59,6 @@ const deleteObject = errorHandler(async (req, res) => {
   if (object) {
     fs.unlink(`${process.env.FILE_PATH}/public/uploads/${object["objectPath"]}`, async () => {
       console.log("File deleted");
-
-      const comments = await CommentsController.getCommentsByObjectId(id);
-
-      if (comments) {
-        for (const comment of comments) {
-          await CommentsController.deleteComment(comment["id"]);
-        }
-      }
 
       const deleteObject = await ObjectsController.deleteObject(id);
 

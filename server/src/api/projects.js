@@ -3,6 +3,7 @@ const { ObjectsController } = require("../controllers/ObjectsController");
 const { validateProject } = require("../validation/validate");
 const { errorHandler } = require("../utils");
 const { HttpError } = require("../error");
+const fs = require("fs");
 
 /**
  * Get projects
@@ -29,7 +30,7 @@ const getProjectById = errorHandler(async (req, res) => {
   const objectsPath = [];
 
   for (const object of objects) {
-    const path =  "uploads/" + object["objectPath"];
+    const path = "uploads/" + object["objectPath"];
     objectsPath.push(path);
   }
 
@@ -90,7 +91,7 @@ const updateProject = errorHandler(async (req, res) => {
 });
 
 /**
- * Delete project
+ * Delete project and the other objects and comments related to it and the associated files
  */
 const deleteProject = errorHandler(async (req, res) => {
   const { id } = req.params;
@@ -100,6 +101,10 @@ const deleteProject = errorHandler(async (req, res) => {
   if (deletedProject === 0) {
     throw new HttpError(404, "Project not found");
   } else {
+    fs.rm(`${process.env.FILE_PATH}/public/uploads/${id}`, { recursive: true, force: true }, async () => {
+      console.log("File deleted");
+    });
+
     return { message: "Project deleted" };
   }
 });

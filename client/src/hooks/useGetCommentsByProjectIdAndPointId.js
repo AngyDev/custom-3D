@@ -4,7 +4,6 @@ import { dispatchError } from "../features/error/errorSlice";
 import { getCommentsByProjectIdAndPointId } from "../utils/api";
 
 export const useGetCommentsByProjectIdAndPointId = () => {
-  // const [comments, setComments] = useState([]);
   const dispatch = useDispatch();
   const comments = useSelector(getComments);
 
