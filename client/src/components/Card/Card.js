@@ -3,7 +3,7 @@ import Button from "../Button/Button";
 import PropTypes from "prop-types";
 import moment from "moment";
 
-export default function Card({ color, project, onClick }) {
+export default function Card({ color, project, onClick, deleteClick }) {
   return (
     <div className="bg-canvas rounded overflow-hidden shadow-md relative hover:shadow-lg">
       <div className={`center w-full h-32 sm:h-38 object-cover ${color ? color : "bg-yellow-400"} p-8 text-justify`}>
@@ -33,8 +33,11 @@ export default function Card({ color, project, onClick }) {
           <span>Ultima modifica: {moment(project.createdAt).format("DD/MM/YYYY")}</span>
           <span>Ultima visita: {moment(project.updatedAt).format("DD/MM/YYYY")}</span>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 flex justify-between">
           <Button text="Apri" title="Apri" onClick={onClick} />
+          <div className="flex items-center">
+            <span className="delete" onClick={deleteClick}></span>
+          </div>
         </div>
       </div>
     </div>
@@ -45,4 +48,5 @@ Card.propTypes = {
   color: PropTypes.string,
   project: PropTypes.object,
   onClick: PropTypes.func,
+  deleteClick: PropTypes.func,
 };

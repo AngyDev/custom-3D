@@ -56,6 +56,13 @@ export const saveProject = async (userId, project) => {
   }
 };
 
+export const deleteProject = async (id) => {
+  return await axios({
+    method: "DELETE",
+    url: `${process.env.REACT_APP_API_URL}/project/${id}`,
+  });
+};
+
 export const saveObject = async (id, projectId, file, filename) => {
   let data = new FormData();
   data.append("file", file, filename);

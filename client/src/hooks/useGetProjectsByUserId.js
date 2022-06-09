@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { dispatchError } from "../features/error/errorSlice";
+import { getProjects, setProjects } from "../features/projects/projectsSlice";
 import { getProjectsByUserId } from "../utils/api";
 
 export default function useGetProjectsByUserId() {
-  const [projects, setProjects] = useState({});
   const userId = "d27db05e-fb3f-4942-a517-59fefbd97937";
   const dispatch = useDispatch();
+  const projects = useSelector(getProjects);
 
-  useEffect(() => {
+  const fetchGetProjectsByUserId = useCallback(() => {
     getProjectsByUserId(userId)
-      .then((res) => {
-        setProjects(res.data);
+      .then((response) => {
+        dispatch(setProjects(response.data));
       })
       .catch((error) => {
         dispatch(dispatchError(error.message));
@@ -19,6 +20,7 @@ export default function useGetProjectsByUserId() {
   }, []);
 
   return {
+    fetchGetProjectsByUserId,
     projects,
   };
 }

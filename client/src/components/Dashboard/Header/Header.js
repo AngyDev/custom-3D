@@ -18,8 +18,8 @@ export default function Header() {
 
   const saveNewProject = async (data) => {
     const response = await saveProject(user.id, data);
-    history.push(`/editor/${response.id}`);
     setIsOpen(false);
+    history.push(`/editor/${response.id}`);
   };
 
   const openModal = () => {
