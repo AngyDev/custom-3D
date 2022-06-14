@@ -121,7 +121,7 @@ export default function Main({ project }) {
 
     // If present sets the plane counter
     const planeCounter = getMaxCounter(filterStartsWithName("Plane")(scene.children));
-    planeCounter > 0 && dispatch(setPlaneCounter(Number(planeCounter)));
+    dispatch(setPlaneCounter(Number(planeCounter)));
 
     const comments = filterStartsWithName("Comment")(scene.children);
     for (const comment of comments) {
@@ -130,7 +130,7 @@ export default function Main({ project }) {
     }
     // If present sets the comment counter
     const commentCounter = getMaxCounter(comments);
-    commentCounter > 0 && dispatch(setCommentCounter(Number(commentCounter)));
+    dispatch(setCommentCounter(Number(commentCounter)));
 
     var render = function () {
       // Render
