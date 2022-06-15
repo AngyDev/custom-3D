@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { dispatchError } from "../features/error/errorSlice";
+import { setLoading } from "../features/loading/loadingSlice";
 import { getProjects, setProjects } from "../features/projects/projectsSlice";
 import { getProjectsByUserId } from "../utils/api";
 
@@ -10,12 +11,15 @@ export default function useGetProjectsByUserId() {
   const projects = useSelector(getProjects);
 
   const fetchGetProjectsByUserId = useCallback(() => {
+    dispatch(setLoading(true));
     getProjectsByUserId(userId)
       .then((response) => {
         dispatch(setProjects(response.data));
+        dispatch(setLoading(false));
       })
       .catch((error) => {
         dispatch(dispatchError(error.message));
+        dispatch(setLoading(false));
       });
   }, []);
 

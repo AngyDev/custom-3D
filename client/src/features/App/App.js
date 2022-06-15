@@ -4,11 +4,14 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Alert from "../../components/Alert/Alert";
 import Dashboard from "../../components/Dashboard/Dashboard";
 import LayoutEditor from "../../components/Layout/LayoutEditor";
+import Spinner from "../../components/Spinner/Spinner";
 import { AppWrapper } from "../../context/AppContext";
 import { dispatchError, getError } from "../../features/error/errorSlice";
+import { getLoading } from "../loading/loadingSlice";
 
 export default function App() {
   const error = useSelector(getError);
+  const loading = useSelector(getLoading);
   const isOpen = !!error && error.error !== "";
   const dispatch = useDispatch();
 
@@ -19,6 +22,7 @@ export default function App() {
   return (
     <AppWrapper>
       <div className="font-app">
+        {loading ? <Spinner /> : ""}
         <BrowserRouter>
           <Switch>
             <Route exact path="/">

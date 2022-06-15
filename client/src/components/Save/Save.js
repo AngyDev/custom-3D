@@ -1,18 +1,19 @@
-import React, { useState } from "react";
-import Button from "../Button/Button";
-import saveIcon from "../../assets/images/icons/white/save-solid.svg";
-import { getChildren, getGroup } from "../../features/scene/sceneSlice";
-import { useSelector } from "react-redux";
-import { saveObject } from "../../utils/api";
-import Modal from "../Modal/Modal";
-import Spinner from "../Spinner/Spinner";
 import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import saveIcon from "../../assets/images/icons/white/save-solid.svg";
+import { setLoading } from "../../features/loading/loadingSlice";
+import { getChildren, getGroup } from "../../features/scene/sceneSlice";
+import { saveObject } from "../../utils/api";
+import Button from "../Button/Button";
+import Modal from "../Modal/Modal";
 
 export default function Save({ projectId }) {
-  const [loading, setLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const children = useSelector(getChildren);
   const group = useSelector(getGroup);
+  const dispatch = useDispatch();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
     setIsOpen(true);
@@ -22,6 +23,7 @@ export default function Save({ projectId }) {
     const mesh = children.filter((item) => item.type === "Mesh");
 
     setIsOpen(false);
+    console.log(children);
 
     // is not possible to create a unique array of group and mesh because it adds the mesh to the group in the scene,
     // why? I don't know
@@ -35,7 +37,7 @@ export default function Save({ projectId }) {
   };
 
   const save = async (object) => {
-    setLoading(true);
+    dispatch(setLoading(true));
     // updates the matrix position before convert to JSON
     object.updateMatrixWorld(true);
 
@@ -43,7 +45,7 @@ export default function Save({ projectId }) {
     const output = JSON.stringify(json);
     const file = new Blob([output], { type: "application/json" });
     await saveObject(object.uuid, projectId, file, `${object.uuid}.json`);
-    setLoading(false);
+    dispatch(setLoading(false));
 
     // saveObject(object.uuid, projectId, file, `${object.uuid}.json`).then((error) => {
     //   alert(error);
@@ -54,7 +56,6 @@ export default function Save({ projectId }) {
 
   return (
     <>
-      {loading ? <Spinner /> : ""}
       <Button typeClass="btn--img btn__icon" img={saveIcon} onClick={openModal} title="Save" />
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Save Objects" text="Save">
         <div className="modal__body flex flex-col">

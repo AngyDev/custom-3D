@@ -1,21 +1,22 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 import offsetIcon from "../../assets/images/icons/black/pencil-ruler-solid.svg";
+import { setLoading } from "../../features/loading/loadingSlice";
 import { getScene } from "../../features/scene/sceneSlice";
 import useGetMesh from "../../hooks/useGetMesh";
 import { getOffsetMesh } from "../../utils/api";
 import { createMeshFromObject } from "../../utils/functions/createMeshFromObject";
 import Button from "../Button/Button";
-import Spinner from "../Spinner/Spinner";
 
 export default function Offset({ mesh }) {
   const scene = useSelector(getScene);
+  const dispatch = useDispatch();
+
   const meshToOffset = useGetMesh(mesh);
   const [newObject, setNewObject] = useState();
   const [offset, setOffset] = useState();
-  const [loading, setLoading] = useState(false);
 
   const changeScale = (e) => {
     const { value } = e.target;
@@ -26,7 +27,7 @@ export default function Offset({ mesh }) {
     if (offset !== "1") {
       console.time();
 
-      setLoading(true);
+      dispatch(setLoading(true));
 
       // 1. Export mesh as an ascii file
       const exporter = new STLExporter();
@@ -40,7 +41,7 @@ export default function Offset({ mesh }) {
 
       console.timeEnd();
 
-      setLoading(false);
+      dispatch(setLoading(false));
 
       const offsetMesh = scene.children.filter((item) => item.name === mesh.name);
       if (offsetMesh.length === 0) {
@@ -61,7 +62,6 @@ export default function Offset({ mesh }) {
 
   return (
     <>
-      {loading && <Spinner />}
       <div className="flex">
         <input type="number" className="mr-2 form__input px-1 py-0 text-base" step="0.1" onChange={changeScale} />
         <Button typeClass="btn--img btn__icon-sm" img={offsetIcon} onClick={applyOffset} />
