@@ -17,7 +17,7 @@ export const getNormal = (object) => {
 };
 
 export const negative = (num) => {
-  return Math.sign(num) > 0 ? (num = -num) : num;
+  return Math.sign(num) > 0 ? -num : -num;
 };
 
 export const negativeVector = (vector) => {

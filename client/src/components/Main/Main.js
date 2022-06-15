@@ -19,6 +19,7 @@ import {
 } from "../../features/scene/sceneSlice";
 import { filterStartsWithName, getMaxCounter } from "../../utils/common-utils";
 import { createLabel } from "../../utils/functions/objectLabel";
+import { negativeVector } from "../../utils/functions/objectCalc";
 
 export default function Main({ project }) {
   const isCommentsActive = useSelector(getIsCommentsActive);
@@ -111,7 +112,7 @@ export default function Main({ project }) {
       for (const path of project.objectsPath) {
         const object = await loader.loadAsync("http://localhost:8080/" + path);
         if (object.name.startsWith("Group")) {
-          dispatch(setPositionVector(object.position));
+          dispatch(setPositionVector(negativeVector(object.position)));
           group.add(object);
         } else {
           scene.add(object);

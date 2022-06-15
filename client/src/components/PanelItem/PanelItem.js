@@ -53,7 +53,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
     scene.children.forEach((object) => {
       if (object.type === "Group") {
         object.children.forEach((item) => {
-          if (item.name === name) {
+          if (item.name.slice(5) === name) {
             item.visible = !item.visible;
           }
         });
@@ -180,11 +180,8 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
    * @param {String} color The color to set the mesh
    */
   const changeColorMesh = (color) => {
-    group.children.map((mesh) => {
-      if (mesh.uuid === selectedMesh) {
-        mesh.material.color.set(color);
-      }
-    });
+    const mesh = findById(selectedMesh)(group.children);
+    mesh.material.color.set(color);
 
     setIsOpen(false);
   };
