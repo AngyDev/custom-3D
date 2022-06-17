@@ -1,6 +1,6 @@
 const { errorHandler } = require("../utils");
 const { memoize } = require("../memoizer/memoize");
-const { createOffsetMesh } = require("../functions/offsetObject");
+const { createOffsetMesh } = require("../functions/offsetObjectHash");
 
 const createOffsetMeshMemo = memoize(createOffsetMesh);
 

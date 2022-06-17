@@ -1,3 +1,5 @@
+import { Hashtable } from "./hashTable";
+
 /**
  * Creates the mesh with offset
  * @param {String} data The data to read
@@ -6,11 +8,19 @@
 const createOffsetMesh = (data, offset) => {
   const initialObjects = parseASCII(data);
 
-  console.time("newObjects");
-  const newObjects = createNewObjects(initialObjects, offset);
-  console.timeEnd("newObjects");
+  const hashTable = createHashTableWithObject(initialObjects);
 
-  return newObjects;
+  const newObjects = initialObjects.map((item) => {
+    return {
+      ...item,
+      normal: [],
+      vertices: [],
+    };
+  });
+  
+  const finalObjects = calcOffset(hashTable, newObjects, offset);
+
+  return finalObjects;
 };
 
 /**
@@ -63,81 +73,52 @@ const parseASCII = (data) => {
 };
 
 /**
- * Creates the new objects with the new positions and normals
+ * Create an hashTable with the initial objects - reduce the complexity of the algorithm
  * @param {Array} initialObjects The data from the file
- * @param {Number} offset The offset to move the mesh
- * @returns Array of objects
+ * @returns HashTable of objects with the same vertex
  */
-const createNewObjects = (initialObjects, offset) => {
-  // const length = initialObjects.length;
-  // const newObjects = Array(length).fill(newObject);
+const createHashTableWithObject = (initialObjects) => {
+  const hashTable = new Hashtable(initialObjects.length);
 
-  // creare la nuova struttra identica all'originale ma vuota
-  const newObjects = initialObjects.map((item) => {
-    return {
-      ...item,
-      normal: [],
-      vertices: [],
-    };
-  });
-
-  // cicla sulla lista
   for (var i = 0; i < initialObjects.length; i++) {
-    // cicla su vertices
     for (var j = 0; j < initialObjects[i].vertices.length; j++) {
-      // creare una nuova lista temporanea di oggetti
-      const tempList = [];
-      // Si aggiungono i valori del vettore corrente
-      tempList.push({
+      // key: the current vertex initialObjects[i].vertices[j]
+      // value: the face initialObjects[i].face, the normal initialObjects[i].normal and the position j
+      hashTable.set(initialObjects[i].vertices[j], {
         face: initialObjects[i].face,
         normal: initialObjects[i].normal,
         vertexPositionInTheObject: j,
       });
-      // salva il vertice corrente
-      const currentVertex = initialObjects[i].vertices[j];
-      // cancella il vertice corrente dall'oggetto
-      initialObjects[i].vertices[j] = undefined;
+    }
+  }
 
-      if (currentVertex !== undefined) {
-        // cicla sulla lista dal sucessivo
-        for (var z = 1; z < initialObjects.length; z++) {
-          // cicla su vertices del successivo
-          for (var y = 0; y < initialObjects[z].vertices.length; y++) {
-            if (initialObjects[z].vertices[y] !== undefined) {
-              const result = compare(currentVertex, initialObjects[z].vertices[y]);
-              if (result) {
-                const tempObject = {
-                  face: initialObjects[z].face,
-                  normal: initialObjects[z].normal,
-                  vertexPositionInTheObject: y,
-                };
-                tempList.push(tempObject);
+  return hashTable;
+};
 
-                // cancellare il vertice appena comparato
-                initialObjects[z].vertices[y] = undefined;
-              }
-            }
-          }
-        }
+/**
+ * Calculates the offset of the object
+ * @param {Hashtable} hashTable The hashTable with the initial objects
+ * @param {Array} newObjects The final objects
+ * @param {Number} offset The offset to move the mesh
+ * @returns The new objects with the offset
+ */
+const calcOffset = (hashTable, newObjects, offset) => {
+  for (var i = 0; i < hashTable.size; i++) {
+    if (hashTable.data[i]) {
+      for (var j = 0; j < hashTable.data[i].length; j++) {
+        // vctor hashTable.data[i][j][0];
+        // object hashTable.data[i][j][1];
 
-        // - recuperare dalla nuova lista tutte le normali e fare la somma
-        const normalsSum = calcNormalsSum(tempList);
+        const normalsSum = calcNormalsSum(hashTable.data[i][j][1]);
 
-        // - normalizzare il vettore normale ottenuto
-        // dividere gli elementi del vettore per il modulo del vettore
-        // radicequadrata(x^2 + y^2 + z^2) = modulo
         const normalizedNormal = normalizeNormal(normalsSum);
 
-        // - fare la funzione spostamento con la normale normalizzata appena calcolata
-        //const offset = 2;
-        const newPosition = calcNewPosition(offset, normalizedNormal, currentVertex);
+        const newPosition = calcNewPosition(offset, normalizedNormal, hashTable.data[i][j][0]);
 
-        // - salvare tutti i nuovi dati nella stessa posizione in una nuova struttura
-        //   identica all'iniziale
-        tempList.map((tempObject) => {
+        hashTable.data[i][j][1].map((list) => {
           newObjects.find((newObject) => {
-            if (newObject.face === tempObject.face) {
-              newObject.vertices[tempObject.vertexPositionInTheObject] = newPosition;
+            if (newObject.face === list.face) {
+              newObject.vertices[list.vertexPositionInTheObject] = newPosition;
             }
           });
         });
@@ -145,7 +126,6 @@ const createNewObjects = (initialObjects, offset) => {
     }
   }
 
-  // - calcolo della nuova normale con tutte le facce del nuovo oggetto
   newObjects.map((item) => {
     const newNormal = calculateNewNormal(item.vertices[0], item.vertices[1], item.vertices[2]);
     return {
@@ -155,22 +135,6 @@ const createNewObjects = (initialObjects, offset) => {
   });
 
   return newObjects;
-};
-
-/**
- * Compares two arrays
- * @param {Array} array1 The first array
- * @param {Array} array2 The second array
- * @returns Boolean - true if the two arrays are equal
- */
-const compare = (array1, array2) => {
-  const result = array1.every((element, index) => {
-    if (element === array2[index]) {
-      return true;
-    }
-    return false;
-  });
-  return result;
 };
 
 /**
