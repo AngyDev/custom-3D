@@ -34,6 +34,13 @@ export const getProjectsByUserId = async (userId) => {
   });
 };
 
+export const getUsers = async () => {
+  return await axios({
+    method: "GET",
+    url: `${process.env.REACT_APP_API_URL}/users`,
+  });
+};
+
 export const saveProject = async (userId, project) => {
   try {
     const res = await axios({
@@ -65,6 +72,7 @@ export const updateProject = async (projectId, project) => {
           assignedAt: project.assignedAt,
         }
       : {};
+
   try {
     const res = await axios({
       method: "PUT",

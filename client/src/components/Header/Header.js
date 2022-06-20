@@ -11,6 +11,7 @@ import { useHistory } from "react-router";
 import PropTypes from "prop-types";
 import Screenshot from "../Screenshot/Screenshot";
 import { setPositionVector, setScene } from "../../features/scene/sceneSlice";
+import Share from "../Share/Share";
 
 export default function Header({ projectId }) {
   const headerRef = useRef(null);
@@ -36,6 +37,7 @@ export default function Header({ projectId }) {
         <Import />
         <Export />
         <Save projectId={projectId} />
+        <Share />
         <AddComment />
         <Screenshot />
       </div>
