@@ -10,7 +10,7 @@ import dashboardIcon from "../../assets/images/icons/white/th-large-solid.svg";
 import { useHistory } from "react-router";
 import PropTypes from "prop-types";
 import Screenshot from "../Screenshot/Screenshot";
-import { setScene } from "../../features/scene/sceneSlice";
+import { setPositionVector, setScene } from "../../features/scene/sceneSlice";
 
 export default function Header({ projectId }) {
   const headerRef = useRef(null);
@@ -25,6 +25,7 @@ export default function Header({ projectId }) {
 
   const toDashboard = () => {
     dispatch(setScene({}));
+    dispatch(setPositionVector({}));
     history.push("/");
   };
 

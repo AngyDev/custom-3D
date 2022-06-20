@@ -74,8 +74,9 @@ const updateProject = errorHandler(async (req, res) => {
   const { id } = req.params;
   const project = req.body;
 
+  // 20/06/22 Issue #174 Commented the validation because I can update only the updated_at field and send from the FE an empty object
   // Validate the body input
-  validateProject(project);
+  // validateProject(project);
 
   // Checks if the project exists
   const oldProject = await ProjectsController.getProjectById(id);

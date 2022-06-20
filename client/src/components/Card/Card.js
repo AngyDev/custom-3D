@@ -30,8 +30,8 @@ export default function Card({ color, project, onClick, deleteClick }) {
           <div className="w-full border-t border-gray-300"></div>
         </div>
         <div className="flex flex-wrap justify-between">
-          <span>Ultima modifica: {moment(project.createdAt).format("DD/MM/YYYY")}</span>
-          <span>Ultima visita: {moment(project.updatedAt).format("DD/MM/YYYY")}</span>
+          <span>Data creazione: {moment(project.createdAt).format("DD/MM/YYYY")}</span>
+          <span>Ultima modifica: {moment(project.updatedAt).format("DD/MM/YYYY")}</span>
         </div>
         <div className="mt-4 flex justify-between">
           <Button text="Apri" title="Apri" onClick={onClick} />

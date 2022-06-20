@@ -43,10 +43,33 @@ export const saveProject = async (userId, project) => {
         projectName: project.projectName,
         patientCode: project.patientCode,
         status: project.status,
-        scene: project.scene,
         assignedAt: project.assignedAt,
         userId: userId,
       },
+    });
+
+    return res.data;
+  } catch (error) {
+    console.log(error.message);
+    return error.message;
+  }
+};
+
+export const updateProject = async (projectId, project) => {
+  const data =
+    Object.keys(project).length > 0
+      ? {
+          projectName: project.projectName,
+          patientCode: project.patientCode,
+          status: project.status,
+          assignedAt: project.assignedAt,
+        }
+      : {};
+  try {
+    const res = await axios({
+      method: "PUT",
+      url: `${API_URL}/project/${projectId}`,
+      data: data,
     });
 
     return res.data;
