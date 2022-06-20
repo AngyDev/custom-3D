@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { getIsCommentsActive } from "../../features/comments/commentsSlice";
@@ -10,7 +10,11 @@ import Sidebar from "../Sidebar/Sidebar";
 
 export default function LayoutEditor() {
   const { id } = useParams();
-  const { project } = useGetProjectById(id);
+  const { project, fetchGetProjectById } = useGetProjectById();
+
+  useEffect(() => {
+    fetchGetProjectById(id);
+  }, []);
 
   const isCommentsActive = useSelector(getIsCommentsActive);
 

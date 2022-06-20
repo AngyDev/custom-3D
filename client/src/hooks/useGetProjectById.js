@@ -1,23 +1,38 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { dispatchError } from "../features/error/errorSlice";
+import { getProject, setProject } from "../features/project/projectSlice";
 import { getProjectById } from "../utils/api";
 
-export default function useGetProjectById(id) {
-  const [project, setProject] = useState({});
+export default function useGetProjectById() {
+  // const [project, setProject] = useState({});
+  const project = useSelector(getProject);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const fetchGetProjectById = useCallback((id) => {
     getProjectById(id)
       .then((res) => {
-        setProject(res.data);
+        dispatch(setProject(res.data));
+        // setProject(res.data);
       })
       .catch((error) => {
         dispatch(dispatchError(error.message));
       });
   }, []);
 
+  // useEffect(() => {
+  //   getProjectById(id)
+  //     .then((res) => {
+  //       dispatch(setProject(res.data));
+  //       // setProject(res.data);
+  //     })
+  //     .catch((error) => {
+  //       dispatch(dispatchError(error.message));
+  //     });
+  // }, []);
+
   return {
     project,
+    fetchGetProjectById,
   };
 }
