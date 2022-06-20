@@ -17,7 +17,7 @@ export default function ChangeColor({ onClick, onClose }) {
           <span className="text-gray-500 dark:text-gray-400">Tumore</span>
         </div>
         <div className="flex flex-col items-center color">
-          <input type="button" className="color__box color__blue color__btn" onClick={(e) => setColor(e.target.name)} name="blue" />
+          <input type="button" className="color__box color__blue color__btn" onClick={(e) => setColor(e.target.name)} name="#C7AC96" />
           <span className="text-gray-500 dark:text-gray-400">Osso</span>
         </div>
         <div className="flex flex-col items-center color">
