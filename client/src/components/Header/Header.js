@@ -12,8 +12,9 @@ import PropTypes from "prop-types";
 import Screenshot from "../Screenshot/Screenshot";
 import { setPositionVector, setScene } from "../../features/scene/sceneSlice";
 import Share from "../Share/Share";
+import { setProject } from "../../features/project/projectSlice";
 
-export default function Header({ projectId }) {
+export default function Header({ project }) {
   const headerRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -27,6 +28,7 @@ export default function Header({ projectId }) {
   const toDashboard = () => {
     dispatch(setScene({}));
     dispatch(setPositionVector({}));
+    dispatch(setProject({}));
     history.push("/");
   };
 
@@ -36,15 +38,21 @@ export default function Header({ projectId }) {
         <Button typeClass="btn__icon" img={dashboardIcon} onClick={toDashboard} title="Dashboard" />
         <Import />
         <Export />
-        <Save projectId={projectId} />
+        <Save projectId={project.id} />
         <Share />
         <AddComment />
         <Screenshot />
+      </div>
+      <div>
+        <h1 className="text-white">{project.projectName}</h1>
+      </div>
+      <div>
+        <div></div>
       </div>
     </div>
   );
 }
 
 Header.propTypes = {
-  projectId: PropTypes.string,
+  project: PropTypes.object,
 };
