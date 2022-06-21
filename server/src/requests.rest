@@ -1,0 +1,85 @@
+### USER
+POST http://localhost:3000/api/user
+Content-Type: application/json
+
+{
+  "firstName": "Michaela",
+  "lastName": "Servi",
+  "email": "michaela.servi@gmail.com",
+  "password": "michaela",
+  "role": "engeener"
+}
+
+###
+GET http://localhost:3000/api/users
+
+###
+GET http://localhost:3000/api/user/4f80b729-4620-4529-900b-509c1e31f547
+
+###
+DELETE http://localhost:3000/api/user/4f80b729-4620-4529-900b-509c1e31f547
+
+
+### PROJECT
+
+POST http://localhost:3000/api/project
+Content-Type: application/json
+
+
+{
+  "projectName": "Request test",
+  "patientCode": "Request test Patient Code",
+  "status": "start",
+  "assignedAt": null,
+  "userId": "d27db05e-fb3f-4942-a517-59fefbd97937"
+}
+
+###
+
+GET http://localhost:3000/api/projects
+
+###
+GET http://localhost:3000/api/project/b6416c1f-e734-4321-b962-3b461444c62c
+
+###
+GET http://localhost:3000/api/project-user/d27db05e-fb3f-4942-a517-59fefbd97937
+
+###
+PUT http://localhost:3000/api/project/0d302901-1a3c-4327-9334-4210e78cbc9a
+Content-Type: application/json
+
+{
+  "projectName": "Test 3",
+  "patientCode": "Patient 2",
+  "status": "in progress",
+  "assignedAt": null,
+  "userId": "d27db05e-fb3f-4942-a517-59fefbd97937"
+}
+
+###
+DELETE http://localhost:3000/api/project/33a3ff30-dc70-45dc-8b43-a4eb8316e7c6
+
+### COMMENTS
+
+GET http://localhost:3000/api/comments/4f40ccd1-4161-4861-9c99-0bbb2a0bba8b/821DBDF7-9EDF-49FF-A642-3E3B5F5ED6F4
+
+###
+POST http://localhost:3000/api/comment
+Content-Type: application/json
+
+{
+  "text": "Test comment",
+  "userId": "d27db05e-fb3f-4942-a517-59fefbd97937",
+  "projectId": "4f40ccd1-4161-4861-9c99-0bbb2a0bba8b",
+  "pointId": "821DBDF7-9EDF-49FF-A642-3E3B5F5ED6F4"
+}
+
+### OBJECTS
+
+GET http://localhost:3000/api/object/821DBDF7-9EDF-49FF-A642-3E3B5F5ED6F4
+
+###
+GET http://localhost:3000/api/objects/4f40ccd1-4161-4861-9c99-0bbb2a0bba8b
+
+###
+DELETE http://localhost:3000/api/object/821DBDF7-9EDF-49FF-A642-
