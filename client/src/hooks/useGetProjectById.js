@@ -5,7 +5,6 @@ import { getProject, setProject } from "../features/project/projectSlice";
 import { getProjectById } from "../utils/api";
 
 export default function useGetProjectById() {
-  // const [project, setProject] = useState({});
   const project = useSelector(getProject);
   const dispatch = useDispatch();
 
@@ -19,17 +18,6 @@ export default function useGetProjectById() {
         dispatch(dispatchError(error.message));
       });
   }, []);
-
-  // useEffect(() => {
-  //   getProjectById(id)
-  //     .then((res) => {
-  //       dispatch(setProject(res.data));
-  //       // setProject(res.data);
-  //     })
-  //     .catch((error) => {
-  //       dispatch(dispatchError(error.message));
-  //     });
-  // }, []);
 
   return {
     project,
