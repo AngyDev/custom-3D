@@ -53,8 +53,7 @@ function ShareModal({ users, onClose }) {
       dispatch(setLoading(true));
       await updateProject(project.id, {
         ...project,
-        // assignedAt: project.assignedAt === null ? [selectedUser] : project.assignedAt.push(selectedUser),
-        assignedAt: selectedUser,
+        assignedAt: project.assignedAt === null ? [selectedUser] : [...project.assignedAt, selectedUser],
       });
       dispatch(setLoading(false));
     }
