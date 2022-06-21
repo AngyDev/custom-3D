@@ -20,6 +20,9 @@ import {
 import { filterStartsWithName, getMaxCounter } from "../../utils/common-utils";
 import { createLabel } from "../../utils/functions/objectLabel";
 import { negativeVector } from "../../utils/functions/objectCalc";
+import { computeBoundsTree } from "three-mesh-bvh";
+
+THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 
 export default function Main({ project }) {
   const isCommentsActive = useSelector(getIsCommentsActive);
@@ -112,7 +115,12 @@ export default function Main({ project }) {
       for (const path of project.objectsPath) {
         const object = await loader.loadAsync("http://localhost:8080/" + path);
         if (object.name.startsWith("Group")) {
+          // add bounding box for paint function
+          object.geometry.computeBoundingBox();
+          object.geometry.computeBoundsTree();
+          // save the position vector
           dispatch(setPositionVector(negativeVector(object.position)));
+          // add the object to the group
           group.add(object);
         } else {
           scene.add(object);
