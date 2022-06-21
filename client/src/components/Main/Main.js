@@ -21,6 +21,7 @@ import { filterStartsWithName, getMaxCounter } from "../../utils/common-utils";
 import { createLabel } from "../../utils/functions/objectLabel";
 import { negativeVector } from "../../utils/functions/objectCalc";
 import { computeBoundsTree } from "three-mesh-bvh";
+import { setLoading } from "../../features/loading/loadingSlice";
 
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 
@@ -110,6 +111,7 @@ export default function Main({ project }) {
     scene.add(group);
 
     if (Object.keys(project.objectsPath).length !== 0) {
+      dispatch(setLoading(true));
       const loader = new THREE.ObjectLoader();
 
       for (const path of project.objectsPath) {
@@ -126,6 +128,7 @@ export default function Main({ project }) {
           scene.add(object);
         }
       }
+      dispatch(setLoading(false));
     }
 
     // If present sets the plane counter

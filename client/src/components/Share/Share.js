@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import shareIcon from "../../assets/images/icons/white/share-nodes-solid.svg";
 import { setLoading } from "../../features/loading/loadingSlice";
-import { getProject } from "../../features/project/projectSlice";
+import { getProject, updatedProject } from "../../features/project/projectSlice";
 import useGetUsers from "../../hooks/useGetUsers";
 import { updateProject } from "../../utils/api";
 import Button from "../Button/Button";
@@ -51,10 +51,11 @@ function ShareModal({ users, onClose }) {
     } else {
       onClose();
       dispatch(setLoading(true));
-      await updateProject(project.id, {
+      const projectUpdate = await updateProject(project.id, {
         ...project,
         assignedAt: project.assignedAt === null ? [selectedUser] : [...project.assignedAt, selectedUser],
       });
+      dispatch(updatedProject(projectUpdate));
       dispatch(setLoading(false));
     }
   };

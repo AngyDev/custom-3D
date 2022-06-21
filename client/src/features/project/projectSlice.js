@@ -9,10 +9,13 @@ export const projectSlice = createSlice({
     setProject: (state, action) => {
       state.project = action.payload;
     },
+    updatedProject: (state, action) => {
+      state.project.project = action.payload;
+    },
   },
 });
 
-export const { setProject } = projectSlice.actions;
+export const { setProject, updatedProject } = projectSlice.actions;
 
 export const getProject = (state) => state.project.project;
 
