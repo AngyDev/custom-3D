@@ -32,10 +32,18 @@ export default function Share() {
 }
 
 function ShareModal({ users, onClose }) {
-  const [selectedUser, setSelectedUser] = useState();
-  const [errors, setErrors] = useState({});
   const { project } = useSelector(getProject);
   const dispatch = useDispatch();
+
+  const [selectedUser, setSelectedUser] = useState();
+  const [errors, setErrors] = useState({});
+
+  const owner = users.filter((user) => user.id === project.userId)[0];
+  const assignableUsers =
+    project.assignedAt !== null
+      ? users.filter((user) => !project.assignedAt.includes(user.id)).filter((user) => user.id !== project.userId)
+      : users.filter((user) => user.id !== project.userId);
+  const assignedUsers = project.assignedAt !== null ? project.assignedAt.map((userId) => users.find((user) => user.id === userId)) : [];
 
   const handleChange = (e) => {
     const { value } = e.target;
@@ -63,18 +71,31 @@ function ShareModal({ users, onClose }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="modal__body h-72">
-        <label htmlFor="assignedUser" className="form__label">
-          Choose a user to assign the project
-        </label>
-        <select name="" id="assignedUser" className="form__select" onChange={handleChange}>
-          <option value=""></option>
-          {users.map((user, i) => (
-            <option key={i} value={user.id}>
-              {user.firstName} {user.lastName}
-            </option>
+        <div>
+          <label htmlFor="assignedUser" className="form__label">
+            Choose a user to assign the project
+          </label>
+          <select name="" id="assignedUser" className="form__select" onChange={handleChange}>
+            <option value=""></option>
+            {assignableUsers.map((user, i) => (
+              <option key={i} value={user.id}>
+                {user.firstName} {user.lastName}
+              </option>
+            ))}
+          </select>
+          {errors.user && <p className="form__error">{errors.user}</p>}
+        </div>
+
+        <div className="flex flex-col mt-3">
+          <p className="text-white">
+            Owner: {owner.firstName} {owner.lastName}
+          </p>
+          {assignedUsers.map((assignedUser, i) => (
+            <p key={i} className="text-white mt-2">
+              {assignedUser.firstName} {assignedUser.lastName}
+            </p>
           ))}
-        </select>
-        {errors.user && <p className="form__error">{errors.user}</p>}
+        </div>
       </div>
       <div className="modal__footer modal__border-t">
         <Button type="submit" typeClass="modal__btn-confirm" text="Save" />
