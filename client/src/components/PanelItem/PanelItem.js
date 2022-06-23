@@ -9,7 +9,7 @@ import Modal from "../Modal/Modal";
 import Offset from "../Offset/Offset";
 import { addColorToClippedMesh } from "../../utils/functions/clippingObject";
 import PanelPlaneInfo from "../Panel/PanelPlaneInfo/PanelPlaneInfo";
-import { findById } from "../../utils/common-utils";
+import { filterByName, findById } from "../../utils/common-utils";
 
 export default function PanelItem({ uuid, type, name, deleteClick }) {
   const scene = useSelector(getScene);
@@ -50,23 +50,24 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
 
     const name = e.target.nextSibling.innerText;
 
-    scene.children.forEach((object) => {
-      if (object.type === "Group") {
-        object.children.forEach((item) => {
-          if (item.name.slice(5) === name) {
-            item.visible = !item.visible;
-          }
-        });
-      } else if (object.type === "Mesh") {
-        if (object.name === name) {
-          object.visible = !object.visible;
-          // checks if the object has a label and makes it visible or invisible
-          object.children.length > 0 && (object.children[0].visible = !object.children[0].visible);
-          if (tControls.visible && selectedMesh === e.target.id) tControls.detach();
-          // else tControls.attach();
-        }
+    // Get the mesh selected with the name
+    const mesh = filterByName(name)(scene.children)[0];
+
+    mesh.visible = !mesh.visible;
+    if (mesh.name.startsWith("Measure")) {
+      for (const child of mesh.children) {
+        // remove the label on the measurement
+        child.visible = !child.visible;
       }
-    });
+    }
+
+    if (mesh.name.startsWith("Plane") || mesh.name.startsWith("Comment")) {
+      // if the mesh is a comment remove the label
+      mesh.children.length > 0 && (mesh.children[0].visible = !mesh.children[0].visible);
+      // remove the controls
+      if (tControls.visible && selectedMesh === e.target.id) tControls.detach();
+      //else tControls.attach();
+    }
   };
 
   /**
@@ -100,10 +101,12 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   const clippingMesh = (e) => {
     setClipped((prev) => !prev);
 
+    const planeUuid = e.target.attributes.id.nodeValue;
+    dispatch(setSelectedMesh(planeUuid));
+
     const result = scene.children.filter((object) => object.name.startsWith("Clipping"));
 
     if (result.length === 0) {
-      const planeUuid = e.target.attributes.id.nodeValue;
       const planeMesh = scene.children.filter((item) => item.uuid === planeUuid)[0];
 
       // const plane = new THREE.Plane();
@@ -191,6 +194,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
    * @param {Event} e
    */
   const handleOffset = (e) => {
+    dispatch(setSelectedMesh(e.target.id));
     setOpenOffset(true);
     setMeshToOffset(e.target.id);
   };
@@ -200,6 +204,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
    * @param {Event} e
    */
   const handleOpacity = (e) => {
+    dispatch(setSelectedMesh(e.target.attributes.id.nodeValue));
     const object = findById(e.target.attributes.id.nodeValue)(scene.children);
 
     object.material.transparent = !object.material.transparent;
@@ -207,6 +212,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   };
 
   const handleInfo = (e) => {
+    dispatch(setSelectedMesh(e.target.attributes.id.nodeValue));
     const plane = findById(e.target.attributes.id.nodeValue)(scene.children);
     setSelectedPlane(plane);
     setOpenPlaneInfo(!openPlaneInfo);
