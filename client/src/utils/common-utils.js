@@ -14,6 +14,14 @@ export const filterStartsWithName = (name) => (list) =>
   list.flatMap((item) => (item.children ? [item, ...item.children] : item)).filter((item) => item.name.startsWith(name));
 
 /**
+ * Filter a list of objects with the given name
+ * @param {String} name The name of the object to find
+ * @returns {Array} A list of objects with that name
+ */
+export const filterByName = (name) => (list) =>
+  list.flatMap((item) => (item.children ? [item, ...item.children] : item)).filter((item) => item.name.includes(name));
+
+/**
  * Get the maximum counter of the objects with the given name.
  * @param {Array} list
  * @returns {Number} The highest counter of the given list
