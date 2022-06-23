@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import rulerIcon from "../../assets/images/icons/white/ruler-solid.svg";
 import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
-import { getCanvas, getChildren, getGroup, getScene, getSceneModified, setSceneModified } from "../../features/scene/sceneSlice";
+import { getCanvas, getChildren, getControls, getGroup, getScene, getSceneModified, setSceneModified } from "../../features/scene/sceneSlice";
 import Button from "../Button/Button";
 
 export default function Measurements({ openPanel, setOpenPanel }) {
@@ -17,12 +17,12 @@ export default function Measurements({ openPanel, setOpenPanel }) {
   const headerHeight = useSelector(getHeaderHeight);
   const isModified = useSelector(getSceneModified);
   const dispatch = useDispatch();
+  const controls = useSelector(getControls);
 
-  const [event, setEvent] = useState(false);
   const [finish, setFinish] = useState(false);
+  const [active, setActive] = useState(false);
 
   let drawingLine = false;
-  let ctrlDown = false;
 
   let line = new THREE.Line();
   let measurementLabels = {};
@@ -33,6 +33,20 @@ export default function Measurements({ openPanel, setOpenPanel }) {
   const camera = children && children.find((children) => children.type === "PerspectiveCamera");
 
   useEffect(() => {
+    if (canvas) {
+      if (!controls.enabled) {
+        canvas.addEventListener("pointerdown", onDocumentMouseDown);
+        canvas.addEventListener("pointermove", onDocumentMouseMove);
+      }
+      return () => {
+        console.log("return");
+        canvas.removeEventListener("pointerdown", onDocumentMouseDown);
+        canvas.removeEventListener("pointermove", onDocumentMouseMove);
+      };
+    }
+  }, [controls.enabled]);
+
+  useEffect(() => {
     if (finish) {
       dispatch(setSceneModified(!isModified));
       setFinish(false);
@@ -40,49 +54,11 @@ export default function Measurements({ openPanel, setOpenPanel }) {
   }, [finish]);
 
   const addMeasures = () => {
+    setActive(!active);
     if (!openPanel) {
       setOpenPanel(true);
     }
-
-    if (event) {
-      window.removeEventListener("keydown", onKeyDown);
-      window.removeEventListener("keyup", onKeyUp);
-      setEvent(false);
-    } else {
-      window.addEventListener("keydown", onKeyDown, false);
-      window.addEventListener("keyup", onKeyUp, false);
-    }
-    canvas.addEventListener("mousedown", onDocumentMouseDown, false);
-    canvas.addEventListener("mousemove", onDocumentMouseMove, false);
-  };
-
-  const onKeyDown = (event) => {
-    if (event.key === "Control") {
-      ctrlDown = true;
-      // controls.enabled = false;
-      // renderer.domElement.style.cursor = "crosshair";
-    }
-  };
-
-  const onKeyUp = (event) => {
-    if (event.key === "Control") {
-      ctrlDown = false;
-      // controls.enabled = true;
-      // renderer.domElement.style.cursor = "pointer";
-      if (drawingLine) {
-        //delete the last line because it wasn't committed
-        scene.remove(line);
-        scene.remove(measurementLabels[lineId]);
-        // and the point
-        scene.children.forEach((object) => {
-          if (object.name === "Measure" + count) {
-            scene.remove(object);
-          }
-        });
-
-        drawingLine = false;
-      }
-    }
+    controls.enabled = !controls.enabled;
   };
 
   const createPoint = (intersects, name) => {
@@ -99,67 +75,64 @@ export default function Measurements({ openPanel, setOpenPanel }) {
   };
 
   const onDocumentMouseDown = (event) => {
-    if (ctrlDown) {
-      pointer.x = ((event.clientX - sidebarWidth) / canvas.offsetWidth) * 2 - 1;
-      pointer.y = -((event.clientY - headerHeight) / canvas.offsetHeight) * 2 + 1;
-      raycaster.setFromCamera(pointer, camera);
+    pointer.x = ((event.clientX - sidebarWidth) / canvas.offsetWidth) * 2 - 1;
+    pointer.y = -((event.clientY - headerHeight) / canvas.offsetHeight) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
 
-      const intersects = raycaster.intersectObjects(group.children, true);
+    const intersects = raycaster.intersectObjects(group.children, true);
 
-      if (intersects.length > 0) {
-        if (!drawingLine) {
-          //start the line
-          const points = [];
-          points.push(intersects[0].point);
-          points.push(intersects[0].point.clone());
+    if (intersects.length > 0) {
+      if (!drawingLine) {
+        //start the line
+        const points = [];
+        points.push(intersects[0].point);
+        points.push(intersects[0].point.clone());
 
-          createPoint(intersects, "Measure" + count);
+        createPoint(intersects, "Measure" + count);
 
-          const geometry = new THREE.BufferGeometry().setFromPoints(points);
-          line = new THREE.LineSegments(
-            geometry,
-            new THREE.LineBasicMaterial({
-              color: 0xffff00,
-              // color: 0xffffff,
-              transparent: true,
-              linewidth: 100,
-              depthTest: false,
-              opacity: 0.75,
-            }),
-          );
-          line.frustumCulled = false;
-          line.name = "Measure" + count;
-          scene.add(line);
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        line = new THREE.LineSegments(
+          geometry,
+          new THREE.LineBasicMaterial({
+            color: 0xffff00,
+            // color: 0xffffff,
+            transparent: true,
+            linewidth: 100,
+            depthTest: false,
+            opacity: 0.75,
+          }),
+        );
+        line.frustumCulled = false;
+        line.name = "Measure" + count;
+        scene.add(line);
 
-          const measurementDiv = document.createElement("div");
-          measurementDiv.className = "measurementLabel";
-          measurementDiv.innerText = "0.0m";
-          measurementDiv.id = "Measure" + count;
-          const measurementLabel = new CSS2DObject(measurementDiv);
-          measurementLabel.position.copy(intersects[0].point);
-          measurementLabel.name = "Measure" + count;
-          measurementLabels[lineId] = measurementLabel;
-          scene.add(measurementLabels[lineId]);
-          drawingLine = true;
-        } else {
-          //finish the line
-          createPoint(intersects, "Measure" + count);
-          const positions = line.geometry.attributes.position.array;
-          positions[3] = intersects[0].point.x;
-          positions[4] = intersects[0].point.y;
-          positions[5] = intersects[0].point.z;
-          line.geometry.attributes.position.needsUpdate = true;
-          lineId++;
+        const measurementDiv = document.createElement("div");
+        measurementDiv.className = "measurementLabel";
+        measurementDiv.innerText = "0.0m";
+        measurementDiv.id = "Measure" + count;
+        const measurementLabel = new CSS2DObject(measurementDiv);
+        measurementLabel.position.copy(intersects[0].point);
+        measurementLabel.name = "Measure" + count;
+        measurementLabels[lineId] = measurementLabel;
+        scene.add(measurementLabels[lineId]);
+        drawingLine = true;
+      } else {
+        //finish the line
+        createPoint(intersects, "Measure" + count);
+        const positions = line.geometry.attributes.position.array;
+        positions[3] = intersects[0].point.x;
+        positions[4] = intersects[0].point.y;
+        positions[5] = intersects[0].point.z;
+        line.geometry.attributes.position.needsUpdate = true;
+        lineId++;
 
-          createMeasureGroup();
+        createMeasureGroup();
 
-          // Increment the counter
-          count++;
-          drawingLine = false;
+        // Increment the counter
+        count++;
+        drawingLine = false;
 
-          setEvent(true);
-          setFinish(true);
-        }
+        setFinish(true);
       }
     }
   };
@@ -186,7 +159,7 @@ export default function Measurements({ openPanel, setOpenPanel }) {
   };
 
   const onDocumentMouseMove = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
 
     pointer.x = ((event.clientX - sidebarWidth) / canvas.offsetWidth) * 2 - 1;
     pointer.y = -((event.clientY - headerHeight) / canvas.offsetHeight) * 2 + 1;
@@ -211,10 +184,10 @@ export default function Measurements({ openPanel, setOpenPanel }) {
 
   return (
     <div className="popover__wrapper">
-      <Button typeClass="btn--img btn__icon button" img={rulerIcon} onClick={addMeasures} title="Measure" />
+      <Button typeClass="btn--img btn__icon button" img={rulerIcon} onClick={addMeasures} title="Measure" active={active} />
       <div className="popover__content rounded">
         <p className="popover__message">
-          Press CTRL + Left Mouse Click to start drawing a line. Continue to hold CTRL and Left Mouse Click again to mark the end of the line
+          Press Left Mouse click to start drawing a line. Continue to hold Left Mouse and click again to mark the end of the line
         </p>
       </div>
     </div>
