@@ -20,6 +20,11 @@ export const getProjectById = async (id) => {
   });
 };
 
+/**
+ * Get the objects of project id
+ * @param {String} projectId The id of the project
+ * @returns A list of objects
+ */
 export const getObjectsByProjectId = async (projectId) => {
   return await axios({
     method: "GET",
@@ -27,6 +32,7 @@ export const getObjectsByProjectId = async (projectId) => {
   });
 };
 
+// return the project and the objects path
 export const getProjectsByUserId = async (userId) => {
   return await axios({
     method: "GET",
@@ -129,6 +135,13 @@ export const getCommentsByProjectIdAndPointId = async (projectId, pointId) => {
   return await axios({
     method: "GET",
     url: `${API_URL}/comments/${projectId}/${pointId}`,
+  });
+};
+
+export const getCommentsByProjectId = async (projectId) => {
+  return await axios({
+    method: "GET",
+    url: `${API_URL}/comments/${projectId}`,
   });
 };
 

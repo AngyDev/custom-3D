@@ -18,9 +18,10 @@
       "version": "detect"
     }
   },
-  "plugins": ["react"],
+  "plugins": ["react", "react-hooks"],
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
     "prettier/prettier": [
       "error",
       {

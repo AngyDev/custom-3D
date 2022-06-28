@@ -1,23 +1,26 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getTemporaryComments, removeComment } from "../../features/comments/commentsSlice";
+import { getObjects, addObjectToRemove } from "../../features/objects/objectsSlice";
 import { getScene, getSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
-import { deleteObject } from "../../utils/api";
 import { findById } from "../../utils/common-utils";
 import ModalDelete from "../Modal/ModalDelete";
 import PanelItem from "../PanelItem/PanelItem";
 
 export default function Panel({ type }) {
   const scene = useSelector(getScene);
+  const isModified = useSelector(getSceneModified);
+  const objects = useSelector(getObjects);
+  const temporaryComments = useSelector(getTemporaryComments);
+  const dispatch = useDispatch();
+
   const [meshList, setMeshList] = useState([]);
   const [planeList, setPlaneList] = useState([]);
   const [pointList, setPointList] = useState([]);
   const [measureList, setMeasureList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteElem, setDeleteElem] = useState();
-
-  const isModified = useSelector(getSceneModified);
-  const dispatch = useDispatch();
 
   const tControls = scene.children && scene.children.find((obj) => obj.name === "TransformControls");
 
@@ -93,13 +96,23 @@ export default function Panel({ type }) {
       document.getElementById(mesh.name) && document.getElementById(mesh.name).remove();
       tControls.detach();
       scene.remove(mesh);
+
+      // remove the comments from the temporary comments when the user remove a Point
+      if (mesh.name.startsWith("Comment")) {
+        const commentsToRemove = temporaryComments.filter((comment) => comment.pointId === mesh.uuid);
+        for (const comment of commentsToRemove) {
+          dispatch(removeComment(comment));
+        }
+      }
+    }
+
+    // if the object is in the the list of saved object, remove it otherwise remove it from the scene
+    if (objects.length > 0) {
+      const object = objects.find((item) => item.id === id);
+      object !== undefined && dispatch(addObjectToRemove(object));
     }
 
     setIsOpen(false);
-
-    // TODO: handle error
-    const response = deleteObject(mesh.uuid);
-    console.log(response);
   };
 
   return (

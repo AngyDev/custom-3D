@@ -7,6 +7,7 @@ import { loadingReducer } from "../features/loading/loadingSlice";
 import { projectsReducer } from "../features/projects/projectsSlice";
 import { projectReducer } from "../features/project/projectSlice";
 import { sceneReducer } from "../features/scene/sceneSlice";
+import { objectsReducer } from "../features/objects/objectsSlice";
 
 export default configureStore({
   middleware: getDefaultMiddleware({
@@ -21,5 +22,6 @@ export default configureStore({
     projects: projectsReducer,
     project: projectReducer,
     loading: loadingReducer,
+    objects: objectsReducer,
   },
 });

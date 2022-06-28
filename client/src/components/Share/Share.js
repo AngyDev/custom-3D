@@ -23,7 +23,7 @@ export default function Share() {
 
   return (
     <>
-      <Button typeClass="btn--img btn__icon" img={shareIcon} onClick={() => setIsOpen(true)} title="Export" />
+      <Button typeClass="btn--img btn__icon" img={shareIcon} onClick={() => setIsOpen(true)} title="Share" />
       <Modal open={isOpen} onClose={closeModal} title="Share project" text="Share">
         <ShareModal users={users} onClose={closeModal} />
       </Modal>

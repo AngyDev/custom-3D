@@ -8,8 +8,15 @@ export default function Comments({ comments, deleteElement }) {
       <div className="comments_list">
         <div className="properties">User comments</div>
         {comments.length > 0 &&
-          comments.map((item) => (
-            <CommentsItem key={item.id} id={item.id} name={item.firstName + " " + item.lastName} text={item.text} deleteClick={deleteElement} />
+          comments.map((item, index) => (
+            <CommentsItem
+              key={index}
+              id={index}
+              uuid={item.id ? item.id : ""}
+              name={item.firstName + " " + item.lastName}
+              text={item.text}
+              deleteClick={deleteElement}
+            />
           ))}
       </div>
     </>
