@@ -1,20 +1,20 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getProjectComments, setProjectComments } from "../features/comments/commentsSlice";
 import { dispatchError } from "../features/error/errorSlice";
 import { setLoading } from "../features/loading/loadingSlice";
-import { getObjects, setObjects } from "../features/objects/objectsSlice";
-import { getObjectsByProjectId } from "../utils/api";
+import { getCommentsByProjectId } from "../utils/api";
 
-export const useGetObjectsByProjectId = () => {
-  const objects = useSelector(getObjects);
+export const useGetCommentsByProjectId = () => {
   const dispatch = useDispatch();
+  const projectComments = useSelector(getProjectComments);
 
-  const fetchGetObjectsByProjectId = useCallback(
-    (projectId) => {
+  const fetchGetCommentsByProjectId = useCallback(
+    (projectId, pointId) => {
       dispatch(setLoading(true));
-      getObjectsByProjectId(projectId)
+      getCommentsByProjectId(projectId, pointId)
         .then((res) => {
-          dispatch(setObjects(res.data));
+          dispatch(setProjectComments(res.data));
           dispatch(setLoading(false));
         })
         .catch((error) => {
@@ -26,7 +26,7 @@ export const useGetObjectsByProjectId = () => {
   );
 
   return {
-    objects,
-    fetchGetObjectsByProjectId,
+    fetchGetCommentsByProjectId,
+    projectComments,
   };
 };

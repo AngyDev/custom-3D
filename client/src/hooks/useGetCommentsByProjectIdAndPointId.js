@@ -7,7 +7,7 @@ export const useGetCommentsByProjectIdAndPointId = () => {
   const dispatch = useDispatch();
   const comments = useSelector(getComments);
 
-  const fecthGetCommentsByProjectIdPointId = (projectId, pointId) => {
+  const fetchGetCommentsByProjectIdPointId = (projectId, pointId) => {
     getCommentsByProjectIdAndPointId(projectId, pointId)
       .then((res) => {
         dispatch(setComments(res.data));
@@ -18,7 +18,7 @@ export const useGetCommentsByProjectIdAndPointId = () => {
   };
 
   return {
-    fecthGetCommentsByProjectIdPointId,
+    fetchGetCommentsByProjectIdPointId,
     comments,
   };
 };

@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const morgan = require("morgan");
 const knex = require("knex");
 const knexConfig = require("./utils/knexfile");
 const { Model } = require("objection");
@@ -14,6 +15,7 @@ const host = process.env.NODE_HOST || "0.0.0.0";
 // app.use(cors(corsOption));
 
 app.use(express.static(__dirname + "public"));
+app.use(morgan("dev"));
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from

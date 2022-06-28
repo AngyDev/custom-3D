@@ -4,14 +4,24 @@ import { useDispatch, useSelector } from "react-redux";
 import saveIcon from "../../assets/images/icons/white/save-solid.svg";
 import { setLoading } from "../../features/loading/loadingSlice";
 import { getChildren, getGroup } from "../../features/scene/sceneSlice";
-import { saveObject, updateProject } from "../../utils/api";
+import { getObjectsToRemove } from "../../features/objects/objectsSlice";
+import { getTemporaryComments, getProjectComments } from "../../features/comments/commentsSlice";
+import { useGetObjectsByProjectId } from "../../hooks/useGetObjectsByProjectId";
+import { saveObject, updateProject, deleteObject, saveComment } from "../../utils/api";
 import Button from "../Button/Button";
 import Modal from "../Modal/Modal";
+import { useGetCommentsByProjectId } from "../../hooks/useGetCommentsByProjectId";
 
 export default function Save({ projectId }) {
   const children = useSelector(getChildren);
   const group = useSelector(getGroup);
+  const objectsToRemove = useSelector(getObjectsToRemove);
+  const projectComments = useSelector(getProjectComments);
+  const temporaryComments = useSelector(getTemporaryComments);
   const dispatch = useDispatch();
+
+  const { fetchGetObjectsByProjectId } = useGetObjectsByProjectId();
+  const { fetchGetCommentsByProjectId } = useGetCommentsByProjectId();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,6 +36,11 @@ export default function Save({ projectId }) {
 
     dispatch(setLoading(true));
 
+    // remove the object from the db
+    for (const object of objectsToRemove) {
+      await deleteObject(object.id);
+    }
+
     // update project updatedAt date
     await updateProject(projectId, {});
 
@@ -38,6 +53,23 @@ export default function Save({ projectId }) {
     for (const item of mesh) {
       await save(item);
     }
+
+    if (projectComments.length !== temporaryComments.length) {
+      // get the comments to save
+      const commentsToAdd = temporaryComments.filter((item) => !projectComments.includes(item));
+
+      // save the comments
+      for (const comment of commentsToAdd) {
+        await saveComment(comment);
+      }
+    }
+
+    // set the objects state with the correct list of the objects and comments after the save
+    // TODO:  Is it correct to reload the location or calls the api again?
+    // window.location.reload();
+    fetchGetObjectsByProjectId(projectId);
+    fetchGetCommentsByProjectId(projectId);
+    dispatch(setLoading(false));
   };
 
   const save = async (object) => {
@@ -48,7 +80,6 @@ export default function Save({ projectId }) {
     const output = JSON.stringify(json);
     const file = new Blob([output], { type: "application/json" });
     await saveObject(object.uuid, projectId, file, `${object.uuid}.json`);
-    dispatch(setLoading(false));
 
     // saveObject(object.uuid, projectId, file, `${object.uuid}.json`).then((error) => {
     //   alert(error);

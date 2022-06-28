@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
 import { UserContext } from "../../context/UserContext";
-import { getIsTextOpen, setComments } from "../../features/comments/commentsSlice";
+import { getIsTextOpen, setTemporaryComments, getTemporaryComments, removeComment } from "../../features/comments/commentsSlice";
 import { getCommentCounter, setCommentCounter } from "../../features/counters/countersSlice";
 import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
 import {
@@ -17,9 +17,6 @@ import {
   setSceneModified,
   setSelectedMesh,
 } from "../../features/scene/sceneSlice";
-import { useGetCommentsByProjectIdAndPointId } from "../../hooks/useGetCommentsByProjectIdAndPointId";
-import useSaveComment from "../../hooks/useSaveComment";
-import { deleteComment, saveObject } from "../../utils/api";
 import { createLabel } from "../../utils/functions/objectLabel";
 import Button from "../Button/Button";
 import Comments from "../Comments/Comments";
@@ -39,14 +36,14 @@ export default function CommentsListPanel({ projectId }) {
 
   const { user } = useContext(UserContext);
 
-  const { saveComment } = useSaveComment();
-  const { fecthGetCommentsByProjectIdPointId, comments } = useGetCommentsByProjectIdAndPointId();
+  const temporaryComments = useSelector(getTemporaryComments);
+  const [comments, setComments] = useState([]);
 
   const scene = useSelector(getScene);
   const group = useSelector(getGroup);
   const canvas = useSelector(getCanvas);
   const isModified = useSelector(getSceneModified);
-  const isTextOpen = useSelector(getIsTextOpen);
+  // const isTextOpen = useSelector(getIsTextOpen);
   const sidebarWidth = useSelector(getSidebarWidth);
   const headerHeight = useSelector(getHeaderHeight);
   const commentCounter = useSelector(getCommentCounter);
@@ -68,13 +65,12 @@ export default function CommentsListPanel({ projectId }) {
     };
   });
 
-  useEffect(async () => {
+  useEffect(() => {
     if (selectedMesh) {
       setOpenText(true);
-
-      fecthGetCommentsByProjectIdPointId(projectId, selectedMesh);
+      setComments(temporaryComments.filter((comment) => comment.pointId === selectedMesh));
     }
-  }, [isTextOpen]);
+  }, [selectedMesh, temporaryComments]);
 
   const addPoint = () => {
     canvas.addEventListener("dblclick", onPointerClick);
@@ -108,16 +104,7 @@ export default function CommentsListPanel({ projectId }) {
 
       tControls.detach();
 
-      // updates the matrix position before convert to JSON
-      sphere.updateMatrixWorld(true);
-
-      const object = JSON.stringify(sphere.toJSON());
-      const file = new Blob([object], { type: "application/json" });
-
-      await saveObject(sphere.uuid, projectId, file, `${sphere.uuid}.json`);
-
       setOpenText(true);
-      dispatch(setComments([]));
 
       // dispatch(setIsTextOpen(true));
       dispatch(setCommentCounter(commentCounter + 1));
@@ -129,14 +116,18 @@ export default function CommentsListPanel({ projectId }) {
   const onSave = async (data, e) => {
     const comment = {
       projectId: projectId,
+      firstName: user.firstName,
+      lastName: user.lastName,
       userId: user.id,
       text: data.text,
       pointId: selectedMesh,
     };
 
-    await saveComment(comment);
+    // save the comment in the temporary array
+    dispatch(setTemporaryComments(comment));
 
-    fecthGetCommentsByProjectIdPointId(projectId, selectedMesh);
+    // checks on userId????
+    setComments([...comments, comment]);
 
     e.target.reset();
   };
@@ -147,9 +138,13 @@ export default function CommentsListPanel({ projectId }) {
   };
 
   const deleteClick = async () => {
-    await deleteComment(deleteElem.value);
+    const comment = comments[deleteElem.value];
 
-    fecthGetCommentsByProjectIdPointId(projectId, selectedMesh);
+    const newComments = [...comments];
+    newComments.splice(deleteElem.value, 1);
+    setComments(newComments);
+
+    dispatch(removeComment(comment));
 
     setIsOpen(false);
   };

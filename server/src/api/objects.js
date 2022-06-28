@@ -18,7 +18,8 @@ const getObjectById = errorHandler(async (req, res) => {
 });
 
 /**
- * Get objects by project id
+ * Get objects file path by project id
+ * Not used
  */
 const getObjectsPathByProjectId = errorHandler(async (req, res) => {
   const { projectId } = req.params;
@@ -37,16 +38,16 @@ const getObjectsPathByProjectId = errorHandler(async (req, res) => {
   return objectsPath;
 });
 
-const getObjectsByProjectId = async (req, res) => {
+/**
+ * Get objects by project id
+ */
+const getObjectsByProjectId = errorHandler(async (req, res) => {
   const { projectId } = req.params;
 
   const objects = await ObjectsController.getObjectsByProjectId(projectId);
 
-  for (const object of objects) {
-    const stream = fs.createReadStream(`${process.env.FILE_PATH}/public/uploads/${object["objectPath"]}`);
-    stream.pipe(res);
-  }
-};
+  return objects;
+});
 
 /**
  * Deletes object and comments, the comments are deleted by the foreign key
@@ -67,7 +68,7 @@ const deleteObject = errorHandler(async (req, res) => {
       }
 
       return { message: "Object deleted" };
-    })
+    });
   } else {
     throw new HttpError(404, "Object not found");
   }
