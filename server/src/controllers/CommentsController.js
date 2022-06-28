@@ -8,7 +8,11 @@ class CommentsController {
    * @returns list of comments by project id
    */
   static getCommentsByProjectId(projectId) {
-    return CommentsModel.query().select("comments.*").where("comments.project_id", projectId);
+    return CommentsModel.query()
+      .select(["comments.*", "users.first_name", "users.last_name"])
+      .join("users", "users.id", "comments.user_id")
+      .where("comments.project_id", projectId)
+      .orderBy("created_at", "ASC");
   }
 
   /**
@@ -52,7 +56,7 @@ class CommentsController {
 
   /**
    * Delete the comment by id
-   * @param {String} id 
+   * @param {String} id
    */
   static deleteComment(id) {
     return CommentsModel.query().deleteById(id);

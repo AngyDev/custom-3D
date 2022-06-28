@@ -63,6 +63,9 @@ DELETE http://localhost:3000/api/project/33a3ff30-dc70-45dc-8b43-a4eb8316e7c6
 
 GET http://localhost:3000/api/comments/4f40ccd1-4161-4861-9c99-0bbb2a0bba8b/821DBDF7-9EDF-49FF-A642-3E3B5F5ED6F4
 
+### GET COMMENTS BY PROJECT ID
+GET http://localhost:3000/api/comments/b6416c1f-e734-4321-b962-3b461444c62c
+
 ###
 POST http://localhost:3000/api/comment
 Content-Type: application/json

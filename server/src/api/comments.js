@@ -17,6 +17,17 @@ const getCommentsByProjectIdAndPointId = errorHandler(async (req, res) => {
 });
 
 /**
+ * Get comments by project id
+ */
+const getCommentsByProjectId = errorHandler(async (req, res) => {
+  const { projectId } = req.params;
+
+  const comments = await CommentsController.getCommentsByProjectId(projectId);
+
+  return comments;
+});
+
+/**
  * Save comment
  */
 const createComment = errorHandler(async (req, res) => {
@@ -55,4 +66,4 @@ const deleteComment = errorHandler(async (req, res) => {
   }
 });
 
-module.exports = { getCommentsByProjectIdAndPointId, createComment, deleteComment };
+module.exports = { getCommentsByProjectIdAndPointId, getCommentsByProjectId, createComment, deleteComment };
