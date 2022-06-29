@@ -41,6 +41,8 @@ export default function Save({ projectId }) {
       await deleteObject(object.id);
     }
 
+    console.log(children);
+
     // update project updatedAt date
     await updateProject(projectId, {});
 
@@ -51,7 +53,9 @@ export default function Save({ projectId }) {
     }
 
     for (const item of mesh) {
-      await save(item);
+      if (!item.name.startsWith("Offset")) {
+        await save(item);
+      }
     }
 
     if (projectComments.length !== temporaryComments.length) {
