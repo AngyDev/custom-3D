@@ -100,10 +100,11 @@ export const deleteProject = async (id) => {
   });
 };
 
-export const saveObject = async (id, projectId, file, filename) => {
+export const saveObject = async (id, objectName, projectId, file, filename) => {
   let data = new FormData();
   data.append("file", file, filename);
   data.append("id", id);
+  data.append("objectName", objectName);
 
   try {
     const res = await axios({

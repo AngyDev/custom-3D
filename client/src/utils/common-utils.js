@@ -27,3 +27,15 @@ export const filterByName = (name) => (list) =>
  * @returns {Number} The highest counter of the given list
  */
 export const getMaxCounter = (list) => list.map((item) => item.name[item.name.length - 1]).reduce((a, b) => (a > b ? a : b), 0);
+
+export const filterObjectByName = (name) => (list) => list.filter((item) => item.objectName.startsWith(name));
+
+export const groupByMeasure = (array, key) => {
+  return array.reduce(function (r, a, i) {
+    if (!i || r[r.length - 1][0][key].substring(0, 8) !== a[key].substring(0, 8)) {
+      return r.concat([[a]]);
+    }
+    r[r.length - 1].push(a);
+    return r;
+  }, []);
+};

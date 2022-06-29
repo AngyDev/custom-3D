@@ -9,7 +9,7 @@ import Modal from "../Modal/Modal";
 import Offset from "../Offset/Offset";
 import { addColorToClippedMesh } from "../../utils/functions/clippingObject";
 import PanelPlaneInfo from "../Panel/PanelPlaneInfo/PanelPlaneInfo";
-import { filterByName, findById } from "../../utils/common-utils";
+import { filterStartsWithName, findById } from "../../utils/common-utils";
 
 export default function PanelItem({ uuid, type, name, deleteClick }) {
   const scene = useSelector(getScene);
@@ -51,13 +51,13 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
     const name = e.target.nextSibling.innerText;
 
     // Get the mesh selected with the name
-    const mesh = filterByName(name)(scene.children)[0];
+    const mesh = filterStartsWithName(name)(scene.children)[0];
 
     mesh.visible = !mesh.visible;
     if (mesh.name.startsWith("Measure")) {
       for (const child of mesh.children) {
         // remove the label on the measurement
-        child.visible = !child.visible;
+        child.children.length > 0 && (child.children[0].visible = !child.children[0].visible);
       }
     }
 

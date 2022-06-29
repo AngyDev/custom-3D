@@ -5,6 +5,7 @@ export const countersSlice = createSlice({
   initialState: {
     planeCounter: 0,
     commentCounter: 0,
+    measureCounter: 0,
   },
   reducers: {
     setPlaneCounter: (state, action) => {
@@ -13,12 +14,16 @@ export const countersSlice = createSlice({
     setCommentCounter: (state, action) => {
       state.commentCounter = action.payload;
     },
+    setMeasureCounter: (state, action) => {
+      state.measureCounter = action.payload;
+    },
   },
 });
 
-export const { incrementPlaneCounter, setPlaneCounter, setCommentCounter } = countersSlice.actions;
+export const { incrementPlaneCounter, setPlaneCounter, setCommentCounter, setMeasureCounter } = countersSlice.actions;
 
 export const getPlaneCounter = (state) => state.counters.planeCounter;
 export const getCommentCounter = (state) => state.counters.commentCounter;
+export const getMeasureCounter = (state) => state.counters.measureCounter;
 
 export const countersReducer = countersSlice.reducer;

@@ -46,7 +46,11 @@ const getObjectsByProjectId = errorHandler(async (req, res) => {
 
   const objects = await ObjectsController.getObjectsByProjectId(projectId);
 
-  return objects;
+  const result = objects.map((item) => {
+    return { ...item, objectPath: "uploads/" + item.objectPath };
+  });
+
+  return result;
 });
 
 /**
@@ -91,11 +95,12 @@ const uploadFileAndSaveObject = errorHandler(async (req, res) => {
   }
 
   const filepath = req.params.projectId + "/" + req.file.originalname;
-  const object = req.body.id;
+  const objectId = req.body.id;
+  const objectName = req.body.objectName;
   const projectId = req.params.projectId;
 
   // Saves the object in the db
-  await ObjectsController.saveObject(object, projectId, filepath);
+  await ObjectsController.saveObject(objectId, objectName, projectId, filepath);
 
   return { message: "Uploaded the file successfully: " + req.file.originalname };
 });
