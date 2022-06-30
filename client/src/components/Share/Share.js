@@ -6,6 +6,8 @@ import { setLoading } from "../../features/loading/loadingSlice";
 import { getProject, updatedProject } from "../../features/project/projectSlice";
 import useGetUsers from "../../hooks/useGetUsers";
 import { updateProject } from "../../utils/api";
+import { Autocomplete } from "../Autocomplete/Autocomplete";
+import { Badge } from "../Badge/Badge";
 import Button from "../Button/Button";
 import Modal from "../Modal/Modal";
 
@@ -35,30 +37,48 @@ function ShareModal({ users, onClose }) {
   const { project } = useSelector(getProject);
   const dispatch = useDispatch();
 
-  const [selectedUser, setSelectedUser] = useState();
   const [errors, setErrors] = useState({});
+  const [text, setText] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [selectedSuggestion, setSelectedSuggestion] = useState([]);
 
   const owner = users.filter((user) => user.id === project.userId)[0];
-  const assignableUsers =
-    project.assignedAt !== null
-      ? users.filter((user) => !project.assignedAt.includes(user.id)).filter((user) => user.id !== project.userId)
-      : users.filter((user) => user.id !== project.userId);
-  const assignedUsers = project.assignedAt !== null ? project.assignedAt.map((userId) => users.find((user) => user.id === userId)) : [];
 
-  const handleChange = (e) => {
-    const { value } = e.target;
-    setSelectedUser(value);
-    setErrors({});
+  const onChange = (e) => {
+    const userText = e.target.value;
+    let matches = [];
+    if (userText.length > 0) {
+      matches = users.filter((user) => {
+        const regex = new RegExp(`${userText}`, "gi");
+        return user.firstName.match(regex) || user.lastName.match(regex);
+      });
+    }
+
+    setSuggestions(matches);
+    setText(userText);
+  };
+
+  const onSuggestionHandler = (suggestion) => {
+    setSelectedSuggestion((prev) => [...prev, suggestion]);
+    setSuggestions([]);
+  };
+
+  const onRemove = (item) => {
+    setSelectedSuggestion((prev) => prev.filter((i) => i.id !== item.id));
+    setText("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!selectedUser) {
+    console.log(selectedSuggestion);
+
+    if (selectedSuggestion.length === 0) {
       setErrors({ ...errors, user: "Please select a user" });
     } else {
       onClose();
       dispatch(setLoading(true));
+      // TODO: update project with a list of users
       const projectUpdate = await updateProject(project.id, {
         ...project,
         assignedAt: project.assignedAt === null ? [selectedUser] : [...project.assignedAt, selectedUser],
@@ -71,30 +91,23 @@ function ShareModal({ users, onClose }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="modal__body h-72">
-        <div>
+        <div className="flex flex-col">
+          <p className="form__label">
+            Project Owner: {owner.firstName} {owner.lastName}
+          </p>
+          <div className="mb-2 flex gap-1 flex-wrap">
+            {selectedSuggestion.length > 0 &&
+              selectedSuggestion.map((user, i) => (
+                <div key={i}>
+                  <Badge text={user.firstName + " " + user.lastName} handleClick={() => onRemove(user)} />
+                </div>
+              ))}
+          </div>
           <label htmlFor="assignedUser" className="form__label">
             Choose a user to assign the project
           </label>
-          <select name="" id="assignedUser" className="form__select" onChange={handleChange}>
-            <option value=""></option>
-            {assignableUsers.map((user, i) => (
-              <option key={i} value={user.id}>
-                {user.firstName} {user.lastName}
-              </option>
-            ))}
-          </select>
+          <Autocomplete text={text} onChange={onChange} suggestions={suggestions} onSuggestionHandler={onSuggestionHandler} />
           {errors.user && <p className="form__error">{errors.user}</p>}
-        </div>
-
-        <div className="flex flex-col mt-3">
-          <p className="text-white">
-            Owner: {owner.firstName} {owner.lastName}
-          </p>
-          {assignedUsers.map((assignedUser, i) => (
-            <p key={i} className="text-white mt-2">
-              {assignedUser.firstName} {assignedUser.lastName}
-            </p>
-          ))}
         </div>
       </div>
       <div className="modal__footer modal__border-t">
