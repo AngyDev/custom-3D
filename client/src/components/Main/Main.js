@@ -114,7 +114,7 @@ export default function Main({ objects }) {
     // If there are objects recreates the saved scene
     if (objects.length > 0) {
       dispatch(setLoading(true));
-      recreateScene(scene, group);
+      await recreateScene(scene, group);
       dispatch(setLoading(false));
     }
 
