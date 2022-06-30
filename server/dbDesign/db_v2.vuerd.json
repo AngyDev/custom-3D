@@ -675,9 +675,9 @@
             "id": "474aab96-e63e-411e-9e31-487c51bf3b61"
           },
           {
-            "name": "object",
+            "name": "object_name",
             "comment": "",
-            "dataType": "json",
+            "dataType": "string",
             "default": "",
             "option": {
               "autoIncrement": false,
@@ -690,7 +690,7 @@
               "pk": false,
               "fk": false,
               "pfk": false,
-              "widthName": 60,
+              "widthName": 76.43896484375,
               "widthComment": 60,
               "widthDataType": 60,
               "widthDefault": 60
@@ -768,10 +768,10 @@
           }
         ],
         "ui": {
-          "active": false,
+          "active": true,
           "left": 47.3333,
           "top": 403,
-          "zIndex": 4,
+          "zIndex": 11,
           "widthName": 60,
           "widthComment": 60,
           "color": "#FF9800"
@@ -883,7 +883,7 @@
           "columnIds": [
             "474aab96-e63e-411e-9e31-487c51bf3b61"
           ],
-          "x": 465.3147453125,
+          "x": 472.53203046875,
           "y": 547,
           "direction": "right"
         },
@@ -900,7 +900,7 @@
           "columnIds": [
             "da39b3b5-67ca-445b-b42f-6e60beeb8ceb"
           ],
-          "x": 465.3147453125,
+          "x": 472.53203046875,
           "y": 451,
           "direction": "right"
         },

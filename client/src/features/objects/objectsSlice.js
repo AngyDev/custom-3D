@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const objectsSlice = createSlice({
   name: "objects",
   initialState: {
-    objects: [],
+    objects: null,
     objectsToRemove: [],
   },
   reducers: {

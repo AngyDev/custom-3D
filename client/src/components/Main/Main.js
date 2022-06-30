@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from "prop-types";
 import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,7 +7,7 @@ import { TrackballControls } from "three/examples/jsm/controls/TrackballControls
 import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { getIsCommentsActive } from "../../features/comments/commentsSlice";
-import { setCommentCounter, setPlaneCounter } from "../../features/counters/countersSlice";
+import { setCommentCounter, setMeasureCounter, setPlaneCounter } from "../../features/counters/countersSlice";
 import {
   getSceneModified,
   setCamera,
@@ -17,15 +18,16 @@ import {
   setScene,
   setSceneModified,
 } from "../../features/scene/sceneSlice";
-import { filterStartsWithName, getMaxCounter } from "../../utils/common-utils";
-import { createLabel } from "../../utils/functions/objectLabel";
+import { filterObjectByName, filterStartsWithName, getMaxCounter, groupByMeasure } from "../../utils/common-utils";
+import { createLabel, createLabelMeasure } from "../../utils/functions/objectLabel";
 import { negativeVector } from "../../utils/functions/objectCalc";
 import { computeBoundsTree } from "three-mesh-bvh";
 import { setLoading } from "../../features/loading/loadingSlice";
+import { setOpenMeausurePanel } from "../../features/measurements/measurementsSlice";
 
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 
-export default function Main({ project }) {
+export default function Main({ objects }) {
   const isCommentsActive = useSelector(getIsCommentsActive);
   const sceneModified = useSelector(getSceneModified);
 
@@ -110,39 +112,12 @@ export default function Main({ project }) {
     group.name = "Import";
     scene.add(group);
 
-    if (Object.keys(project.objectsPath).length !== 0) {
+    // If there are objects recreates the saved scene
+    if (objects.length > 0) {
       dispatch(setLoading(true));
-      const loader = new THREE.ObjectLoader();
-
-      for (const path of project.objectsPath) {
-        const object = await loader.loadAsync("http://localhost:8080/" + path);
-        if (object.name.startsWith("Group")) {
-          // add bounding box for paint function
-          object.geometry.computeBoundingBox();
-          object.geometry.computeBoundsTree();
-          // save the position vector
-          dispatch(setPositionVector(negativeVector(object.position)));
-          // add the object to the group
-          group.add(object);
-        } else {
-          scene.add(object);
-        }
-      }
+      await recreateScene(scene, group);
       dispatch(setLoading(false));
     }
-
-    // If present sets the plane counter
-    const planeCounter = getMaxCounter(filterStartsWithName("Plane")(scene.children));
-    dispatch(setPlaneCounter(Number(planeCounter)));
-
-    const comments = filterStartsWithName("Comment")(scene.children);
-    for (const comment of comments) {
-      comment.children = [];
-      createLabel(comment);
-    }
-    // If present sets the comment counter
-    const commentCounter = getMaxCounter(comments);
-    dispatch(setCommentCounter(Number(commentCounter)));
 
     var render = function () {
       // Render
@@ -182,9 +157,99 @@ export default function Main({ project }) {
     return () => canvasRef.current.removeChild(renderer.domElement);
   }, []);
 
+  /**
+   * Recreates the saved scene
+   * @param {THREE.Scene} scene The created scene
+   * @param {THREE.Group} group The created group for the imported objects
+   */
+  const recreateScene = async (scene, group) => {
+    const loader = new THREE.ObjectLoader();
+
+    let measureGroups = [];
+
+    const measureGroupsSorted = filterObjectByName("Measure")(objects).sort(function (a, b) {
+      if (a.objectName < b.objectName) {
+        return -1;
+      }
+      if (b.objectName < a.objectName) {
+        return 1;
+      }
+      return 0;
+    });
+
+    measureGroups = groupByMeasure(measureGroupsSorted, "objectName");
+
+    if (measureGroups.length > 0) {
+      for (const measureGroup of measureGroups) {
+        // Define two points to calculate the distance
+        let point1 = new THREE.Vector3();
+        let point2 = new THREE.Vector3();
+        // Create a 3D group for each measure
+        const groupMeasure = new THREE.Group();
+        groupMeasure.name = measureGroup[0].objectName;
+        scene.add(groupMeasure);
+
+        // Save the counter for the measure name
+        const measureCounter = measureGroup[0].objectName.slice(-1);
+        dispatch(setMeasureCounter(Number(measureCounter)));
+
+        for (const measure of measureGroup) {
+          const object = await loader.loadAsync("http://localhost:8080/" + measure.objectPath);
+          groupMeasure.add(object);
+        }
+
+        // set the points with the position of the point objects of the measure
+        point1 = groupMeasure.children.filter((item) => item.name.includes("start"))[0].position;
+        point2 = groupMeasure.children.filter((item) => item.name.includes("end"))[0].position;
+
+        const distance = point1.distanceTo(point2).toFixed(2);
+
+        // create the label with the distance
+        for (const mesh of groupMeasure.children) {
+          if (mesh.type === "LineSegments") {
+            mesh.children = [];
+            createLabelMeasure(mesh, distance, measureCounter, point1, point2);
+          }
+        }
+      }
+      dispatch(setOpenMeausurePanel(true));
+    }
+
+    for (const object of objects) {
+      if (!object.objectName.startsWith("Measure")) {
+        const mesh = await loader.loadAsync("http://localhost:8080/" + object.objectPath);
+        if (mesh.name.startsWith("Group")) {
+          // add bounding box for paint function
+          mesh.geometry.computeBoundingBox();
+          mesh.geometry.computeBoundsTree();
+          // save the position vector
+          dispatch(setPositionVector(negativeVector(mesh.position)));
+          // add the object to the group
+          group.add(mesh);
+        } else {
+          scene.add(mesh);
+        }
+      }
+    }
+
+    // If present sets the plane counter
+    const planeCounter = getMaxCounter(filterStartsWithName("Plane")(scene.children));
+    dispatch(setPlaneCounter(Number(planeCounter)));
+
+    // create the label of the comments points
+    const comments = filterStartsWithName("Comment")(scene.children);
+    for (const comment of comments) {
+      comment.children = [];
+      createLabel(comment);
+    }
+    // If present sets the comment counter
+    const commentCounter = getMaxCounter(comments);
+    dispatch(setCommentCounter(Number(commentCounter)));
+  };
+
   return <div id="canvas" ref={canvasRef} className={isCommentsActive ? "canvas__comments" : "canvas"} />;
 }
 
 Main.propTypes = {
-  project: PropTypes.object.isRequired,
+  objects: PropTypes.array.isRequired,
 };

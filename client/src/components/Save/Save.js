@@ -48,8 +48,17 @@ export default function Save({ projectId }) {
 
     // It is not possible to create a unique array of group and mesh because it adds the mesh to the group in the scene,
     // why? I don't know
+    // Group "Import"
     for (const object of group.children) {
       await save(object);
+    }
+
+    const measure = children.filter((item) => item.name.startsWith("Measure"));
+
+    for (const object of measure) {
+      for (const item of object.children) {
+        await save(item);
+      }
     }
 
     for (const item of mesh) {
@@ -83,7 +92,7 @@ export default function Save({ projectId }) {
     const json = object.toJSON();
     const output = JSON.stringify(json);
     const file = new Blob([output], { type: "application/json" });
-    await saveObject(object.uuid, projectId, file, `${object.uuid}.json`);
+    await saveObject(object.uuid, object.name, projectId, file, `${object.uuid}.json`);
 
     // saveObject(object.uuid, projectId, file, `${object.uuid}.json`).then((error) => {
     //   alert(error);

@@ -27,6 +27,7 @@ class ObjectsController {
    * Saves the object on the db
    * @param {Object} object
    * @returns The object inserted
+   * Method Not used
    */
   static createObject(object) {
     return ObjectsModel.query().insert({
@@ -43,11 +44,11 @@ class ObjectsController {
    * @param {String} filepath
    * @returns
    */
-  static saveObject(objectId, projectId, filepath) {
+  static saveObject(objectId, objectName, projectId, filepath) {
     return ObjectsModel.query().insert({
       id: objectId,
       project_id: projectId,
-      object: { model: "model.json" },
+      object_name: objectName,
       object_path: filepath,
     });
   }

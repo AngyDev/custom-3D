@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSidebarWidth } from "../../features/dimensions/dimensionsSlice";
+import { getOpenMeausurePanel } from "../../features/measurements/measurementsSlice";
 import AddPlane from "../AddPlane/AddPlane";
 import Clipping from "../Clipping/Clipping";
 import Measurements from "../Measurements/Measurements";
@@ -10,7 +11,7 @@ import Panel from "../Panel/Panel";
 export default function Sidebar() {
   const sidebarRef = useRef(null);
   const dispatch = useDispatch();
-  const [openMeausurePanel, setOpenMeasurePanel] = useState(false);
+  const openMeausurePanel = useSelector(getOpenMeausurePanel);
 
   useEffect(() => {
     const sidebarCurrent = sidebarRef.current;
@@ -24,7 +25,7 @@ export default function Sidebar() {
         <div className="properties">Tools</div>
         <div className="sidebar__btn-space flex">
           <AddPlane />
-          <Measurements setOpenPanel={setOpenMeasurePanel} openPanel={openMeausurePanel} />
+          <Measurements openPanel={openMeausurePanel} />
         </div>
         <div className="sidebar__btn-space">
           <Paint />

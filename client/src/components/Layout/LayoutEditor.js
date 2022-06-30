@@ -13,7 +13,7 @@ import Sidebar from "../Sidebar/Sidebar";
 export default function LayoutEditor() {
   const { id } = useParams();
   const { project, fetchGetProjectById } = useGetProjectById();
-  const { fetchGetObjectsByProjectId } = useGetObjectsByProjectId();
+  const { objects, fetchGetObjectsByProjectId } = useGetObjectsByProjectId();
   const { fetchGetCommentsByProjectId } = useGetCommentsByProjectId();
 
   useEffect(() => {
@@ -26,12 +26,12 @@ export default function LayoutEditor() {
 
   return (
     <>
-      {Object.keys(project).length > 0 && (
+      {Object.keys(project).length > 0 && objects !== null && (
         <>
           <Header project={project.project} />
           <div className="flex">
             <Sidebar />
-            <Main project={project} />
+            <Main objects={objects} />
             {isCommentsActive && <CommentsListPanel projectId={id} />}
           </div>
         </>
