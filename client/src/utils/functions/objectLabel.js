@@ -13,7 +13,7 @@ export const createLabel = (object) => {
   object.add(objectLabel);
 };
 
-export const createLabelMeasure = (object, distance, count) => {
+export const createLabelMeasure = (object, distance, count, point1, point2) => {
   const objectDiv = document.createElement("div");
   objectDiv.className = "measurementLabel";
   objectDiv.textContent = "M" + count + ": " + distance + "mm";
@@ -21,7 +21,6 @@ export const createLabelMeasure = (object, distance, count) => {
   objectDiv.id = object.name;
   const objectLabel = new CSS2DObject(objectDiv);
   objectLabel.name = object.name;
-  objectLabel.position.copy(object.position);
-  // objectLabel.position.set(0, 0, 0);
+  objectLabel.position.lerpVectors(point1, point2, 0.5);
   object.add(objectLabel);
 };

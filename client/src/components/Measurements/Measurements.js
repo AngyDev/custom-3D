@@ -146,7 +146,6 @@ export default function Measurements({ openPanel, setOpenPanel }) {
    * For each Measure there is 4 object, 2 point, 1 line and 1 label
    */
   const createMeasureGroup = (name) => {
-    console.log(name);
     let array = [];
     children.forEach((object) => {
       if (object.name.startsWith(name) && object.type !== "Group") {

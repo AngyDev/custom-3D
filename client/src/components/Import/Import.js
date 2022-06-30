@@ -51,6 +51,7 @@ export default function Import() {
         }
       }
     }
+    e.target.value = null;
   };
 
   const loadFile = (file) =>

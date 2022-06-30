@@ -108,6 +108,14 @@ export default function Panel({ type }) {
 
     // if the object is in the the list of saved object, remove it otherwise remove it from the scene
     if (objects.length > 0) {
+      // checks children of the measure object, the measure is a group
+      if (mesh.children.length > 0) {
+        for (const childMesh of mesh.children) {
+          const object = objects.find((item) => item.id === childMesh.uuid);
+          object !== undefined && dispatch(addObjectToRemove(object));
+        }
+      }
+
       const object = objects.find((item) => item.id === id);
       object !== undefined && dispatch(addObjectToRemove(object));
     }
