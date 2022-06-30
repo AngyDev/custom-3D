@@ -8,8 +8,9 @@ import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dime
 import { getCanvas, getChildren, getControls, getGroup, getScene, getSceneModified, setSceneModified } from "../../features/scene/sceneSlice";
 import Button from "../Button/Button";
 import { getMeasureCounter, setMeasureCounter } from "../../features/counters/countersSlice";
+import { setOpenMeausurePanel } from "../../features/measurements/measurementsSlice";
 
-export default function Measurements({ openPanel, setOpenPanel }) {
+export default function Measurements({ openPanel }) {
   const canvas = useSelector(getCanvas);
   const children = useSelector(getChildren);
   const scene = useSelector(getScene);
@@ -58,7 +59,7 @@ export default function Measurements({ openPanel, setOpenPanel }) {
   const addMeasures = () => {
     setActive(!active);
     if (!openPanel) {
-      setOpenPanel(true);
+      dispatch(setOpenMeausurePanel(true));
     }
     controls.enabled = !controls.enabled;
   };
@@ -200,5 +201,4 @@ export default function Measurements({ openPanel, setOpenPanel }) {
 
 Measurements.propTypes = {
   openPanel: PropTypes.bool,
-  setOpenPanel: PropTypes.func,
 };

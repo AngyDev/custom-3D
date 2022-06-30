@@ -23,6 +23,7 @@ import { createLabel, createLabelMeasure } from "../../utils/functions/objectLab
 import { negativeVector } from "../../utils/functions/objectCalc";
 import { computeBoundsTree } from "three-mesh-bvh";
 import { setLoading } from "../../features/loading/loadingSlice";
+import { setOpenMeausurePanel } from "../../features/measurements/measurementsSlice";
 
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 
@@ -156,11 +157,17 @@ export default function Main({ objects }) {
     return () => canvasRef.current.removeChild(renderer.domElement);
   }, []);
 
+  /**
+   * Recreates the saved scene
+   * @param {THREE.Scene} scene The created scene
+   * @param {THREE.Group} group The created group for the imported objects
+   */
   const recreateScene = async (scene, group) => {
-    let measureGroups = [];
     const loader = new THREE.ObjectLoader();
 
-    const array = filterObjectByName("Measure")(objects).sort(function (a, b) {
+    let measureGroups = [];
+
+    const measureGroupsSorted = filterObjectByName("Measure")(objects).sort(function (a, b) {
       if (a.objectName < b.objectName) {
         return -1;
       }
@@ -170,38 +177,42 @@ export default function Main({ objects }) {
       return 0;
     });
 
-    measureGroups = groupByMeasure(array, "objectName");
+    measureGroups = groupByMeasure(measureGroupsSorted, "objectName");
 
     if (measureGroups.length > 0) {
       for (const measureGroup of measureGroups) {
+        // Define two points to calculate the distance
+        let point1 = new THREE.Vector3();
+        let point2 = new THREE.Vector3();
+        // Create a 3D group for each measure
         const groupMeasure = new THREE.Group();
         groupMeasure.name = measureGroup[0].objectName;
         scene.add(groupMeasure);
 
+        // Save the counter for the measure name
         const measureCounter = measureGroup[0].objectName.slice(-1);
         dispatch(setMeasureCounter(Number(measureCounter)));
-
-        let point1 = new THREE.Vector3();
-        let point2 = new THREE.Vector3();
 
         for (const measure of measureGroup) {
           const object = await loader.loadAsync("http://localhost:8080/" + measure.objectPath);
           groupMeasure.add(object);
         }
 
+        // set the points with the position of the point objects of the measure
         point1 = groupMeasure.children.filter((item) => item.name.includes("start"))[0].position;
         point2 = groupMeasure.children.filter((item) => item.name.includes("end"))[0].position;
 
         const distance = point1.distanceTo(point2).toFixed(2);
 
+        // create the label with the distance
         for (const mesh of groupMeasure.children) {
           if (mesh.type === "LineSegments") {
-            console.log(mesh);
             mesh.children = [];
             createLabelMeasure(mesh, distance, measureCounter, point1, point2);
           }
         }
       }
+      dispatch(setOpenMeausurePanel(true));
     }
 
     for (const object of objects) {
@@ -225,6 +236,7 @@ export default function Main({ objects }) {
     const planeCounter = getMaxCounter(filterStartsWithName("Plane")(scene.children));
     dispatch(setPlaneCounter(Number(planeCounter)));
 
+    // create the label of the comments points
     const comments = filterStartsWithName("Comment")(scene.children);
     for (const comment of comments) {
       comment.children = [];
