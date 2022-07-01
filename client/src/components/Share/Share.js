@@ -37,18 +37,25 @@ function ShareModal({ users, onClose }) {
   const { project } = useSelector(getProject);
   const dispatch = useDispatch();
 
-  const [errors, setErrors] = useState({});
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [selectedSuggestion, setSelectedSuggestion] = useState([]);
+  const [selectedSuggestion, setSelectedSuggestion] = useState(
+    project.assignedAt !== null ? project.assignedAt.map((userId) => users.find((user) => user.id === userId)) : [],
+  );
 
   const owner = users.filter((user) => user.id === project.userId)[0];
+  // list of users that are not assigned to the project or the owner
+  const [usersAvailables, setUsersAvailables] = useState(
+    project.assignedAt !== null
+      ? users.filter((user) => !project.assignedAt.includes(user.id)).filter((user) => user.id !== project.userId)
+      : users.filter((user) => user.id !== project.userId),
+  );
 
   const onChange = (e) => {
     const userText = e.target.value;
     let matches = [];
     if (userText.length > 0) {
-      matches = users.filter((user) => {
+      matches = usersAvailables.filter((user) => {
         const regex = new RegExp(`${userText}`, "gi");
         return user.firstName.match(regex) || user.lastName.match(regex);
       });
@@ -60,32 +67,31 @@ function ShareModal({ users, onClose }) {
 
   const onSuggestionHandler = (suggestion) => {
     setSelectedSuggestion((prev) => [...prev, suggestion]);
+    // remove selected user from availables users
+    setUsersAvailables((prev) => prev.filter((user) => user.id !== suggestion.id));
     setSuggestions([]);
   };
 
   const onRemove = (item) => {
     setSelectedSuggestion((prev) => prev.filter((i) => i.id !== item.id));
+    // add selected user to the available users list
+    setUsersAvailables((prev) => [...prev, item]);
     setText("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(selectedSuggestion);
+    dispatch(setLoading(true));
 
-    if (selectedSuggestion.length === 0) {
-      setErrors({ ...errors, user: "Please select a user" });
-    } else {
-      onClose();
-      dispatch(setLoading(true));
-      // TODO: update project with a list of users
-      const projectUpdate = await updateProject(project.id, {
-        ...project,
-        assignedAt: project.assignedAt === null ? [selectedUser] : [...project.assignedAt, selectedUser],
-      });
-      dispatch(updatedProject(projectUpdate));
-      dispatch(setLoading(false));
-    }
+    const projectUpdate = await updateProject(project.id, {
+      ...project,
+      assignedAt: selectedSuggestion.length !== 0 ? selectedSuggestion.map((user) => user.id) : null,
+    });
+
+    dispatch(updatedProject(projectUpdate));
+    dispatch(setLoading(false));
+    onClose();
   };
 
   return (
@@ -95,7 +101,11 @@ function ShareModal({ users, onClose }) {
           <p className="form__label">
             Project Owner: {owner.firstName} {owner.lastName}
           </p>
-          <div className="mb-2 flex gap-1 flex-wrap">
+          <label htmlFor="assignedUser" className="form__label">
+            Choose a user to assign the project
+          </label>
+          <Autocomplete text={text} onChange={onChange} suggestions={suggestions} onSuggestionHandler={onSuggestionHandler} />
+          <div className="mb-2 mt-2 flex gap-1 flex-wrap">
             {selectedSuggestion.length > 0 &&
               selectedSuggestion.map((user, i) => (
                 <div key={i}>
@@ -103,11 +113,6 @@ function ShareModal({ users, onClose }) {
                 </div>
               ))}
           </div>
-          <label htmlFor="assignedUser" className="form__label">
-            Choose a user to assign the project
-          </label>
-          <Autocomplete text={text} onChange={onChange} suggestions={suggestions} onSuggestionHandler={onSuggestionHandler} />
-          {errors.user && <p className="form__error">{errors.user}</p>}
         </div>
       </div>
       <div className="modal__footer modal__border-t">

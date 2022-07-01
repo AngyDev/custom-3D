@@ -5,7 +5,7 @@ import "./autocomplete.css";
 
 export const Autocomplete = ({ text, onChange, suggestions, onSuggestionHandler }) => {
   return (
-    <>
+    <div className="relative">
       <input className="form__input" type="text" onChange={(e) => onChange(e)} value={text} />
       {suggestions && (
         <div className="suggestions-container overflow-y-auto">
@@ -16,7 +16,7 @@ export const Autocomplete = ({ text, onChange, suggestions, onSuggestionHandler 
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

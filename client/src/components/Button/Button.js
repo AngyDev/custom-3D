@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 export default function Button({ typeClass, type, onClick, title, disabled, text, img, active }) {
   return (
     <button
-      className={`btn ${typeClass} ${disabled ? "bg-red-500" : ""} ${active ? "bg-yellow-600" : ""}`}
+      className={`btn ${typeClass} ${disabled ? "bg-gray-500 cursor-not-allowed disabled:bg-gray-500" : ""} ${active ? "bg-yellow-600" : ""}`}
       type={type}
       onClick={onClick}
       title={title}

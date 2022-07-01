@@ -19,7 +19,5 @@
 .suggestions-container {
   border-top: none;
   z-index: 100;
-  box-sizing: border-box;
-  overflow-y: auto;
-  @apply  mt-0;
+  @apply  mt-0 w-full overflow-y-auto absolute;
 }
