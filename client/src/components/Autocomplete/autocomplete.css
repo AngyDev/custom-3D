@@ -1,0 +1,23 @@
+.suggestion {
+  border-top: 1px solid;
+  border-bottom: 1px solid transparent;
+  @apply bg-gray-50 cursor-pointer border-gray-300 text-black text-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white;
+}
+
+.suggestion:last-child {
+  border-bottom-color: transparent;
+}
+
+.suggestion:first-child {
+  border-top-color: transparent;
+}
+
+.suggestion:hover {
+  @apply bg-yellow-600;
+}
+
+.suggestions-container {
+  border-top: none;
+  z-index: 100;
+  @apply  mt-0 w-full overflow-y-auto absolute;
+}

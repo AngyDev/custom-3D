@@ -1,0 +1,7 @@
+.btn-badge {
+  @apply border-none bg-button h-fit flex justify-center items-center font-normal text-text hover:bg-yellow-600 cursor-pointer outline-none uppercase rounded-lg px-3 py-0.5;
+}
+
+.badge-text {
+  @apply m-1;
+}
