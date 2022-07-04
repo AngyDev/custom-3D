@@ -7,7 +7,7 @@ import { TrackballControls } from "three/examples/jsm/controls/TrackballControls
 import { TransformControls } from "three/examples/jsm/controls/TransformControls.js";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { getIsCommentsActive } from "../../features/comments/commentsSlice";
-import { setCommentCounter, setMeasureCounter, setPlaneCounter } from "../../features/counters/countersSlice";
+import { setCommentCounter, setMeasureCounter, setPlaneCounter, setScrewCounter } from "../../features/counters/countersSlice";
 import {
   getSceneModified,
   setCamera,
@@ -245,6 +245,10 @@ export default function Main({ objects }) {
     // If present sets the comment counter
     const commentCounter = getMaxCounter(comments);
     dispatch(setCommentCounter(Number(commentCounter)));
+
+    // If present sets the screw counter
+    const screwCounter = getMaxCounter(filterStartsWithName("Screw")(scene.children));
+    dispatch(setScrewCounter(Number(screwCounter)));
   };
 
   return <div id="canvas" ref={canvasRef} className={isCommentsActive ? "canvas__comments" : "canvas"} />;

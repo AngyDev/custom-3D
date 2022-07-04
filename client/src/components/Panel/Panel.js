@@ -19,6 +19,7 @@ export default function Panel({ type }) {
   const [planeList, setPlaneList] = useState([]);
   const [pointList, setPointList] = useState([]);
   const [measureList, setMeasureList] = useState([]);
+  const [screwList, setScrewList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [deleteElem, setDeleteElem] = useState();
 
@@ -38,6 +39,8 @@ export default function Panel({ type }) {
           addMeshToList(pointList, obj, setPointList);
         } else if (obj.type === "Group" && obj.name.startsWith("Measure")) {
           addMeshToList(measureList, obj, setMeasureList);
+        } else if (obj.name.startsWith("Screw")) {
+          addMeshToList(screwList, obj, setScrewList);
         }
       });
     }
@@ -80,6 +83,7 @@ export default function Panel({ type }) {
     setPlaneList(planeList.filter((mesh) => mesh.uuid !== id));
     setPointList(pointList.filter((mesh) => mesh.uuid !== id));
     setMeasureList(measureList.filter((mesh) => mesh.uuid !== id));
+    setScrewList(screwList.filter((mesh) => mesh.uuid !== id));
 
     // When the first element is deleted the selection go to the second, this is a workaround, pass a not existing id
     // no one mesh is selected
@@ -92,7 +96,7 @@ export default function Panel({ type }) {
     } else if (mesh.name.startsWith("Measure")) {
       document.getElementById(mesh.name).remove();
       scene.remove(mesh);
-    } else if (mesh.name.startsWith("Plane") || mesh.name.startsWith("Comment")) {
+    } else if (mesh.name.startsWith("Plane") || mesh.name.startsWith("Comment") || mesh.name.startsWith("Screw")) {
       document.getElementById(mesh.name) && document.getElementById(mesh.name).remove();
       tControls.detach();
       scene.remove(mesh);
@@ -141,11 +145,18 @@ export default function Panel({ type }) {
             {pointList.length > 0 &&
               pointList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="points" />)}
           </div>
-        ) : (
+        ) : type === "measure" ? (
           <div id="measure" className="">
             {measureList.length > 0 &&
               measureList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="measure" />)}
           </div>
+        ) : (
+          type === "screw" && (
+            <div id="screw" className="">
+              {screwList.length > 0 &&
+                screwList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="screw" />)}
+            </div>
+          )
         )}
       </div>
       <ModalDelete open={isOpen} onClose={() => setIsOpen(false)} onClick={deleteClick} />

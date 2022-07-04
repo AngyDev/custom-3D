@@ -25,8 +25,8 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   const [clipped, setClipped] = useState(false);
   const [openOffset, setOpenOffset] = useState(false);
   const [meshToOffset, setMeshToOffset] = useState();
-  const [openPlaneInfo, setOpenPlaneInfo] = useState(false);
-  const [selectedPlane, setSelectedPlane] = useState();
+  const [openObjectInfo, setOpenObjectInfo] = useState(false);
+  const [selectedObject, setSelectedObject] = useState();
 
   useEffect(() => {
     // checks the selected mesh to add background to panel object
@@ -75,7 +75,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
    * @param {Event} e
    * @param {*} mode Transformation mode
    */
-  const transformPlane = (e, mode) => {
+  const transformObject = (e, mode) => {
     const node = e.target.attributes.id.nodeValue;
     const name = e.target.attributes.name.nodeValue;
 
@@ -213,9 +213,9 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
 
   const handleInfo = (e) => {
     dispatch(setSelectedMesh(e.target.attributes.id.nodeValue));
-    const plane = findById(e.target.attributes.id.nodeValue)(scene.children);
-    setSelectedPlane(plane);
-    setOpenPlaneInfo(!openPlaneInfo);
+    const object = findById(e.target.attributes.id.nodeValue)(scene.children);
+    setSelectedObject(object);
+    setOpenObjectInfo(!openObjectInfo);
   };
 
   return (
@@ -229,20 +229,25 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
         ) : (
           <span>{name.startsWith("Group") ? name.slice(5) : name}</span>
         )}
-        {type === "planes" && (
+        {(type === "planes" || type === "screw") && (
           <>
-            <span id={uuid} name={name} className="translate" onClick={(e) => transformPlane(e, "translate")}></span>
-            <span id={uuid} name={name} className="rotate" onClick={(e) => transformPlane(e, "rotate")}></span>
-            <span id={uuid} name={name} className="scale" onClick={(e) => transformPlane(e, "scale")}></span>
-            <span id={uuid} name={name} className="clipping" onClick={(e) => clippingMesh(e)}></span>
-            {clipped && (
-              <span>
-                <input type="checkbox" name="" id="" onChange={handleNegated} />
-              </span>
-            )}
+            <span id={uuid} name={name} className="translate" onClick={(e) => transformObject(e, "translate")}></span>
+            <span id={uuid} name={name} className="rotate" onClick={(e) => transformObject(e, "rotate")}></span>
+            <span id={uuid} name={name} className="scale" onClick={(e) => transformObject(e, "scale")}></span>
             <span id={uuid} name={name} className="opacity" onClick={handleOpacity} />
+            {/* {type === "screw" && <span id={uuid} name={name} className="height" onClick={(e) => transformHeightObject(e)}></span>} */}
+            {type === "planes" && (
+              <>
+                <span id={uuid} name={name} className="clipping" onClick={(e) => clippingMesh(e)}></span>
+                {clipped && (
+                  <span>
+                    <input type="checkbox" name="" id="" onChange={handleNegated} />
+                  </span>
+                )}
+              </>
+            )}
             <span id={uuid} name={name} className="infoIcon" onClick={handleInfo} />
-            {openPlaneInfo && <PanelPlaneInfo plane={selectedPlane} />}
+            {openObjectInfo && <PanelPlaneInfo plane={selectedObject} />}
           </>
         )}
         {type === "scene" && (
