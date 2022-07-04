@@ -8,8 +8,8 @@ import ChangeColor from "../ChangeColor/ChangeColor";
 import Modal from "../Modal/Modal";
 import Offset from "../Offset/Offset";
 import { addColorToClippedMesh } from "../../utils/functions/clippingObject";
-import PanelPlaneInfo from "../Panel/PanelPlaneInfo/PanelPlaneInfo";
 import { filterStartsWithName, findById } from "../../utils/common-utils";
+import PanelObjectInfo from "../Panel/PanelObjectInfo/PanelObjectInfo";
 
 export default function PanelItem({ uuid, type, name, deleteClick }) {
   const scene = useSelector(getScene);
@@ -27,6 +27,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   const [meshToOffset, setMeshToOffset] = useState();
   const [openObjectInfo, setOpenObjectInfo] = useState(false);
   const [selectedObject, setSelectedObject] = useState();
+  const [panelTopPosition, setPanelTopPosition] = useState();
 
   useEffect(() => {
     // checks the selected mesh to add background to panel object
@@ -61,7 +62,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
       }
     }
 
-    if (mesh.name.startsWith("Plane") || mesh.name.startsWith("Comment")) {
+    if (mesh.name.startsWith("Plane") || mesh.name.startsWith("Comment") || mesh.name.startsWith("Screw")) {
       // if the mesh is a comment remove the label
       mesh.children.length > 0 && (mesh.children[0].visible = !mesh.children[0].visible);
       // remove the controls
@@ -76,21 +77,17 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
    * @param {*} mode Transformation mode
    */
   const transformObject = (e, mode) => {
-    const node = e.target.attributes.id.nodeValue;
-    const name = e.target.attributes.name.nodeValue;
+    const nodeId = e.target.attributes.id.nodeValue;
+    const mesh = findById(nodeId)(scene.children);
 
-    dispatch(setSelectedMesh(node));
+    dispatch(setSelectedMesh(nodeId));
 
     // Checks created to control the transformControls to remove if present and add if not
-    if (tControls.visible && tControls.mode === mode && selectedMesh === node) {
+    if (tControls.visible && tControls.mode === mode && selectedMesh === nodeId) {
       tControls.detach();
     } else {
-      scene.children.forEach((object) => {
-        if (object.name === name) {
-          tControls.attach(object);
-          tControls.setMode(mode);
-        }
-      });
+      tControls.attach(mesh);
+      tControls.setMode(mode);
     }
   };
 
@@ -209,13 +206,25 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
 
     object.material.transparent = !object.material.transparent;
     object.material.opacity = object.material.opacity === 1 ? 0.5 : 1;
+
+    if (tControls.visible) {
+      tControls.detach();
+    }
   };
 
   const handleInfo = (e) => {
-    dispatch(setSelectedMesh(e.target.attributes.id.nodeValue));
-    const object = findById(e.target.attributes.id.nodeValue)(scene.children);
+    const nodeId = e.target.attributes.id.nodeValue;
+
+    setPanelTopPosition(e.target.getBoundingClientRect().top);
+    dispatch(setSelectedMesh(nodeId));
+
+    const object = findById(nodeId)(scene.children);
     setSelectedObject(object);
     setOpenObjectInfo(!openObjectInfo);
+
+    if (tControls.visible) {
+      tControls.detach();
+    }
   };
 
   return (
@@ -247,7 +256,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
               </>
             )}
             <span id={uuid} name={name} className="infoIcon" onClick={handleInfo} />
-            {openObjectInfo && <PanelPlaneInfo plane={selectedObject} />}
+            {openObjectInfo && <PanelObjectInfo plane={selectedObject} panelTopPosition={panelTopPosition} />}
           </>
         )}
         {type === "scene" && (
