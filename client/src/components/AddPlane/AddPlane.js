@@ -32,12 +32,12 @@ export default function AddPlane() {
    * @returns Mesh
    */
   const createPlane = () => {
-    var geometry = new THREE.PlaneGeometry(50, 50, 1, 1);
-    var material = new THREE.MeshStandardMaterial({
+    const geometry = new THREE.PlaneGeometry(50, 50, 1, 1);
+    const material = new THREE.MeshStandardMaterial({
       color: "#38382f",
       side: THREE.DoubleSide,
     });
-    var mesh = new THREE.Mesh(geometry, material);
+    const mesh = new THREE.Mesh(geometry, material);
     mesh.name = "Plane" + (planeCounter + 1);
 
     dispatch(setPlaneCounter(planeCounter + 1));

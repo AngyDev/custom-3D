@@ -1,12 +1,17 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { getCenter, getNormal } from "../../../utils/functions/objectCalc";
 import uploadIcon from "../../../assets/images/icons/white/upload-solid.svg";
 import { downloadObject } from "../../../utils/functions/downloadObject";
 
-export default function PanelPlaneInfo({ plane }) {
+export default function PanelObjectInfo({ plane, panelTopPosition }) {
+  const objectInfo = useRef();
   const center = getCenter(plane);
   const normal = getNormal(plane);
+
+  useEffect(() => {
+    objectInfo.current.style.top = Math.floor(panelTopPosition) + "px";
+  }, []);
 
   const text = `Center: ${center.x.toFixed(3)}, ${center.y.toFixed(3)}, ${center.z.toFixed(3)}\nNormal: ${normal.x.toFixed(3)}, ${normal.y.toFixed(
     3,
@@ -18,7 +23,10 @@ export default function PanelPlaneInfo({ plane }) {
   };
 
   return (
-    <div className="inline-block absolute left-80 z-10 py-2 px-3 text-sm font-medium text-white rounded-lg shadow-sm bg-gray-600 dark:bg-base">
+    <div
+      ref={objectInfo}
+      className="inline-block fixed left-80 z-10 py-2 px-3 text-sm font-medium text-white rounded-lg shadow-sm bg-gray-600 dark:bg-base"
+    >
       <div className="flex justify-between">
         <h3>{plane.name} Info</h3>
         <div>
@@ -43,6 +51,7 @@ export default function PanelPlaneInfo({ plane }) {
   );
 }
 
-PanelPlaneInfo.propTypes = {
+PanelObjectInfo.propTypes = {
   plane: PropTypes.object.isRequired,
+  panelTopPosition: PropTypes.number,
 };
