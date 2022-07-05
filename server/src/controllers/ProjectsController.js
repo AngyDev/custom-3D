@@ -7,7 +7,7 @@ class ProjectsController {
    * @returns List of projects
    */
   static getProjects() {
-    return ProjectsModel.query().select().orderBy('created_at');
+    return ProjectsModel.query().select().orderBy("created_at");
   }
 
   /**
@@ -22,14 +22,15 @@ class ProjectsController {
   /**
    * Get the projects by user id
    * @param {String} userId User ID
-   * @returns The list of projects by user id
+   * @returns The list of projects by user id and assigned to the userId
    */
   // TODO: Some fields are missing
   static getProjectsByUserId(userId) {
     return ProjectsModel.query()
       .join("users", "projects.user_id", "users.id")
       .select(["projects.*", "users.first_name", "users.last_name"])
-      .where("projects.user_id", userId)
+      .whereRaw("? = any(??)", [userId, "projects.assigned_at"])
+      .orWhere("projects.user_id", userId)
       .orderBy("projects.created_at");
   }
 
