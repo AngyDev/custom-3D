@@ -10,6 +10,11 @@ body {
   margin: 0;
 }
 
+.container-app {
+  min-width: 360px;
+  margin: 0 auto;
+}
+
 .container-component {
   padding: 1em;
 }

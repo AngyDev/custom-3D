@@ -7,7 +7,8 @@ import LayoutEditor from "../../components/Layout/LayoutEditor";
 import Spinner from "../../components/Spinner/Spinner";
 import { AppWrapper } from "../../context/AppContext";
 import { dispatchError, getError } from "../../features/error/errorSlice";
-import { getLoading } from "../loading/loadingSlice";
+import { getLoading } from "../../features/loading/loadingSlice";
+import Login from "../Login/Login";
 
 export default function App() {
   const error = useSelector(getError);
@@ -21,12 +22,13 @@ export default function App() {
 
   return (
     <AppWrapper>
-      <div className="font-app">
+      <div className="font-app container-app">
         {loading ? <Spinner /> : ""}
         <BrowserRouter>
           <Switch>
             <Route exact path="/">
-              <Dashboard />
+              {/* <Dashboard /> */}
+              <Login />
             </Route>
             <Route path="/editor/:id">
               <LayoutEditor />

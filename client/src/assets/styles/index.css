@@ -5,6 +5,7 @@
 @import "./base/base.css";
 @import "./base/variables.css";
 @import "./base/form.css";
+@import "./base/auth.css";
 
 @import "../../components/Dashboard/dashboard.css";
 @import "../../components/Button/button.css";

@@ -1,0 +1,4 @@
+.auth-container {
+  border: 1px solid;
+  @apply mt-6 border-gray-300 w-full p-4 rounded-lg dark:bg-baseLight bg-base;
+}
