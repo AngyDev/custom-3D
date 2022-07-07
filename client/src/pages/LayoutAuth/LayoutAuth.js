@@ -4,7 +4,7 @@ import HeaderAuth from "../../components/HeaderAuth/HeaderAuth";
 
 export default function LayoutAuth({ children, title }) {
   return (
-    <div className="bg-baseLight dark:bg-base h-screen flex items-center justify-center p-3">
+    <div className="bg-baseLight dark:bg-base h-screen flex items-center justify-center p-3 overflow-y-auto">
       <div className="flex flex-col m-auto w-96">
         <HeaderAuth />
         <div className="auth-container">
