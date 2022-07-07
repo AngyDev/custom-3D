@@ -8,6 +8,7 @@ import { useHistory } from "react-router";
 import { UserContext } from "../../../context/UserContext";
 import { saveProject } from "../../../utils/api";
 import Theme from "../../Theme/Theme";
+import { ThemeContext } from "../../../context/ThemeContext";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +16,7 @@ export default function Header() {
 
   const history = useHistory();
   const { user } = useContext(UserContext);
+  const [theme] = useContext(ThemeContext);
 
   const saveNewProject = async (data) => {
     const response = await saveProject(user.id, data);
@@ -36,7 +38,7 @@ export default function Header() {
     <div className="container-component flex w-full h-18 bg-baseLight dark:bg-base text-white p-3">
       <div className="flex gap-5 w-full justify-between">
         <div className="flex flex-row gap-5 items-center">
-          <Logo className="h-10" />
+          <Logo className="h-10" theme={theme} />
           <Button text="Nuovo" img={plus} onClick={openModal} title="Nuovo" active={active} />
         </div>
         <div>

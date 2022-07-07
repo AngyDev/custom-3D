@@ -9,6 +9,7 @@ import { AppWrapper } from "../../context/AppContext";
 import { dispatchError, getError } from "../../features/error/errorSlice";
 import { getLoading } from "../../features/loading/loadingSlice";
 import Login from "../Login/Login";
+import Register from "../Register/Register";
 
 export default function App() {
   const error = useSelector(getError);
@@ -29,6 +30,12 @@ export default function App() {
             <Route exact path="/">
               {/* <Dashboard /> */}
               <Login />
+            </Route>
+            <Route path="/register">
+              <Register />
+            </Route>
+            <Route path="/dashboard">
+              <Dashboard />
             </Route>
             <Route path="/editor/:id">
               <LayoutEditor />
