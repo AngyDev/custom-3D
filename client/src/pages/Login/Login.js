@@ -1,46 +1,62 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Button from "../../components/Button/Button";
-import HeaderAuth from "../../components/HeaderAuth/HeaderAuth";
+import { useForm } from "react-hook-form";
+import InputForm from "../../components/atoms/InputForm/InputForm";
+import LayoutAuth from "../LayoutAuth/LayoutAuth";
 
 export default function Login() {
-  const handleSubmit = () => {};
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
 
   return (
-    <div className="bg-baseLight dark:bg-base h-screen flex items-center justify-center p-3">
-      <div className="flex flex-col m-auto w-96">
-        <HeaderAuth />
-        <div className="auth-container">
-          <h1 className="dark:text-black text-gray-300 text-4xl text-center">Login</h1>
-          <div className="flex w-full mt-6">
-            <form className="w-full" onSubmit={handleSubmit}>
-              <div className="w-full mb-5">
-                <label htmlFor="username" className="form__label-black">
-                  Username
-                </label>
-                <input type="text" id="username" className="form__input" />
-              </div>
-              <div className="w-full mb-10">
-                <label htmlFor="password" className="form__label-black">
-                  Password
-                </label>
-                <input type="text" id="password" className="form__input" />
-              </div>
-              <div className="flex justify-between gap-4">
-                <Button type="submit" typeClass="modal__btn-confirm w-full" text="Login" />
-                <Button type="submit" typeClass="modal__btn-confirm w-full" text="Signup" />
-              </div>
-              {/* <Button type="submit" typeClass="modal__btn-confirm w-full" text="Login" />
+    <LayoutAuth title="Login">
+      <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+        <div className="w-full mb-5">
+          <InputForm
+            label="Email"
+            id="email"
+            type="email"
+            classNameLabel="form__label-black"
+            classNameInput="form__input"
+            register={register}
+            required={"This field is required"}
+          />
+          {errors.username && <div className="form__error">{errors.username.message}</div>}
+        </div>
+        <div className="w-full mb-10">
+          <InputForm
+            label="Password"
+            id="password"
+            type="password"
+            classNameLabel="form__label-black"
+            classNameInput="form__input"
+            register={register}
+            required={"This field is required"}
+          />
+          {errors.password && <div className="form__error">{errors.password.message}</div>}
+        </div>
+        <div className="flex justify-between gap-4">
+          <Button type="submit" typeClass="modal__btn-confirm w-full" text="Login" />
+          {/* <Link to="/register" className="w-full no-underline"> */}
+          <Button type="button" typeClass="modal__btn-confirm w-full" text="Signup" />
+          {/* </Link> */}
+        </div>
+        {/* <Button type="submit" typeClass="modal__btn-confirm w-full" text="Login" />
             <p className="py-2">
               <span className="text-black dark:text-gray-300">Don't have an account yet? </span>
               <Link to="/signup" className="underline">
                 <span className="font-bold">Sign up</span>
               </Link>
             </p> */}
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+      </form>
+    </LayoutAuth>
   );
 }
