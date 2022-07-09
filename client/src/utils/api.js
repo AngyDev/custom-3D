@@ -2,18 +2,22 @@ import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-export const getProjectById = async (id) => {
-  // try {
-  //   const res = await axios({
-  //     method: "GET",
-  //     url: `${process.env.REACT_APP_API_URL}/project/${id}`,
-  //   });
+export const getUser = async (login) => {
+  try {
+    const response = await axios({
+      method: "POST",
+      url: `${API_URL}/login`,
+      headers: { withCredentials: true },
+      data: login,
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-  //   return res.data;
-  // } catch (error) {
-  //   console.log(error.message);
-  //   return false;
-  // }
+export const getProjectById = async (id) => {
   return await axios({
     method: "GET",
     url: `${process.env.REACT_APP_API_URL}/project/${id}`,
