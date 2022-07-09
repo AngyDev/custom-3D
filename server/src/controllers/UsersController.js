@@ -11,14 +11,14 @@ class UsersController {
   }
 
   static getUserByEmail(email) {
-    return UsersModel.query().select("email").where("email", email);
+    return UsersModel.query().select().where("email", email);
   }
 
   static createUser(user) {
     return UsersModel.query().insert({
       id: v4(),
-      first_name: user.firstName,
-      last_name: user.lastName,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       password: user.password,
       role: user.role,
