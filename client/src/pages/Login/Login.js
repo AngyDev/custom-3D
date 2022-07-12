@@ -4,8 +4,11 @@ import { useForm } from "react-hook-form";
 import InputForm from "../../components/atoms/InputForm/InputForm";
 import LayoutAuth from "../LayoutAuth/LayoutAuth";
 import { Link, useHistory } from "react-router-dom";
+import { getUser } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
+  const { login } = useAuth();
   const history = useHistory();
   const {
     handleSubmit,
@@ -13,8 +16,12 @@ export default function Login() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+
+    const user = await getUser(data);
+
+    login(user[0]);
 
     history.push("/dashboard");
   };

@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Alert from "../../components/Alert/Alert";
 import Dashboard from "../../components/Dashboard/Dashboard";
 import LayoutEditor from "../../components/Layout/LayoutEditor";
+import ProtectedRoute from "../../components/ProtectedRoute/ProtectedRoute";
 import Spinner from "../../components/Spinner/Spinner";
 import { AppWrapper } from "../../context/AppContext";
 import { dispatchError, getError } from "../../features/error/errorSlice";
@@ -35,10 +36,14 @@ export default function App() {
               <Register />
             </Route>
             <Route path="/dashboard">
-              <Dashboard />
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
             </Route>
             <Route path="/editor/:id">
-              <LayoutEditor />
+              <ProtectedRoute>
+                <LayoutEditor />
+              </ProtectedRoute>
             </Route>
           </Switch>
         </BrowserRouter>

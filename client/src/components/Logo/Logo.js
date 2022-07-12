@@ -6,7 +6,7 @@ import logoChiaro from "../../assets/images/logo_sfondo_chiaro.svg";
 export default function Logo({ className, theme }) {
   return (
     <>
-      {theme === "dark" ? (
+      {theme === "dark" || theme === null ? (
         <img className={`${className}`} src={logoScuro} alt="logo" />
       ) : (
         <img className={`${className}`} src={logoChiaro} alt="logo" />
