@@ -6,7 +6,7 @@ import offsetIcon from "../../assets/images/icons/black/pencil-ruler-solid.svg";
 import { setLoading } from "../../features/loading/loadingSlice";
 import { getScene } from "../../features/scene/sceneSlice";
 import useGetMesh from "../../hooks/useGetMesh";
-import { getOffsetMesh } from "../../utils/api";
+import { getOffsetMesh } from "../../services/api";
 import { createMeshFromObject } from "../../utils/functions/createMeshFromObject";
 import Button from "../Button/Button";
 

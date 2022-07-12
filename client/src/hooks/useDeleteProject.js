@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { dispatchError } from "../features/error/errorSlice";
-import { deleteProject } from "../utils/api";
+import { deleteProject } from "../services/api";
 
 export const useDeleteProject = () => {
   const dispatch = useDispatch();

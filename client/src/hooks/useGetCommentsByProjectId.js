@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProjectComments, setProjectComments } from "../features/comments/commentsSlice";
 import { dispatchError } from "../features/error/errorSlice";
 import { setLoading } from "../features/loading/loadingSlice";
-import { getCommentsByProjectId } from "../utils/api";
+import { getCommentsByProjectId } from "../services/api";
 
 export const useGetCommentsByProjectId = () => {
   const dispatch = useDispatch();

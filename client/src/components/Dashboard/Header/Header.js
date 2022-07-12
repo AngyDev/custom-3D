@@ -5,8 +5,8 @@ import plus from "../../../assets/images/icons/white/plus-solid.svg";
 import Modal from "../../Modal/Modal";
 import NewProject from "../NewProject/NewProject";
 import { useHistory } from "react-router";
-import { UserContext } from "../../../context/UserContext";
-import { saveProject } from "../../../utils/api";
+import { useAuth } from "../../../context/AuthContext";
+import { saveProject } from "../../../services/api";
 import Theme from "../../Theme/Theme";
 import { ThemeContext } from "../../../context/ThemeContext";
 
@@ -15,7 +15,7 @@ export default function Header() {
   const [active, setActive] = useState(false);
 
   const history = useHistory();
-  const { user } = useContext(UserContext);
+  const { user } = useAuth();
   const [theme] = useContext(ThemeContext);
 
   const saveNewProject = async (data) => {
