@@ -1,11 +1,15 @@
 import React from "react";
-import Button from "../../components/Button/Button";
 import { useForm } from "react-hook-form";
+import { Link, useHistory } from "react-router-dom";
 import InputForm from "../../components/atoms/InputForm/InputForm";
+import Button from "../../components/Button/Button";
+import { useAuth } from "../../context/AuthContext";
+import { registerUser } from "../../services/api";
 import LayoutAuth from "../LayoutAuth/LayoutAuth";
-import { Link } from "react-router-dom";
 
 export default function Register() {
+  const { login } = useAuth();
+  const history = useHistory();
   const {
     handleSubmit,
     register,
@@ -13,11 +17,17 @@ export default function Register() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
     if (data.password !== data.confPassword) {
       setError("confPassword", { type: "custom", message: "The passwords do not match" });
     }
+
+    const user = await registerUser(data);
+
+    login(user);
+
+    history.push("/dashboard");
   };
 
   return (

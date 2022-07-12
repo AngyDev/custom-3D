@@ -2,6 +2,11 @@ import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
+/**
+ * Get the user by login info
+ * @param {Object} login Email and password of the user
+ * @returns The user
+ */
 export const getUser = async (login) => {
   try {
     const response = await axios.post(`${API_URL}/login`, login, { withCredentials: true });
@@ -12,6 +17,20 @@ export const getUser = async (login) => {
   }
 };
 
+/**
+ * Insert a new user
+ * @param {Object} user User object
+ * @returns Th user
+ */
+export const registerUser = async (user) => {
+  return await axios.post(`${API_URL}/register`, user, { withCredentials: true });
+};
+
+/**
+ * Get the project by project id
+ * @param {String} id Project id
+ * @returns the project
+ */
 export const getProjectById = async (id) => {
   return await axios.get(`${API_URL}/project/${id}`, { withCredentials: true });
 };
@@ -30,6 +49,10 @@ export const getProjectsByUserId = async (userId) => {
   return await axios.get(`${API_URL}/project-user/${userId}`, { withCredentials: true });
 };
 
+/**
+ * Get users
+ * @returns The list of all users
+ */
 export const getUsers = async () => {
   return await axios.get(`${API_URL}/users`, { withCredentials: true });
 };
