@@ -1,12 +1,18 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { TokenController } = require("../controllers/TokenController");
 const { UsersController } = require("../controllers/UsersController");
 const { HttpError } = require("../error");
+const { verifyRefreshToken } = require("../middleware/auth");
 const { errorHandler } = require("../utils");
 const { validateUser, validateLogin } = require("../validation/validate");
 
 const generateToken = (userId) => {
-  return jwt.sign({ userId: userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
+  return jwt.sign({ userId: userId }, process.env.JWT_SECRET, { expiresIn: "15s" });
+};
+
+const generateRefreshToken = (userId) => {
+  return jwt.sign({ userId: userId }, process.env.REFRESH_TOKEN, { expiresIn: "7d" });
 };
 
 const login = errorHandler(async (req, res) => {
@@ -28,9 +34,24 @@ const login = errorHandler(async (req, res) => {
 
   // if the password is correct create a token for the user
   if (isPasswordValid) {
-    const token = generateToken(user[0].id);
-    // set the token in the cookie
+    // checks if the user has a refresh token
+    const refreshTokenUser = await TokenController.getTokenByUserId(user[0].id);
 
+    console.log("refreshToken", refreshTokenUser);
+
+    let newRefreshToken = "";
+
+    if (refreshTokenUser.length === 0) {
+      // if the user doesn't have a refresh token create one
+      newRefreshToken = generateRefreshToken(user[0].id);
+
+      // save the refresh token in the database
+      await TokenController.createToken(user[0].id, newRefreshToken);
+    }
+
+    const token = generateToken(user[0].id);
+
+    // set the token in the cookie
     res.cookie("token", token, {
       httpOnly: true,
       sameSite: "lax",
@@ -38,11 +59,18 @@ const login = errorHandler(async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     });
 
+    res.cookie("refreshToken", refreshTokenUser.length === 0 ? newRefreshToken : refreshTokenUser[0].token, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+      maxAge: 7 * 14 * 60 * 60 * 1000, // 7 days
+    });
+
     // return the user
     return user;
   } else {
     // if the password is incorrect return an error
-    throw new HttpError(401, "Invalid password");
+    throw new HttpError(403, "Invalid password");
   }
 });
 
@@ -70,6 +98,13 @@ const register = errorHandler(async (req, res) => {
 
   // create token for the user
   const token = generateToken(newUser.id);
+  // create the refresh token for the user
+  const refreshToken = generateRefreshToken(newUser.id);
+
+  // save the refresh token in the database
+  const savedToken = await TokenController.createToken(refreshToken, newUser.id);
+
+  console.log(savedToken);
 
   // set the token in the cookie
   res.cookie("token", token, {
@@ -78,8 +113,41 @@ const register = errorHandler(async (req, res) => {
     secure: false,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   });
+
+  res.cookie("refreshToken", refreshToken, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+    maxAge: 7 * 14 * 60 * 60 * 1000, // 7 days
+  });
+
   // return the user
   return newUser;
+});
+
+const refreshToken = errorHandler(async (req, res) => {
+  try {
+    // get the token from the cookie
+    const refreshToken = req.cookies.refreshToken;
+
+    // verify the jwt token and if it is present on the db
+    const decodedToken = verifyRefreshToken(refreshToken);
+
+    // create a new token for the user
+    const newToken = generateToken(decodedToken.userId);
+
+    // set the token in the cookie
+    res.cookie("token", newToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    });
+
+    return { message: "Token refreshed" };
+  } catch (error) {
+    throw new HttpError(401, "Invalid refresh token");
+  }
 });
 
 const logout = errorHandler(async (req, res) => {
@@ -89,4 +157,4 @@ const logout = errorHandler(async (req, res) => {
   return { message: "Success" };
 });
 
-module.exports = { login, register, logout };
+module.exports = { login, register, refreshToken, logout };

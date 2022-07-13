@@ -44,14 +44,9 @@ app.use("/api/", require("./routes/comments"));
 app.use("/api/", require("./routes/objects"));
 app.use("/api/", require("./routes/threeCalculations"));
 
-// Catch the error and print it in console
-app.use((err, req, res, next) => {
-  console.error(err);
-  next(err);
-});
-
 // Catch the error and return on client
 app.use((err, req, res, next) => {
+  console.error(err);
   res.status(err.statusCode || 500).send({ error: err.message });
 });
 

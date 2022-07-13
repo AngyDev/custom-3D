@@ -1,9 +1,10 @@
 const { HttpError } = require("../error");
 const { errorHandler } = require("../utils");
 const jwt = require("jsonwebtoken");
+const { TokenController } = require("../controllers/TokenController");
 const { TokenExpiredError } = jwt;
 
-// get the token from the cookie and verufy it
+// get the token from the cookie and verify it
 const verifyToken = (req, res, next) => {
   console.log("verifyToken");
   const token = req.cookies.token;
@@ -23,6 +24,29 @@ const verifyToken = (req, res, next) => {
   });
 };
 
+const verifyRefreshToken = async (token) => {
+  const decodeToken = () => {
+    try {
+      return jwt.verify(token, process.env.REFRESH_TOKEN);
+    } catch (error) {
+      throw new HttpError(401, "Invalid refresh token");
+    }
+  };
+
+  const decodedToken = decodeToken();
+  
+  console.log(decodedToken);
+  
+  // check if the token exists
+  const tokenExists = await TokenController.getTokenByUserId(decodedToken.userId);
+
+  if (!tokenExists) {
+    throw new HttpError(401, "Invalid refresh token");
+  } else {
+    return decodedToken;
+  }
+};
+
 const catchError = (err, res) => {
   if (err instanceof TokenExpiredError) {
     return res.status(401).send("Token expired");
@@ -31,4 +55,4 @@ const catchError = (err, res) => {
   return res.status(401).send("Unauthorized");
 };
 
-module.exports = { verifyToken };
+module.exports = { verifyToken, verifyRefreshToken };
