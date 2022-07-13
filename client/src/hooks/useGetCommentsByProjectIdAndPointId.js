@@ -13,7 +13,7 @@ export const useGetCommentsByProjectIdAndPointId = () => {
         dispatch(setComments(res.data));
       })
       .catch((error) => {
-        dispatch(dispatchError(error.message));
+        dispatch(dispatchError(error));
       });
   };
 

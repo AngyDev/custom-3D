@@ -20,15 +20,13 @@ export default function Login() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
-
     getUser(data)
       .then((response) => {
         login(response.data[0]);
         history.push("/dashboard");
       })
       .catch((error) => {
-        dispatch(dispatchError(error.message));
+        dispatch(dispatchError(error));
       });
   };
 

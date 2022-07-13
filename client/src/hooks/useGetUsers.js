@@ -13,7 +13,7 @@ export default function useGetUsers() {
         setUsers(res.data);
       })
       .catch((error) => {
-        dispatch(dispatchError(error.message));
+        dispatch(dispatchError(error));
       });
   }, []);
 

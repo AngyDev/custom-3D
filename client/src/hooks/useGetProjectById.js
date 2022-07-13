@@ -15,7 +15,7 @@ export default function useGetProjectById() {
         // setProject(res.data);
       })
       .catch((error) => {
-        dispatch(dispatchError(error.message));
+        dispatch(dispatchError(error));
       });
   }, []);
 

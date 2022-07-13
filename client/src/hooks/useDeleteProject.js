@@ -9,7 +9,7 @@ export const useDeleteProject = () => {
     await deleteProject(id)
       .then(() => {})
       .catch((error) => {
-        dispatch(dispatchError(error.message));
+        dispatch(dispatchError(error));
       });
   };
 

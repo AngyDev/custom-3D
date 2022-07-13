@@ -19,7 +19,7 @@ export const useGetCommentsByProjectId = () => {
         })
         .catch((error) => {
           dispatch(setLoading(false));
-          dispatch(dispatchError(error.message));
+          dispatch(dispatchError(error));
         });
     },
     [dispatch],

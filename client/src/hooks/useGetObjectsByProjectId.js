@@ -19,7 +19,7 @@ export const useGetObjectsByProjectId = () => {
         })
         .catch((error) => {
           dispatch(setLoading(false));
-          dispatch(dispatchError(error.message));
+          dispatch(dispatchError(error));
         });
     },
     [dispatch],

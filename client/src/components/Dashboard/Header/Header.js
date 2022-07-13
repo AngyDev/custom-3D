@@ -24,13 +24,11 @@ export default function Header() {
   const saveNewProject = (data) => {
     saveProject(user.id, data)
       .then((response) => {
-        console.log("saveProject", response);
         setIsOpen(false);
         history.push(`/editor/${response.data.id}`);
       })
       .catch((error) => {
-        console.log("error", error);
-        dispatch(dispatchError(error.message));
+        dispatch(dispatchError(error));
       });
   };
 

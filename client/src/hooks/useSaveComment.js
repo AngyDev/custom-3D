@@ -11,7 +11,7 @@ export default function useSaveComment() {
       await saveComment(comment)
         .then(() => {})
         .catch((error) => {
-          dispatch(dispatchError(error.message));
+          dispatch(dispatchError(error));
         });
     },
   };

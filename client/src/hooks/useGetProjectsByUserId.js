@@ -18,7 +18,7 @@ export default function useGetProjectsByUserId() {
         dispatch(setLoading(false));
       })
       .catch((error) => {
-        dispatch(dispatchError(error.message));
+        dispatch(dispatchError(error));
         dispatch(setLoading(false));
       });
   }, []);

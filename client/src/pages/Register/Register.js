@@ -32,7 +32,7 @@ export default function Register() {
         history.push("/dashboard");
       })
       .catch((error) => {
-        dispatch(dispatchError(error.message));
+        dispatch(dispatchError(error));
       });
   };
 
