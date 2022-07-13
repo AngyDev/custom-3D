@@ -38,11 +38,19 @@ axiosService.interceptors.response.use(
   },
   async (error) => {
     console.log("error", error);
-    if (error.response.status === 401) {
-      window.location = "/";
+    if (error.response !== undefined) {
+      if (error.response.status === 401) {
+        // window.location = "/";
+        const response = await axiosService.post("/refresh", {});
+
+        if (response.status === 200) {
+          return axiosService(error.config); // contains all the information of the previous request that failed
+        }
+      }
     }
 
-    return error;
+    // Use promise reject to have, in the api call, the error in the "catch" and not a response in the "then"
+    return Promise.reject(error);
   },
 );
 
