@@ -13,10 +13,7 @@ const app = express();
 const port = process.env.NODE_PORT || 3000;
 const host = process.env.NODE_HOST || "0.0.0.0";
 
-// var corsOption = { origin: "http://localhost:9000" };
-// app.use(cors(corsOption));
-
-// app.use(cors({ origin: "http://localhost:9000", credentials: true }));
+app.use(cors({ origin: "http://localhost:9000", credentials: true }));
 
 app.use(express.static(__dirname + "public"));
 app.use(morgan("dev"));
@@ -46,10 +43,6 @@ app.use("/api/", require("./routes/projects"));
 app.use("/api/", require("./routes/comments"));
 app.use("/api/", require("./routes/objects"));
 app.use("/api/", require("./routes/threeCalculations"));
-
-// app.use("/welcome", verifyToken, (req, res) => {
-//   res.send("Welcome");
-// })
 
 // Catch the error and print it in console
 app.use((err, req, res, next) => {

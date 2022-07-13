@@ -9,6 +9,8 @@ import { useAuth } from "../../../context/AuthContext";
 import { saveProject } from "../../../services/api";
 import Theme from "../../Theme/Theme";
 import { ThemeContext } from "../../../context/ThemeContext";
+import { useDispatch } from "react-redux";
+import { dispatchError } from "../../../features/error/errorSlice";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,11 +19,19 @@ export default function Header() {
   const history = useHistory();
   const { user } = useAuth();
   const [theme] = useContext(ThemeContext);
+  const dispatch = useDispatch();
 
-  const saveNewProject = async (data) => {
-    const response = await saveProject(user.id, data);
-    setIsOpen(false);
-    history.push(`/editor/${response.id}`);
+  const saveNewProject = (data) => {
+    saveProject(user.id, data)
+      .then((response) => {
+        console.log("saveProject", response);
+        setIsOpen(false);
+        history.push(`/editor/${response.data.id}`);
+      })
+      .catch((error) => {
+        console.log("error", error);
+        dispatch(dispatchError(error.message));
+      });
   };
 
   const openModal = () => {

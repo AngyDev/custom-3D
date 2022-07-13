@@ -6,24 +6,30 @@ import LayoutAuth from "../LayoutAuth/LayoutAuth";
 import { Link, useHistory } from "react-router-dom";
 import { getUser } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
+import { useDispatch } from "react-redux";
+import { dispatchError } from "../../features/error/errorSlice";
 
 export default function Login() {
   const { login } = useAuth();
   const history = useHistory();
+  const dispatch = useDispatch();
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     console.log(data);
 
-    const user = await getUser(data);
-
-    login(user[0]);
-
-    history.push("/dashboard");
+    getUser(data)
+      .then((response) => {
+        login(response.data[0]);
+        history.push("/dashboard");
+      })
+      .catch((error) => {
+        dispatch(dispatchError(error.message));
+      });
   };
 
   return (

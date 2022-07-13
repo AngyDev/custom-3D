@@ -26,10 +26,11 @@ export default function Header({ project }) {
   }, []);
 
   const toDashboard = () => {
+    // TODO: check all the elements to remove from the store
     dispatch(setScene({}));
     dispatch(setPositionVector({}));
     dispatch(setProject({}));
-    history.push("/");
+    history.push("/dashboard");
   };
 
   return (

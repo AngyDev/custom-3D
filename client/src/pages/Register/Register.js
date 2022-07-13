@@ -1,15 +1,18 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import InputForm from "../../components/atoms/InputForm/InputForm";
 import Button from "../../components/Button/Button";
 import { useAuth } from "../../context/AuthContext";
+import { dispatchError } from "../../features/error/errorSlice";
 import { registerUser } from "../../services/api";
 import LayoutAuth from "../LayoutAuth/LayoutAuth";
 
 export default function Register() {
   const { login } = useAuth();
   const history = useHistory();
+  const dispatch = useDispatch();
   const {
     handleSubmit,
     register,
@@ -23,11 +26,14 @@ export default function Register() {
       setError("confPassword", { type: "custom", message: "The passwords do not match" });
     }
 
-    const user = await registerUser(data);
-
-    login(user);
-
-    history.push("/dashboard");
+    registerUser(data)
+      .then((response) => {
+        login(response.data);
+        history.push("/dashboard");
+      })
+      .catch((error) => {
+        dispatch(dispatchError(error.message));
+      });
   };
 
   return (
