@@ -205,3 +205,7 @@ export const deleteComment = async (commentId) => {
     return false;
   }
 };
+
+export const getLogout = async () => {
+  return await axios.post("/logout");
+};
