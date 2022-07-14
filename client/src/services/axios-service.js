@@ -33,11 +33,9 @@ const axiosService = axios.create({
 
 axiosService.interceptors.response.use(
   (response) => {
-    console.log("response", response);
     return response;
   },
   async (error) => {
-    console.log("error", error);
     if (error.response !== undefined) {
       if (error.response.status === 401) {
         // window.location = "/";
@@ -46,6 +44,9 @@ axiosService.interceptors.response.use(
         if (response.status === 200) {
           return axiosService(error.config); // contains all the information of the previous request that failed
         }
+      } else if (error.response.status === 403) {
+        // in case the refresh token is expired
+        window.location = "/";
       }
     }
 

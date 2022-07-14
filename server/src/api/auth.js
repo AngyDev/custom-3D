@@ -5,16 +5,30 @@ const { UsersController } = require("../controllers/UsersController");
 const { HttpError } = require("../error");
 const { verifyRefreshToken } = require("../middleware/auth");
 const { errorHandler } = require("../utils");
+const { parseJwt, isExpired } = require("../utils/token-utils");
 const { validateUser, validateLogin } = require("../validation/validate");
 
+/**
+ * Generate a new token for the user
+ * @param {String} userId
+ * @returns The token
+ */
 const generateToken = (userId) => {
   return jwt.sign({ userId: userId }, process.env.JWT_SECRET, { expiresIn: "15s" });
 };
 
+/**
+ * Generate a new refresh token for the user
+ * @param {String} userId
+ * @returns The refresh token
+ */
 const generateRefreshToken = (userId) => {
   return jwt.sign({ userId: userId }, process.env.REFRESH_TOKEN, { expiresIn: "7d" });
 };
 
+/**
+ * Login a user
+ */
 const login = errorHandler(async (req, res) => {
   // get the email and password from the request
   const { email, password } = req.body;
@@ -37,8 +51,6 @@ const login = errorHandler(async (req, res) => {
     // checks if the user has a refresh token
     const refreshTokenUser = await TokenController.getTokenByUserId(user[0].id);
 
-    console.log("refreshToken", refreshTokenUser);
-
     let newRefreshToken = "";
 
     if (refreshTokenUser.length === 0) {
@@ -47,6 +59,18 @@ const login = errorHandler(async (req, res) => {
 
       // save the refresh token in the database
       await TokenController.createToken(user[0].id, newRefreshToken);
+    } else {
+      // decode the refresh token
+      const decoded = parseJwt(refreshTokenUser[0].token);
+
+      // checks if the refresh token is expired
+      if (isExpired(decoded)) {
+        // if the refresh token is expired create a new one
+        newRefreshToken = generateRefreshToken(user[0].id);
+
+        // update the refresh token in the database
+        await TokenController.updateToken(refreshTokenUser[0].id, newRefreshToken);
+      }
     }
 
     const token = generateToken(user[0].id);
@@ -59,7 +83,7 @@ const login = errorHandler(async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     });
 
-    res.cookie("refreshToken", refreshTokenUser.length === 0 ? newRefreshToken : refreshTokenUser[0].token, {
+    res.cookie("refreshToken", newRefreshToken !== "" ? newRefreshToken : refreshTokenUser[0].token, {
       httpOnly: true,
       sameSite: "lax",
       secure: false,
@@ -70,10 +94,13 @@ const login = errorHandler(async (req, res) => {
     return user;
   } else {
     // if the password is incorrect return an error
-    throw new HttpError(403, "Invalid password");
+    throw new HttpError(404, "Invalid password");
   }
 });
 
+/**
+ * Register a new user
+ */
 const register = errorHandler(async (req, res) => {
   // get the user from the request
   const { firstName, lastName, email, password } = req.body;
@@ -102,9 +129,7 @@ const register = errorHandler(async (req, res) => {
   const refreshToken = generateRefreshToken(newUser.id);
 
   // save the refresh token in the database
-  const savedToken = await TokenController.createToken(refreshToken, newUser.id);
-
-  console.log(savedToken);
+  const savedToken = await TokenController.createToken(newUser.id, refreshToken);
 
   // set the token in the cookie
   res.cookie("token", token, {
@@ -125,32 +150,56 @@ const register = errorHandler(async (req, res) => {
   return newUser;
 });
 
+/**
+ * Refresh the access token
+ */
 const refreshToken = errorHandler(async (req, res) => {
-  try {
-    // get the token from the cookie
-    const refreshToken = req.cookies.refreshToken;
+  const refreshToken = req.cookies.refreshToken;
+  let newRefreshToken = "";
 
-    // verify the jwt token and if it is present on the db
-    const decodedToken = verifyRefreshToken(refreshToken);
+  // decode the refresh token
+  const decoded = parseJwt(refreshToken);
 
-    // create a new token for the user
-    const newToken = generateToken(decodedToken.userId);
+  // if the refreshToken is expired create a new one
+  if (isExpired(decoded)) {
+    // remove token from the database
+    await TokenController.deleteTokenByUserId(decoded.userId);
 
-    // set the token in the cookie
-    res.cookie("token", newToken, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: false,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    });
+    res.cookie("token", "", { httpOnly: false, sameSite: "lax", secure: false, maxAge: 0 });
+    res.cookie("refreshToken", "", { httpOnly: false, sameSite: "lax", secure: false, maxAge: 0 });
 
-    return { message: "Token refreshed" };
-  } catch (error) {
-    throw new HttpError(401, "Invalid refresh token");
+    throw new HttpError(403, "Refresh token expired");
   }
+
+  // verify the jwt token and if it is present on the db
+  const decodedToken = await verifyRefreshToken(refreshToken, res);
+
+  console.log(decodedToken);
+
+  // check if the token exists
+  const tokenExists = await TokenController.getTokenByUserId(decodedToken.userId);
+
+  if (tokenExists.length === 0) {
+    throw new HttpError(403, "Invalid refresh token");
+  }
+
+  // create a new token for the user
+  const newToken = generateToken(newRefreshToken.userId);
+
+  // set the token in the cookie
+  res.cookie("token", newToken, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  });
+
+  return { message: "Token refreshed" };
 });
 
 const logout = errorHandler(async (req, res) => {
+  // remove token from the database
+
   res.cookie("token", "", { httpOnly: false, sameSite: "lax", secure: false, maxAge: 0 });
   res.cookie("refreshToken", "", { httpOnly: false, sameSite: "lax", secure: false, maxAge: 0 });
 

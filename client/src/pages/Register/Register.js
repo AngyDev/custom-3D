@@ -24,16 +24,16 @@ export default function Register() {
     console.log(data);
     if (data.password !== data.confPassword) {
       setError("confPassword", { type: "custom", message: "The passwords do not match" });
+    } else {
+      registerUser(data)
+        .then((response) => {
+          login(response.data);
+          history.push("/dashboard");
+        })
+        .catch((error) => {
+          dispatch(dispatchError(error));
+        });
     }
-
-    registerUser(data)
-      .then((response) => {
-        login(response.data);
-        history.push("/dashboard");
-      })
-      .catch((error) => {
-        dispatch(dispatchError(error));
-      });
   };
 
   return (

@@ -36,12 +36,33 @@ class TokenController {
   }
 
   /**
+   * Update the token string by user id
+   * @param {String} userId The user id
+   * @param {String} token The token string
+   * @returns 
+   */
+  static updateToken(tokenId, token) {
+    return TokenModel.query().updateAndFetchById(tokenId, {
+      token: token,
+    });
+  }
+
+  /**
    * Remove the token by id
    * @param {String} id The token id
    * @returns
    */
   static deleteToken(id) {
     return TokenModel.query().deleteById(id);
+  }
+
+  /**
+   * Remove the token by user id
+   * @param {String} userId The user id
+   * @returns
+   */
+  static deleteTokenByUserId(userId) {
+    return TokenModel.query().delete().where("userId", userId);
   }
 }
 
