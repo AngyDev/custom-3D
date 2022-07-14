@@ -13,6 +13,7 @@ import Screenshot from "../Screenshot/Screenshot";
 import { setPositionVector, setScene } from "../../features/scene/sceneSlice";
 import Share from "../Share/Share";
 import { setProject } from "../../features/project/projectSlice";
+import Profile from "../Profile/Profile";
 
 export default function Header({ project }) {
   const headerRef = useRef(null);
@@ -48,7 +49,7 @@ export default function Header({ project }) {
         <h1 className="text-white">{project.projectName}</h1>
       </div>
       <div>
-        <div></div>
+        <Profile />
       </div>
     </div>
   );

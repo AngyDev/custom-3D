@@ -11,6 +11,7 @@ import Theme from "../../Theme/Theme";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { useDispatch } from "react-redux";
 import { dispatchError } from "../../../features/error/errorSlice";
+import Profile from "../../Profile/Profile";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,13 +45,14 @@ export default function Header() {
 
   return (
     <div className="container-component flex w-full h-18 bg-baseLight dark:bg-base text-white p-3">
-      <div className="flex gap-5 w-full justify-between">
+      <div className="flex gap-5 w-full items-center">
         <div className="flex flex-row gap-5 items-center">
           <Logo className="h-10" theme={theme} />
           <Button text="Nuovo" img={plus} onClick={openModal} title="Nuovo" active={active} />
         </div>
-        <div>
+        <div className="flex gap-5 items-center ml-auto">
           <Theme />
+          <Profile />
         </div>
       </div>
       {isOpen && (
