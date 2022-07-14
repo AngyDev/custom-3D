@@ -14,7 +14,7 @@ const { validateUser, validateLogin } = require("../validation/validate");
  * @returns The token
  */
 const generateToken = (userId) => {
-  return jwt.sign({ userId: userId }, process.env.JWT_SECRET, { expiresIn: "15s" });
+  return jwt.sign({ userId: userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
 };
 
 /**
@@ -174,8 +174,6 @@ const refreshToken = errorHandler(async (req, res) => {
   // verify the jwt token and if it is present on the db
   const decodedToken = await verifyRefreshToken(refreshToken, res);
 
-  console.log(decodedToken);
-
   // check if the token exists
   const tokenExists = await TokenController.getTokenByUserId(decodedToken.userId);
 
@@ -199,6 +197,7 @@ const refreshToken = errorHandler(async (req, res) => {
 
 const logout = errorHandler(async (req, res) => {
   // remove token from the database
+  await TokenController.deleteTokenByUserId(req.body.userId);
 
   res.cookie("token", "", { httpOnly: false, sameSite: "lax", secure: false, maxAge: 0 });
   res.cookie("refreshToken", "", { httpOnly: false, sameSite: "lax", secure: false, maxAge: 0 });

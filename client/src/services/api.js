@@ -206,6 +206,6 @@ export const deleteComment = async (commentId) => {
   }
 };
 
-export const getLogout = async () => {
-  return await axios.post("/logout");
+export const getLogout = async (userId) => {
+  return await axios.post("/logout", { userId });
 };

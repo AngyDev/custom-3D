@@ -13,7 +13,7 @@ export default function Profile() {
   const changePassword = () => {};
 
   const logoutUser = () => {
-    getLogout()
+    getLogout(user.id)
       .then(() => logout())
       .catch((error) => dispatch(dispatchError(error)));
   };
