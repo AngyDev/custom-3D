@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Alert from "../../components/Alert/Alert";
@@ -17,6 +17,19 @@ export default function App() {
   const loading = useSelector(getLoading);
   const isOpen = !!error && error.error !== "";
   const dispatch = useDispatch();
+
+  // add alert when user reload or leave the page
+  useEffect(() => {
+    window.addEventListener("beforeunload", alertUser);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+    };
+  }, []);
+
+  const alertUser = (e) => {
+    e.preventDefault();
+    e.returnValue = "";
+  };
 
   const closeModal = () => {
     dispatch(dispatchError(""));
