@@ -9,7 +9,7 @@ export default function LayoutAuth({ children, title }) {
         <HeaderAuth />
         <div className="auth-container">
           <h1 className="dark:text-black text-gray-300 text-4xl text-center">{title}</h1>
-          <div className="flex w-full mt-6">{children}</div>
+          <div className="flex w-full mt-4">{children}</div>
         </div>
       </div>
     </div>

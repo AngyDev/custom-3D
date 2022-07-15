@@ -58,7 +58,7 @@ export default function Header() {
       {isOpen && (
         <div>
           <Modal open={isOpen} onClose={closeModal} title="New Project" text="Save">
-            <NewProject isOpen={isOpen} saveNewProject={saveNewProject} onClose={closeModal} />
+            <NewProject saveNewProject={saveNewProject} onClose={closeModal} />
           </Modal>
         </div>
       )}
