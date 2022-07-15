@@ -10,13 +10,16 @@ import Panel from "../Panel/Panel";
 import minusIcon from "../../assets/images/icons/white/minus-solid.svg";
 import plusIcon from "../../assets/images/icons/white/plus-solid.svg";
 import AddScrew from "../AddScrew/AddScrew";
+import SwitchIcon from "../atoms/SwitchIcon/SwitchIcon";
 
 export default function Sidebar() {
   const sidebarRef = useRef(null);
   const dispatch = useDispatch();
-  const openMeausurePanel = useSelector(getOpenMeausurePanel);
+  const openMeasurePanel = useSelector(getOpenMeausurePanel);
   const [openScene, setOpenScene] = useState(true);
+  const [openPlane, setOpenPlane] = useState(true);
   const [openScrew, setOpenScrew] = useState(false);
+  const [openMeasure, setOpenMeasure] = useState(!openMeasurePanel);
 
   useEffect(() => {
     const sidebarCurrent = sidebarRef.current;
@@ -30,7 +33,7 @@ export default function Sidebar() {
         <div className="properties">Tools</div>
         <div className="sidebar__btn-space flex">
           <AddPlane />
-          <Measurements openPanel={openMeausurePanel} />
+          <Measurements openPanel={openMeasurePanel} />
           <AddScrew setOpenScrew={setOpenScrew} />
         </div>
         <div className="sidebar__btn-space">
@@ -42,34 +45,64 @@ export default function Sidebar() {
         <div className="scene__panel">
           <div className="properties flex justify-between items-center">
             <span>Scene tree</span>
-            {openScene ? (
-              <img className="w-4 h-4 cursor-pointer" src={minusIcon} alt="Minus" onClick={() => setOpenScene(false)} />
-            ) : (
-              <img className="w-4 h-4 cursor-pointer" src={plusIcon} alt="Plus" onClick={() => setOpenScene(true)} />
-            )}
+            <SwitchIcon
+              showIcon={openScene}
+              className="w-4 h-4 cursor-pointer"
+              icon={minusIcon}
+              altIcon="Minus"
+              altIconSwitch="Plus"
+              iconSwitch={plusIcon}
+              onClick={() => setOpenScene(!openScene)}
+            />
           </div>
           {openScene && <Panel type="scene" />}
         </div>
         <div className="scene__panel">
-          <div className="properties">Planes tree & tools</div>
+          <div className="properties flex justify-between items-center">
+            <span>Planes tree & tools</span>
+            <SwitchIcon
+              showIcon={openPlane}
+              className="w-4 h-4 cursor-pointer"
+              icon={minusIcon}
+              altIcon="Minus"
+              altIconSwitch="Plus"
+              iconSwitch={plusIcon}
+              onClick={() => setOpenPlane(!openPlane)}
+            />
+          </div>
           <Clipping />
           <div className="mb-2"></div>
-          <Panel type="planes" scroll={scroll} />
+          {openPlane && <Panel type="planes" scroll={scroll} />}
         </div>
-        {openMeausurePanel && (
+        {openMeasurePanel && (
           <div className="scene__panel">
-            <div className="properties">Measurements tree</div>
-            <Panel type="measure" />
+            <div className="properties flex justify-between items-center">
+              <span>Measurements tree</span>
+              <SwitchIcon
+                showIcon={openMeasure}
+                className="w-4 h-4 cursor-pointer"
+                icon={minusIcon}
+                altIcon="Minus"
+                altIconSwitch="Plus"
+                iconSwitch={plusIcon}
+                onClick={() => setOpenMeasure(!openMeasure)}
+              />
+            </div>
+            {openMeasure && <Panel type="measure" />}
           </div>
         )}
         <div className="scene__panel">
           <div className="properties flex justify-between items-center">
             <span>Screw tree</span>
-            {openScrew ? (
-              <img className="w-4 h-4 cursor-pointer" src={minusIcon} alt="Minus" onClick={() => setOpenScrew(false)} />
-            ) : (
-              <img className="w-4 h-4 cursor-pointer" src={plusIcon} alt="Plus" onClick={() => setOpenScrew(true)} />
-            )}
+            <SwitchIcon
+              showIcon={openScrew}
+              className="w-4 h-4 cursor-pointer"
+              icon={minusIcon}
+              altIcon="Minus"
+              altIconSwitch="Plus"
+              iconSwitch={plusIcon}
+              onClick={() => setOpenScrew(!openScrew)}
+            />
           </div>
           {openScrew && <Panel type="screw" />}
         </div>
