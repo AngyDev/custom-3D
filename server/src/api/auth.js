@@ -94,7 +94,7 @@ const login = errorHandler(async (req, res) => {
     return user;
   } else {
     // if the password is incorrect return an error
-    throw new HttpError(404, "Invalid password");
+    throw new HttpError(409, "Invalid password");
   }
 });
 
@@ -205,4 +205,29 @@ const logout = errorHandler(async (req, res) => {
   return { message: "Success" };
 });
 
-module.exports = { login, register, refreshToken, logout };
+const changePassword = errorHandler(async (req, res) => {
+  const { userId, oldPassword, newPassword } = req.body;
+
+  // check if the user exists
+  const user = await UsersController.getUserById(userId);
+
+  if (!user) {
+    throw new HttpError(404, "User not found");
+  }
+  // compare the old password with the one in the db
+  const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+
+  if (isPasswordValid) {
+    // encrypt the new password
+    const encryptedPassword = await bcrypt.hash(newPassword, 10);
+
+    // update the password in the database
+    await UsersController.updateUser(userId, { password: encryptedPassword });
+
+    return { message: "Password changed" };
+  } else {
+    throw new HttpError(409, "The old password is incorrect");
+  }
+});
+
+module.exports = { login, register, refreshToken, logout, changePassword };

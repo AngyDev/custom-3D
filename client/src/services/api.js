@@ -209,3 +209,11 @@ export const deleteComment = async (commentId) => {
 export const getLogout = async (userId) => {
   return await axios.post("/logout", { userId });
 };
+
+export const changePassword = async (userId, oldPassword, newPassword) => {
+  return await axios.post("/change-password", {
+    userId,
+    oldPassword,
+    newPassword,
+  });
+};
