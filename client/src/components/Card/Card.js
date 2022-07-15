@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../Button/Button";
 import PropTypes from "prop-types";
-import moment from "moment";
+import { format } from "date-fns";
 
 export default function Card({ color, project, onClick, deleteClick }) {
   return (
@@ -30,8 +30,8 @@ export default function Card({ color, project, onClick, deleteClick }) {
           <div className="w-full border-t border-gray-300"></div>
         </div>
         <div className="flex flex-wrap justify-between">
-          <span>Data creazione: {moment(project.createdAt).format("DD/MM/YYYY")}</span>
-          <span>Ultima modifica: {moment(project.updatedAt).format("DD/MM/YYYY")}</span>
+          <span>Data creazione: {format(new Date(project.createdAt), "dd/MM/yyyy")}</span>
+          <span>Ultima modifica: {format(new Date(project.updatedAt), "dd/MM/yyyy")}</span>
         </div>
         <div className="mt-4 flex justify-between">
           <Button text="Apri" title="Apri" onClick={onClick} />

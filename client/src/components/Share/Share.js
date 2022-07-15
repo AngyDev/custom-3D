@@ -5,7 +5,7 @@ import shareIcon from "../../assets/images/icons/white/share-nodes-solid.svg";
 import { setLoading } from "../../features/loading/loadingSlice";
 import { getProject, updatedProject } from "../../features/project/projectSlice";
 import useGetUsers from "../../hooks/useGetUsers";
-import { updateProject } from "../../utils/api";
+import { updateProject } from "../../services/api";
 import { Autocomplete } from "../Autocomplete/Autocomplete";
 import { Badge } from "../Badge/Badge";
 import Button from "../Button/Button";

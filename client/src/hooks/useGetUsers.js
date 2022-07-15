@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { dispatchError } from "../features/error/errorSlice";
-import { getUsers } from "../utils/api";
+import { getUsers } from "../services/api";
 
 export default function useGetUsers() {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ export default function useGetUsers() {
         setUsers(res.data);
       })
       .catch((error) => {
-        dispatch(dispatchError(error.message));
+        dispatch(dispatchError(error));
       });
   }, []);
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { dispatchError } from "../features/error/errorSlice";
 import { setLoading } from "../features/loading/loadingSlice";
 import { getObjects, setObjects } from "../features/objects/objectsSlice";
-import { getObjectsByProjectId } from "../utils/api";
+import { getObjectsByProjectId } from "../services/api";
 
 export const useGetObjectsByProjectId = () => {
   const objects = useSelector(getObjects);
@@ -19,7 +19,7 @@ export const useGetObjectsByProjectId = () => {
         })
         .catch((error) => {
           dispatch(setLoading(false));
-          dispatch(dispatchError(error.message));
+          dispatch(dispatchError(error));
         });
     },
     [dispatch],

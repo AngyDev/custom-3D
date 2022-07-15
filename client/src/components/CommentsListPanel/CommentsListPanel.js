@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
-import { UserContext } from "../../context/UserContext";
+import { useAuth } from "../../context/AuthContext";
 import { getIsTextOpen, setTemporaryComments, getTemporaryComments, removeComment } from "../../features/comments/commentsSlice";
 import { getCommentCounter, setCommentCounter } from "../../features/counters/countersSlice";
 import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
@@ -34,7 +34,7 @@ export default function CommentsListPanel({ projectId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [deleteElem, setDeleteElem] = useState();
 
-  const { user } = useContext(UserContext);
+  const { user } = useAuth();
 
   const temporaryComments = useSelector(getTemporaryComments);
   const [comments, setComments] = useState([]);

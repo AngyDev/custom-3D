@@ -39,5 +39,5 @@ Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
 };

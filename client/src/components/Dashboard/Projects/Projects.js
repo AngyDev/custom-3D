@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
+import { useAuth } from "../../../context/AuthContext";
 import { useDeleteProject } from "../../../hooks/useDeleteProject";
 import useGetProjectsByUserId from "../../../hooks/useGetProjectsByUserId";
 import Card from "../../Card/Card";
 import ModalDelete from "../../Modal/ModalDelete";
 
 export default function Projects() {
+  const { user } = useAuth();
   const { projects, fetchGetProjectsByUserId } = useGetProjectsByUserId();
   const { fetchDeleteProject } = useDeleteProject();
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +15,7 @@ export default function Projects() {
   const history = useHistory();
 
   useEffect(() => {
-    fetchGetProjectsByUserId();
+    fetchGetProjectsByUserId(user.id);
   }, []);
 
   const openProject = (id) => {

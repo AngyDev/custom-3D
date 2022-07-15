@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export default function Button({ typeClass, type, onClick, title, disabled, text, img, active }) {
+export default function Button({ typeClass, type, onClick, title, disabled, text, img, active, imgRight }) {
   return (
     <button
       className={`btn ${typeClass} ${disabled ? "bg-gray-500 cursor-not-allowed disabled:bg-gray-500" : ""} ${active ? "bg-yellow-600" : ""}`}
@@ -10,8 +10,9 @@ export default function Button({ typeClass, type, onClick, title, disabled, text
       title={title}
       disabled={disabled}
     >
-      {img && <img className="w-4 h-4" src={img} alt={title} />}
+      {img && !imgRight && <img className="w-4 h-4" src={img} alt={title} />}
       {text && <span className="pl-2 pr-2">{text}</span>}
+      {imgRight && <img className="w-4 h-4" src={img} alt={title} />}
     </button>
   );
 }
@@ -25,4 +26,5 @@ Button.propTypes = {
   active: PropTypes.bool,
   text: PropTypes.string,
   img: PropTypes.string,
+  imgRight: PropTypes.bool,
 };

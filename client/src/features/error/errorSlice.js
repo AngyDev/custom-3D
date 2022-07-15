@@ -7,7 +7,20 @@ export const errorSlice = createSlice({
   },
   reducers: {
     dispatchError: (state, action) => {
-      state.error = action.payload;
+      let errorText = "";
+
+      if (action.payload !== "") {
+        let errorMessage = "";
+
+        if (action.payload.response) {
+          action.payload.response.status === 500 ? (errorMessage = "Internal server error") : (errorMessage = action.payload.response.data.error);
+          errorText = action.payload.response?.status + " " + errorMessage;
+        } else {
+          errorText = action.payload.message;
+        }
+      }
+
+      state.error = errorText;
     },
   },
 });

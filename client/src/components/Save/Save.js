@@ -7,7 +7,7 @@ import { getChildren, getGroup } from "../../features/scene/sceneSlice";
 import { getObjectsToRemove } from "../../features/objects/objectsSlice";
 import { getTemporaryComments, getProjectComments } from "../../features/comments/commentsSlice";
 import { useGetObjectsByProjectId } from "../../hooks/useGetObjectsByProjectId";
-import { saveObject, updateProject, deleteObject, saveComment } from "../../utils/api";
+import { saveObject, updateProject, deleteObject, saveComment } from "../../services/api";
 import Button from "../Button/Button";
 import Modal from "../Modal/Modal";
 import { useGetCommentsByProjectId } from "../../hooks/useGetCommentsByProjectId";
