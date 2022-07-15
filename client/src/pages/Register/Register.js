@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import InputForm from "../../components/atoms/InputForm/InputForm";
+import ShowPassword from "../../components/atoms/ShowPassword/ShowPassword";
 import Button from "../../components/Button/Button";
 import { useAuth } from "../../context/AuthContext";
 import { dispatchError } from "../../features/error/errorSlice";
@@ -13,6 +14,10 @@ export default function Register() {
   const { login } = useAuth();
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfPassword, setShowConfPassword] = useState(false);
+
   const {
     handleSubmit,
     register,
@@ -33,6 +38,19 @@ export default function Register() {
         .catch((error) => {
           dispatch(dispatchError(error));
         });
+    }
+  };
+
+  const toggle = (id) => {
+    switch (id) {
+      case "password":
+        setShowPassword(!showPassword);
+        break;
+      case "confPassword":
+        setShowConfPassword(!showConfPassword);
+        break;
+      default:
+        break;
     }
   };
 
@@ -75,29 +93,39 @@ export default function Register() {
           />
           {errors.email && <div className="form__error">{errors.email.message}</div>}
         </div>
-        <div className="w-full mb-3">
-          <InputForm
-            label="Password"
-            id="password"
-            type="password"
-            classNameLabel="form__label-black"
-            classNameInput="form__input"
-            register={register}
-            required={"This field is required"}
-          />
-          {errors.password && <div className="form__error">{errors.password.message}</div>}
+        <div className="relative">
+          <div className="w-full mb-3">
+            <InputForm
+              label="Password"
+              id="password"
+              type={showPassword === false ? "password" : "text"}
+              classNameLabel="form__label-black"
+              classNameInput="form__input"
+              register={register}
+              required={"This field is required"}
+            />
+            {errors.password && <div className="form__error">{errors.password.message}</div>}
+          </div>
+          <div className="absolute top-12 right-3">
+            <ShowPassword showPassword={showPassword} onClick={() => toggle("password")} />
+          </div>
         </div>
-        <div className="w-full mb-8">
-          <InputForm
-            label="Confirm Password"
-            id="confPassword"
-            type="password"
-            classNameLabel="form__label-black"
-            classNameInput="form__input"
-            register={register}
-            required={"This field is required"}
-          />
-          {errors.confPassword && <div className="form__error">{errors.confPassword.message}</div>}
+        <div className="relative">
+          <div className="w-full mb-8">
+            <InputForm
+              label="Confirm Password"
+              id="confPassword"
+              type={showConfPassword === false ? "password" : "text"}
+              classNameLabel="form__label-black"
+              classNameInput="form__input"
+              register={register}
+              required={"This field is required"}
+            />
+            {errors.confPassword && <div className="form__error">{errors.confPassword.message}</div>}
+          </div>
+          <div className="absolute top-12 right-3">
+            <ShowPassword showPassword={showConfPassword} onClick={() => toggle("confPassword")} />
+          </div>
         </div>
         <div className="flex flex-col gap-4">
           <Button type="submit" typeClass="modal__btn-confirm w-full" text="Create Account" />
