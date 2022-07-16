@@ -12,6 +12,7 @@ export default function Projects() {
   const { fetchDeleteProject } = useDeleteProject();
   const [isOpen, setIsOpen] = useState(false);
   const [deleteElem, setDeleteElem] = useState();
+  const color = ["bg-card1", "bg-card2", "bg-card3", "bg-card4", "bg-card5", "bg-card6"];
   const history = useHistory();
 
   useEffect(() => {
@@ -39,8 +40,14 @@ export default function Projects() {
       <div className="container-component bg-baseLight dark:bg-base h-screen">
         {Object.keys(projects).length > 0 ? (
           <div className="grid desktop:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {projects.map((project) => (
-              <Card key={project.id} project={project} onClick={() => openProject(project.id)} deleteClick={() => handleDelete(project.id)} />
+            {projects.map((project, i) => (
+              <Card
+                key={project.id}
+                color={color[i % 6]}
+                project={project}
+                onClick={() => openProject(project.id)}
+                deleteClick={() => handleDelete(project.id)}
+              />
             ))}
           </div>
         ) : (

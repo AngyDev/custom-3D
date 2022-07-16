@@ -9,7 +9,7 @@ export default function Card({ color, project, onClick, deleteClick }) {
       <div className={`center w-full h-32 sm:h-38 object-cover ${color ? color : "bg-yellow-400"} p-8 text-justify`}>
         <h1 className="font-bold text-lg">{project.projectName}</h1>
       </div>
-      <div className="m-4">
+      <div className="p-4">
         <span className="font-bold">{project.patientCode}</span>
         <div className="mt-4 mb-4">
           <div className="pb-2">
