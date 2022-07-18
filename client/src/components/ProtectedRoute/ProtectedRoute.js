@@ -6,8 +6,6 @@ import { useAuth } from "../../context/AuthContext";
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
 
-  console.log("user", user);
-
   if (user === null) {
     return <Redirect push to="/" />;
   }
