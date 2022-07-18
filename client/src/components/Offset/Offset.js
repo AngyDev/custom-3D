@@ -5,18 +5,19 @@ import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 import offsetIcon from "../../assets/images/icons/black/pencil-ruler-solid.svg";
 import { setLoading } from "../../features/loading/loadingSlice";
 import { getScene } from "../../features/scene/sceneSlice";
-import useGetMesh from "../../hooks/useGetMesh";
+import { findById } from "../../utils/common-utils";
 import { getOffsetMesh } from "../../services/api";
 import { createMeshFromObject } from "../../utils/functions/createMeshFromObject";
 import Button from "../Button/Button";
 
-export default function Offset({ mesh }) {
+export default function Offset({ meshId }) {
   const scene = useSelector(getScene);
   const dispatch = useDispatch();
 
-  const meshToOffset = useGetMesh(mesh);
   const [newObject, setNewObject] = useState();
   const [offset, setOffset] = useState();
+
+  const meshToOffset = findById(meshId)(scene.children);
 
   const changeScale = (e) => {
     const { value } = e.target;
@@ -71,5 +72,5 @@ export default function Offset({ mesh }) {
 }
 
 Offset.propTypes = {
-  mesh: PropTypes.string.isRequired,
+  meshId: PropTypes.string.isRequired,
 };
