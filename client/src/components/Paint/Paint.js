@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "../Button/Button";
 import brushIcon from "../../assets/images/icons/white/brush-solid.svg";
 import * as THREE from "three";
@@ -15,20 +15,16 @@ export default function Paint() {
   const sidebarWidth = useSelector(getSidebarWidth);
   const headerHeight = useSelector(getHeaderHeight);
 
+  const colorRef = useRef(null);
+  const sizeRef = useRef(null);
+
+  const [isBrush, setIsBrush] = useState(false);
+
   const mouse = new THREE.Vector2();
   const raycaster = new THREE.Raycaster();
   const camera = scene.children && scene.children.find((children) => children.type === "PerspectiveCamera");
   let mouseType = -1;
   let brushActive = false;
-  let brushMesh;
-  const params = {
-    size: 0.5,
-    color: {
-      r: 15,
-      g: 78,
-      b: 85,
-    },
-  };
 
   useEffect(() => {
     window.dispatchEvent(new Event("resize"));
@@ -38,8 +34,24 @@ export default function Paint() {
     };
   });
 
+  useEffect(() => {
+    if (canvas) {
+      if (isBrush) {
+        canvas.addEventListener("pointermove", pointerMove);
+        canvas.addEventListener("pointerdown", pointerDown);
+        canvas.addEventListener("pointerup", pointerUp);
+        canvas.addEventListener("pointermove", pointerColor);
+      }
+      return () => {
+        canvas.removeEventListener("pointermove", pointerMove);
+        canvas.removeEventListener("pointerdown", pointerDown);
+        canvas.removeEventListener("pointerup", pointerUp);
+        canvas.removeEventListener("pointermove", pointerColor);
+      };
+    }
+  }, [isBrush]);
+
   const handleClick = () => {
-    const isBrush = scene.children.find((children) => children.name === "Brush");
     if (!isBrush) {
       const brushGeometry = new THREE.SphereBufferGeometry(1, 40, 40);
       const brushMaterial = new THREE.MeshStandardMaterial({
@@ -53,21 +65,14 @@ export default function Paint() {
         emissiveIntensity: 0.5,
       });
 
-      brushMesh = new THREE.Mesh(brushGeometry, brushMaterial);
+      const brushMesh = new THREE.Mesh(brushGeometry, brushMaterial);
       brushMesh.name = "Brush";
       scene.add(brushMesh);
-
-      canvas.addEventListener("pointermove", pointerMove);
-      canvas.addEventListener("pointerdown", pointerDown);
-      canvas.addEventListener("pointerup", pointerUp);
-      canvas.addEventListener("pointermove", pointerColor);
-      // canvas.addEventListener("wheel", pointerWheel);
+      setIsBrush(true);
     } else {
+      const brushMesh = scene.children.find((children) => children.name === "Brush");
       scene.remove(brushMesh);
-      canvas.removeEventListener("pointermove", pointerMove);
-      canvas.removeEventListener("pointerdown", pointerDown);
-      canvas.removeEventListener("pointerup", pointerUp);
-      canvas.removeEventListener("pointermove", pointerColor);
+      setIsBrush(false);
     }
   };
 
@@ -102,6 +107,8 @@ export default function Paint() {
   };
 
   const pointerColor = () => {
+    const brushMesh = scene.children.find((children) => children.name === "Brush");
+
     if (controls.active || !brushActive) {
       brushMesh.visible = false;
     } else {
@@ -112,7 +119,7 @@ export default function Paint() {
       const res = raycaster.intersectObject(group, true);
 
       if (res.length > 0) {
-        brushMesh.scale.setScalar(params.size);
+        brushMesh.scale.setScalar(sizeRef.current.value);
 
         const geometry = res[0].object.geometry;
         const bvh = geometry.boundsTree;
@@ -128,7 +135,7 @@ export default function Paint() {
 
         const sphere = new THREE.Sphere();
         sphere.center.copy(brushMesh.position).applyMatrix4(inverseMatrix);
-        sphere.radius = params.size;
+        sphere.radius = sizeRef.current.value;
 
         const indices = [];
         const tempVec = new THREE.Vector3();
@@ -169,9 +176,9 @@ export default function Paint() {
             g = 255,
             b = 255;
           if (mouseType === 0) {
-            r = params.color.r;
-            g = params.color.g;
-            b = params.color.b;
+            r = parseInt(colorRef.current.value.substr(1, 2), 16);
+            g = parseInt(colorRef.current.value.substr(3, 2), 16);
+            b = parseInt(colorRef.current.value.substr(5, 2), 16);
           }
 
           for (let i = 0, l = indices.length; i < l; i++) {
@@ -190,27 +197,15 @@ export default function Paint() {
     }
   };
 
-  const changeBrushSize = (event) => {
-    const { value } = event.target;
-    params.size = value;
-  };
-
-  const changeBrushColor = (event) => {
-    const { value } = event.target;
-    params.color.r = parseInt(value.substr(1, 2), 16);
-    params.color.g = parseInt(value.substr(3, 2), 16);
-    params.color.b = parseInt(value.substr(5, 2), 16);
-  };
-
   return (
     <div className="flex flex-col">
       <div className="properties">Painter tools</div>
       <div className="flex justify-between">
-        <Button typeClass="btn__icon" img={brushIcon} onClick={handleClick} title="Paint" />
+        <Button typeClass="btn__icon" img={brushIcon} onClick={handleClick} title="Paint" active={isBrush} />
         <div className="flex gap-1 items-center">
           <span className="text-sm">Brush size: </span>
-          <input type="range" min="0.5" max="4" step="0.5" defaultValue={params.size} onMouseUp={changeBrushSize} />
-          <input id="color" type="color" className="w-8 border-none" defaultValue="#0F4E55" onChange={changeBrushColor} />
+          <input ref={sizeRef} type="range" min="0.5" max="4" step="0.5" defaultValue="0.5" />
+          <input ref={colorRef} id="color" type="color" className="w-8 border-none" defaultValue="#0F4E55" />
         </div>
       </div>
     </div>
