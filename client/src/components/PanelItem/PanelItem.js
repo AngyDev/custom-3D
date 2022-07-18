@@ -10,6 +10,7 @@ import Offset from "../Offset/Offset";
 import { addColorToClippedMesh } from "../../utils/functions/clippingObject";
 import { filterStartsWithName, findById } from "../../utils/common-utils";
 import PanelObjectInfo from "../Panel/PanelObjectInfo/PanelObjectInfo";
+import ScaleScrew from "../ScaleScrew/ScaleScrew";
 
 export default function PanelItem({ uuid, type, name, deleteClick }) {
   const scene = useSelector(getScene);
@@ -24,10 +25,10 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   const [plane] = useState(new THREE.Plane());
   const [clipped, setClipped] = useState(false);
   const [openOffset, setOpenOffset] = useState(false);
-  const [meshToOffset, setMeshToOffset] = useState();
   const [openObjectInfo, setOpenObjectInfo] = useState(false);
   const [selectedObject, setSelectedObject] = useState();
   const [panelTopPosition, setPanelTopPosition] = useState();
+  const [openScaleScrew, setOpenScaleScrew] = useState(false);
 
   useEffect(() => {
     // checks the selected mesh to add background to panel object
@@ -193,7 +194,11 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   const handleOffset = (e) => {
     dispatch(setSelectedMesh(e.target.id));
     setOpenOffset(true);
-    setMeshToOffset(e.target.id);
+  };
+
+  const handleScaleObject = (e) => {
+    dispatch(setSelectedMesh(e.target.id));
+    setOpenScaleScrew(true);
   };
 
   /**
@@ -230,7 +235,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   return (
     <>
       <div className={`option flex items-center text-black ${selected ? "option-active" : ""}`}>
-        <span className="visible" id={uuid} onClick={handleClick}></span>
+        <span className="visible" id={uuid} onClick={handleClick} title="visibility"></span>
         {type === "points" ? (
           <span className="option__point" onClick={() => pointClick(uuid)}>
             {name}
@@ -240,14 +245,14 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
         )}
         {(type === "planes" || type === "screw") && (
           <>
-            <span id={uuid} name={name} className="translate" onClick={(e) => transformObject(e, "translate")}></span>
-            <span id={uuid} name={name} className="rotate" onClick={(e) => transformObject(e, "rotate")}></span>
-            <span id={uuid} name={name} className="scale" onClick={(e) => transformObject(e, "scale")}></span>
-            <span id={uuid} name={name} className="opacity" onClick={handleOpacity} />
-            {/* {type === "screw" && <span id={uuid} name={name} className="height" onClick={(e) => transformHeightObject(e)}></span>} */}
+            <span id={uuid} name={name} className="translate" onClick={(e) => transformObject(e, "translate")} title="translate"></span>
+            <span id={uuid} name={name} className="rotate" onClick={(e) => transformObject(e, "rotate")} title="rotate"></span>
+            <span id={uuid} name={name} className="scale" onClick={(e) => transformObject(e, "scale")} title="scale"></span>
+            <span id={uuid} name={name} className="opacity" onClick={handleOpacity} title="opacity" />
+            {type === "screw" && <span id={uuid} name={name} className="height" onClick={(e) => handleScaleObject(e)} title="scale"></span>}
             {type === "planes" && (
               <>
-                <span id={uuid} name={name} className="clipping" onClick={(e) => clippingMesh(e)}></span>
+                <span id={uuid} name={name} className="clipping" onClick={(e) => clippingMesh(e)} title="clipping"></span>
                 {clipped && (
                   <span>
                     <input type="checkbox" name="" id="" onChange={handleNegated} />
@@ -255,20 +260,29 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
                 )}
               </>
             )}
-            <span id={uuid} name={name} className="infoIcon" onClick={handleInfo} />
+            <span id={uuid} name={name} className="infoIcon" onClick={handleInfo} title="info plane" />
             {openObjectInfo && <PanelObjectInfo plane={selectedObject} panelTopPosition={panelTopPosition} />}
           </>
         )}
         {type === "scene" && (
           <>
-            <span className="changeColor" id={uuid} onClick={modalColorMesh} />
-            <span className="offset" id={uuid} onClick={handleOffset} />
-            <span className="opacity" id={uuid} onClick={handleOpacity} />
+            <span className="changeColor" id={uuid} onClick={modalColorMesh} title="change color" />
+            <span className="offset" id={uuid} onClick={handleOffset} title="offset" />
+            <span className="opacity" id={uuid} onClick={handleOpacity} title="opacity" />
           </>
         )}
-        <span id={uuid} name={name} className="delete" onClick={deleteClick}></span>
+        <span id={uuid} name={name} className="delete" onClick={deleteClick} title="delete"></span>
       </div>
-      <div className="p-1">{openOffset && <Offset mesh={meshToOffset} />}</div>
+      {openOffset && (
+        <div className="p-1">
+          <Offset meshId={selectedMesh} />
+        </div>
+      )}
+      {openScaleScrew && (
+        <div className="pt-1 pb-1">
+          <ScaleScrew meshId={selectedMesh} />
+        </div>
+      )}
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Change mesh color" text="Change color">
         <ChangeColor onClick={changeColorMesh} onClose={() => setIsOpen(false)} />
       </Modal>
