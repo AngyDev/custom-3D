@@ -17,6 +17,7 @@ export default function Clipping() {
   const [planes, setPlanes] = useState([]);
   const [planesOriginal, setPlanesOriginal] = useState([]);
   const [globalClipping, setGlobalClipping] = useState(false);
+  const [active, setActive] = useState(false);
 
   // The clipping button is disabled if there is only one plane
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function Clipping() {
    * Clipping of the mesh by the planes
    */
   const clipMesh = () => {
+    setActive(!active);
     const result = scene.children.filter((object) => object.name.startsWith("Clipping"));
 
     if (result.length === 0) {
@@ -140,7 +142,7 @@ export default function Clipping() {
 
   return (
     <div className="flex items-center">
-      <Button typeClass="btn--img btn__icon" img={clipping} onClick={clipMesh} disabled={globalClipping} />
+      <Button typeClass="btn--img btn__icon" img={clipping} onClick={clipMesh} disabled={globalClipping} active={active} />
       {clipped && (
         <span style={{ marginLeft: "10px" }}>
           <Checkbox label="Negated" onChange={handleNegated} className="text-white" />
