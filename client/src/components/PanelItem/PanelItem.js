@@ -8,7 +8,7 @@ import ChangeColor from "../ChangeColor/ChangeColor";
 import Modal from "../Modal/Modal";
 import Offset from "../Offset/Offset";
 import { addColorToClippedMesh } from "../../utils/functions/clippingObject";
-import { filterStartsWithName, findById } from "../../utils/common-utils";
+import { findById } from "../../utils/common-utils";
 import PanelObjectInfo from "../Panel/PanelObjectInfo/PanelObjectInfo";
 import ScaleScrew from "../ScaleScrew/ScaleScrew";
 
@@ -50,10 +50,10 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
     dispatch(setSelectedMesh(e.target.id));
     e.target.classList.toggle("active");
 
-    const name = e.target.nextSibling.innerText;
+    const id = e.target.id;
 
     // Get the mesh selected with the name
-    const mesh = filterStartsWithName(name)(scene.children)[0];
+    const mesh = findById(id)(scene.children);
 
     mesh.visible = !mesh.visible;
     if (mesh.name.startsWith("Measure")) {
@@ -193,7 +193,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
    */
   const handleOffset = (e) => {
     dispatch(setSelectedMesh(e.target.id));
-    setOpenOffset(true);
+    setOpenOffset(!openOffset);
   };
 
   const handleScaleObject = (e) => {
