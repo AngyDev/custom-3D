@@ -13,6 +13,7 @@ export default function ScaleScrew({ meshId }) {
   const scene = useSelector(getScene);
   const [height, setHeight] = useState();
   const [diameter, setDiameter] = useState();
+  const mesh = findById(meshId)(scene.children);
 
   const changeScale = (e, type) => {
     const { value } = e.target;
@@ -24,8 +25,6 @@ export default function ScaleScrew({ meshId }) {
   };
 
   const applyScale = (type) => {
-    const mesh = findById(meshId)(scene.children);
-
     if (type === "height" && height) {
       const newGeometry = new THREE.CylinderGeometry(mesh.geometry.parameters.radiusTop, mesh.geometry.parameters.radiusBottom, Number(height), 32);
       mesh.geometry = newGeometry;
@@ -44,6 +43,7 @@ export default function ScaleScrew({ meshId }) {
             className="mr-2 form__input px-1 py-0 text-base"
             placeholder="height"
             step="0.1"
+            defaultValue={mesh.geometry.parameters.height}
             onChange={(e) => changeScale(e, "height")}
           />
           <Button typeClass="btn--img btn__icon-sm" img={heightIcon} onClick={() => applyScale("height")} />
@@ -54,6 +54,7 @@ export default function ScaleScrew({ meshId }) {
             className="mr-2 form__input px-1 py-0 text-base"
             placeholder="diameter"
             step="0.1"
+            defaultValue={mesh.geometry.parameters.radiusBottom}
             onChange={(e) => changeScale(e, "diameter")}
           />
           <Button typeClass="btn--img btn__icon-sm" img={diameterIcon} onClick={() => applyScale("diameter")} />
