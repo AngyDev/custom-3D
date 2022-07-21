@@ -50,12 +50,17 @@ export default function App() {
             </Route>
             <Route path="/dashboard">
               <ProtectedRoute>
-                <Dashboard />
+                <Dashboard archived={false} />
               </ProtectedRoute>
             </Route>
             <Route path="/editor/:id">
               <ProtectedRoute>
                 <LayoutEditor />
+              </ProtectedRoute>
+            </Route>
+            <Route path="/archived">
+              <ProtectedRoute>
+                <Dashboard archived={true} />
               </ProtectedRoute>
             </Route>
           </Switch>

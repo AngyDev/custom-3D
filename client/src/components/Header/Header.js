@@ -31,7 +31,7 @@ export default function Header({ project }) {
     dispatch(setScene({}));
     dispatch(setPositionVector({}));
     dispatch(setProject({}));
-    history.push("/dashboard");
+    history.goBack();
   };
 
   return (
@@ -40,7 +40,7 @@ export default function Header({ project }) {
         <Button typeClass="btn__icon" img={dashboardIcon} onClick={toDashboard} title="Dashboard" />
         <Import />
         <Export />
-        <Save projectId={project.id} />
+        <Save projectId={project.id} disabled={project.archived} />
         <Share />
         <AddComment />
         <Screenshot />

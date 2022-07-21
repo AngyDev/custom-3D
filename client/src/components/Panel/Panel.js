@@ -87,7 +87,7 @@ export default function Panel({ type }) {
 
     // When the first element is deleted the selection go to the second, this is a workaround, pass a not existing id
     // no one mesh is selected
-    dispatch(setSelectedMesh(1));
+    dispatch(setSelectedMesh("1"));
 
     const mesh = findById(id)(scene.children);
 

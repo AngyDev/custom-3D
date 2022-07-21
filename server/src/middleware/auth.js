@@ -4,7 +4,6 @@ const { TokenExpiredError } = jwt;
 
 // get the token from the cookie and verify it
 const verifyToken = (req, res, next) => {
-  console.log("verifyToken");
   const token = req.cookies.token;
 
   if (!token) {

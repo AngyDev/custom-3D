@@ -1,38 +1,48 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { useHistory } from "react-router";
 import { useAuth } from "../../../context/AuthContext";
 import { useDeleteProject } from "../../../hooks/useDeleteProject";
 import useGetProjectsByUserId from "../../../hooks/useGetProjectsByUserId";
 import Card from "../../Card/Card";
 import ModalDelete from "../../Modal/ModalDelete";
+import { updateProject } from "../../../services/api";
 
-export default function Projects() {
+export default function Projects({ archived }) {
   const { user } = useAuth();
   const { projects, fetchGetProjectsByUserId } = useGetProjectsByUserId();
   const { fetchDeleteProject } = useDeleteProject();
   const [isOpen, setIsOpen] = useState(false);
-  const [deleteElem, setDeleteElem] = useState();
+  const [isOpenArchive, setIsOpenArchive] = useState(false);
+  const [selectedProject, setSelectedProject] = useState();
   const color = ["bg-card1", "bg-card2", "bg-card3", "bg-card4", "bg-card5", "bg-card6"];
   const history = useHistory();
 
   useEffect(() => {
-    fetchGetProjectsByUserId(user.id);
-  }, []);
+    fetchGetProjectsByUserId(user.id, archived);
+  }, [archived]);
 
   const openProject = (id) => {
     history.push(`/editor/${id}`);
   };
 
-  const handleDelete = (id) => {
-    setDeleteElem(id);
-    setIsOpen(true);
+  const handleModal = (project, type) => {
+    setSelectedProject(project);
+    type === "delete" ? setIsOpen(true) : setIsOpenArchive(true);
   };
 
   const deleteProject = async () => {
-    await fetchDeleteProject(deleteElem);
+    await fetchDeleteProject(selectedProject.id);
 
-    fetchGetProjectsByUserId();
+    fetchGetProjectsByUserId(user.id, archived);
     setIsOpen(false);
+  };
+
+  const archiveProject = async () => {
+    await updateProject(selectedProject.id, { ...selectedProject, archived: true });
+
+    fetchGetProjectsByUserId(user.id, archived);
+    setIsOpenArchive(false);
   };
 
   return (
@@ -46,7 +56,9 @@ export default function Projects() {
                 color={color[i % 6]}
                 project={project}
                 onClick={() => openProject(project.id)}
-                deleteClick={() => handleDelete(project.id)}
+                deleteClick={() => handleModal(project, "delete")}
+                archived={archived}
+                archiveProject={() => handleModal(project, "archive")}
               />
             ))}
           </div>
@@ -55,6 +67,11 @@ export default function Projects() {
         )}
       </div>
       <ModalDelete open={isOpen} onClose={() => setIsOpen(false)} onClick={deleteProject} />
+      <ModalDelete open={isOpenArchive} onClose={() => setIsOpenArchive(false)} onClick={archiveProject} text="archive" />
     </>
   );
 }
+
+Projects.propTypes = {
+  archived: PropTypes.bool,
+};

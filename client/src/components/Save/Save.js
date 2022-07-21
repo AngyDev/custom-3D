@@ -12,7 +12,7 @@ import Button from "../Button/Button";
 import Modal from "../Modal/Modal";
 import { useGetCommentsByProjectId } from "../../hooks/useGetCommentsByProjectId";
 
-export default function Save({ projectId }) {
+export default function Save({ projectId, disabled }) {
   const children = useSelector(getChildren);
   const group = useSelector(getGroup);
   const objectsToRemove = useSelector(getObjectsToRemove);
@@ -40,8 +40,6 @@ export default function Save({ projectId }) {
     for (const object of objectsToRemove) {
       await deleteObject(object.id);
     }
-
-    console.log(children);
 
     // update project updatedAt date
     await updateProject(projectId, {});
@@ -103,7 +101,7 @@ export default function Save({ projectId }) {
 
   return (
     <>
-      <Button typeClass="btn--img btn__icon" img={saveIcon} onClick={openModal} title="Save" />
+      <Button typeClass="btn--img btn__icon" img={saveIcon} onClick={openModal} title="Save" disabled={disabled} />
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Save Objects" text="Save">
         <div className="modal__body flex flex-col">
           <h3 className="text-white">Are you Sure?</h3>
@@ -119,4 +117,5 @@ export default function Save({ projectId }) {
 
 Save.propTypes = {
   projectId: PropTypes.string,
+  disabled: PropTypes.bool,
 };

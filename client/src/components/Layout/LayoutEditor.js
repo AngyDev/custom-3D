@@ -28,7 +28,7 @@ export default function LayoutEditor() {
     <>
       {Object.keys(project).length > 0 && objects !== null && (
         <>
-          <Header project={project.project} />
+          <Header project={project} />
           <div className="flex">
             <Sidebar />
             <Main objects={objects} />

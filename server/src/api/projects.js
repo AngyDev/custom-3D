@@ -26,26 +26,16 @@ const getProjectById = errorHandler(async (req, res) => {
     throw new HttpError(404, "Project not found");
   }
 
-  const objects = await ObjectsController.getObjectsPathByProjectId(id);
-  const objectsPath = [];
-
-  for (const object of objects) {
-    const path = "uploads/" + object["objectPath"];
-    objectsPath.push(path);
-  }
-
-  return {
-    project,
-    objectsPath,
-  };
+  return project;
 });
 
 /**
  * Get project by userId
  */
 const getProjectsByUserId = errorHandler(async (req, res) => {
-  const userId = req.params.userId;
-  const projects = await ProjectsController.getProjectsByUserId(userId);
+  const { userId, archived } = req.params;
+
+  const projects = await ProjectsController.getProjectsByUserId(userId, archived);
 
   return projects;
 });

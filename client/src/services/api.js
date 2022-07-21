@@ -41,8 +41,8 @@ export const getObjectsByProjectId = async (projectId) => {
 };
 
 // return the project and the objects path
-export const getProjectsByUserId = async (userId) => {
-  return await axios.get(`/project-user/${userId}`);
+export const getProjectsByUserId = async (userId, archived) => {
+  return await axios.get(`/project-user/${userId}/${archived}`);
 };
 
 /**
@@ -94,6 +94,7 @@ export const updateProject = async (projectId, project) => {
           patientCode: project.patientCode,
           status: project.status,
           assignedAt: project.assignedAt,
+          archived: project.archived,
         }
       : {};
 

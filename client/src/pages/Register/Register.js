@@ -26,7 +26,6 @@ export default function Register() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
     if (data.password !== data.confPassword) {
       setError("confPassword", { type: "custom", message: "The passwords do not match" });
     } else {

@@ -57,8 +57,6 @@ const deleteComment = errorHandler(async (req, res) => {
 
   const deleteComment = await CommentsController.deleteComment(id);
 
-  console.log(deleteComment);
-
   if (!deleteComment) {
     throw new HttpError(400, "Comment not deleted");
   } else {

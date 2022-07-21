@@ -25,12 +25,13 @@ class ProjectsController {
    * @returns The list of projects by user id and assigned to the userId
    */
   // TODO: Some fields are missing
-  static getProjectsByUserId(userId) {
+  static getProjectsByUserId(userId, archived) {
     return ProjectsModel.query()
       .join("users", "projects.user_id", "users.id")
       .select(["projects.*", "users.first_name", "users.last_name"])
       .whereRaw("? = any(??)", [userId, "projects.assigned_at"])
       .orWhere("projects.user_id", userId)
+      .where("projects.archived", archived)
       .orderBy("projects.created_at");
   }
 
@@ -47,6 +48,7 @@ class ProjectsController {
       status: payload.status,
       assigned_at: payload.assignedAt,
       user_id: payload.userId,
+      archived: payload.archived,
     });
   }
 

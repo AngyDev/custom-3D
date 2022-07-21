@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import xIcon from "../../assets/images/icons/black/close-modal.svg";
 import Button from "../Button/Button";
 
-export default function ModalDelete({ open, onClose, onClick }) {
+export default function ModalDelete({ open, onClose, onClick, text }) {
   if (!open) return null;
 
   return (
@@ -30,7 +30,9 @@ export default function ModalDelete({ open, onClose, onClick }) {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
-              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete this product?</h3>
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Are you sure you want to {!text ? "delete" : text} this product?
+              </h3>
               <div className="flex justify-center">
                 <Button type="button" typeClass="modal__btn-delete-yes" onClick={onClick} text="Yes" />
                 <Button type="button" typeClass="modal__btn-delete-no" onClick={onClose} text="No" />
@@ -47,4 +49,5 @@ ModalDelete.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onClick: PropTypes.func.isRequired,
+  text: PropTypes.string,
 };
