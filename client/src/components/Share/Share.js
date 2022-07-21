@@ -34,7 +34,7 @@ export default function Share() {
 }
 
 function ShareModal({ users, onClose }) {
-  const { project } = useSelector(getProject);
+  const project = useSelector(getProject);
   const dispatch = useDispatch();
 
   const [text, setText] = useState("");
