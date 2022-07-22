@@ -20,13 +20,13 @@ export default function App() {
 
   // add alert when user reload or leave the page
   useEffect(() => {
-    window.addEventListener("beforeunload", alertUser);
+    window.addEventListener("beforeunload", alertLogout);
     return () => {
-      window.removeEventListener("beforeunload", alertUser);
+      window.removeEventListener("beforeunload", alertLogout);
     };
   }, []);
 
-  const alertUser = (e) => {
+  const alertLogout = (e) => {
     e.preventDefault();
     e.returnValue = "";
   };

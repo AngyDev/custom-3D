@@ -1,21 +1,25 @@
-import React, { useRef, useEffect } from "react";
+import PropTypes from "prop-types";
+import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
+import dashboardIcon from "../../assets/images/icons/white/th-large-solid.svg";
+import { useAuth } from "../../context/AuthContext";
 import { setHeaderHeight } from "../../features/dimensions/dimensionsSlice";
+import { dispatchError } from "../../features/error/errorSlice";
+import { setProject } from "../../features/project/projectSlice";
+import { setPositionVector, setScene } from "../../features/scene/sceneSlice";
+import { getProjectById, updateProject } from "../../services/api";
 import AddComment from "../AddComment/AddComment";
 import Button from "../Button/Button";
-import Import from "../Import/Import";
 import Export from "../Export/Export";
-import Save from "../Save/Save";
-import dashboardIcon from "../../assets/images/icons/white/th-large-solid.svg";
-import { useHistory } from "react-router";
-import PropTypes from "prop-types";
-import Screenshot from "../Screenshot/Screenshot";
-import { setPositionVector, setScene } from "../../features/scene/sceneSlice";
-import Share from "../Share/Share";
-import { setProject } from "../../features/project/projectSlice";
+import Import from "../Import/Import";
 import Profile from "../Profile/Profile";
+import Save from "../Save/Save";
+import Screenshot from "../Screenshot/Screenshot";
+import Share from "../Share/Share";
 
 export default function Header({ project }) {
+  const { user } = useAuth();
   const headerRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -26,8 +30,21 @@ export default function Header({ project }) {
     dispatch(setHeaderHeight(headerCurrent.offsetHeight));
   }, []);
 
-  const toDashboard = () => {
+  const toDashboard = async () => {
     // TODO: check all the elements to remove from the store
+    getProjectById(project.id)
+      .then((response) => {
+        if (response.data.locked !== null && response.data.locked === user.id) {
+          updateProject(project.id, { ...response.data, locked: null })
+            .then(() => {})
+            .catch((error) => {
+              dispatch(dispatchError(error));
+            });
+        }
+      })
+      .catch((error) => {
+        dispatch(dispatchError(error));
+      });
     dispatch(setScene({}));
     dispatch(setPositionVector({}));
     dispatch(setProject({}));
@@ -40,7 +57,7 @@ export default function Header({ project }) {
         <Button typeClass="btn__icon" img={dashboardIcon} onClick={toDashboard} title="Dashboard" />
         <Import />
         <Export />
-        <Save projectId={project.id} disabled={project.archived} />
+        <Save projectId={project.id} disabled={project.archived || project.locked !== user.id} />
         <Share />
         <AddComment />
         <Screenshot />

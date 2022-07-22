@@ -6,24 +6,45 @@ import { useDeleteProject } from "../../../hooks/useDeleteProject";
 import useGetProjectsByUserId from "../../../hooks/useGetProjectsByUserId";
 import Card from "../../Card/Card";
 import ModalDelete from "../../Modal/ModalDelete";
-import { updateProject } from "../../../services/api";
+import { getProjectById, updateProject } from "../../../services/api";
+import { useDispatch } from "react-redux";
+import { dispatchError } from "../../../features/error/errorSlice";
 
 export default function Projects({ archived }) {
   const { user } = useAuth();
   const { projects, fetchGetProjectsByUserId } = useGetProjectsByUserId();
   const { fetchDeleteProject } = useDeleteProject();
+  const history = useHistory();
+  const dispatch = useDispatch();
+
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenArchive, setIsOpenArchive] = useState(false);
   const [selectedProject, setSelectedProject] = useState();
   const color = ["bg-card1", "bg-card2", "bg-card3", "bg-card4", "bg-card5", "bg-card6"];
-  const history = useHistory();
 
   useEffect(() => {
     fetchGetProjectsByUserId(user.id, archived);
   }, [archived]);
 
-  const openProject = (id) => {
-    history.push(`/editor/${id}`);
+  const openProject = async (project) => {
+    getProjectById(project.id)
+      .then((response) => {
+        if (response.data.locked !== null && response.data.locked !== user.id) {
+          dispatch(dispatchError({ message: "This project is locked by another user" }));
+          history.push(`/editor/${project.id}`);
+        } else {
+          updateProject(project.id, { ...response.data, locked: user.id })
+            .then(() => {
+              history.push(`/editor/${project.id}`);
+            })
+            .catch((error) => {
+              dispatch(dispatchError(error));
+            });
+        }
+      })
+      .catch((error) => {
+        dispatch(dispatchError(error));
+      });
   };
 
   const handleModal = (project, type) => {
@@ -38,11 +59,15 @@ export default function Projects({ archived }) {
     setIsOpen(false);
   };
 
-  const archiveProject = async () => {
-    await updateProject(selectedProject.id, { ...selectedProject, archived: true });
-
-    fetchGetProjectsByUserId(user.id, archived);
-    setIsOpenArchive(false);
+  const archiveProject = () => {
+    updateProject(selectedProject.id, { ...selectedProject, archived: true })
+      .then(() => {
+        fetchGetProjectsByUserId(user.id, archived);
+        setIsOpenArchive(false);
+      })
+      .catch((error) => {
+        dispatch(dispatchError(error));
+      });
   };
 
   return (
@@ -55,7 +80,7 @@ export default function Projects({ archived }) {
                 key={project.id}
                 color={color[i % 6]}
                 project={project}
-                onClick={() => openProject(project.id)}
+                onClick={() => openProject(project)}
                 deleteClick={() => handleModal(project, "delete")}
                 archived={archived}
                 archiveProject={() => handleModal(project, "archive")}
