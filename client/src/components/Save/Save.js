@@ -4,13 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import saveIcon from "../../assets/images/icons/white/save-solid.svg";
 import { setLoading } from "../../features/loading/loadingSlice";
 import { getChildren, getGroup } from "../../features/scene/sceneSlice";
-import { getObjectsToRemove } from "../../features/objects/objectsSlice";
+import { getObjectsToRemove, removeObjectFromRemove } from "../../features/objects/objectsSlice";
 import { getTemporaryComments, getProjectComments } from "../../features/comments/commentsSlice";
 import { useGetObjectsByProjectId } from "../../hooks/useGetObjectsByProjectId";
 import { saveObject, updateProject, deleteObject, saveComment } from "../../services/api";
 import Button from "../Button/Button";
 import Modal from "../Modal/Modal";
 import { useGetCommentsByProjectId } from "../../hooks/useGetCommentsByProjectId";
+import { dispatchError } from "../../features/error/errorSlice";
 
 export default function Save({ projectId, disabled }) {
   const children = useSelector(getChildren);
@@ -29,74 +30,112 @@ export default function Save({ projectId, disabled }) {
     setIsOpen(true);
   };
 
-  const saveObjects = async () => {
-    const mesh = children.filter((item) => item.type === "Mesh");
-
+  const saveObjects = () => {
     setIsOpen(false);
-
     dispatch(setLoading(true));
+
+    console.log("objectsToRemove", objectsToRemove);
 
     // remove the object from the db
     for (const object of objectsToRemove) {
-      await deleteObject(object.id);
+      deleteObject(object.id)
+        .then(() => {
+          // remove the object from the array
+          dispatch(removeObjectFromRemove(object.id));
+        })
+        .catch((error) => {
+          dispatch(dispatchError(error));
+        });
     }
 
     // update project updatedAt date
-    await updateProject(projectId, {});
+    updateProject(projectId, {})
+      .then(() => {})
+      .catch((error) => {
+        dispatch(dispatchError(error));
+      });
 
-    // It is not possible to create a unique array of group and mesh because it adds the mesh to the group in the scene,
-    // why? I don't know
-    // Group "Import"
-    for (const object of group.children) {
-      await save(object);
-    }
+    const mesh = children.filter((item) => item.type === "Mesh" && !item.name.startsWith("Offset"));
+    const importedMesh = [...group.children];
+    const measuresGroup = children.filter((item) => item.name.startsWith("Measure"));
+    const measures = measuresGroup.flatMap((item) => (item.children ? [...item.children] : item));
 
-    const measure = children.filter((item) => item.name.startsWith("Measure"));
+    const objects = [...mesh, ...importedMesh, ...measures];
 
-    for (const object of measure) {
-      for (const item of object.children) {
-        await save(item);
-      }
-    }
+    // TODO: Checks if the object is saved before the comment
 
-    for (const item of mesh) {
-      if (!item.name.startsWith("Offset")) {
-        await save(item);
-      }
-    }
+    const promisesObjects = objects.map((object) => {
+      return new Promise((resolve, reject) => {
+        const file = getFile(object);
+        saveObject(object.uuid, object.name, projectId, file, `${object.uuid}.json`)
+          .then(() => {
+            console.log("object saved");
+            resolve();
+          })
+          .catch((error) => {
+            dispatch(dispatchError(error));
+            reject();
+          });
+      });
+    });
 
+    Promise.all(promisesObjects).then(
+      () => {
+        console.log("promise all");
+        fetchGetObjectsByProjectId(projectId);
+      },
+      (error) => {
+        dispatch(dispatchError(error));
+      },
+    );
+
+    // Comments
     if (projectComments.length !== temporaryComments.length) {
       // get the comments to save
       const commentsToAdd = temporaryComments.filter((item) => !projectComments.includes(item));
 
       // save the comments
-      for (const comment of commentsToAdd) {
-        await saveComment(comment);
-      }
+      const promisesComments = commentsToAdd.map((comment) => {
+        return new Promise((resolve, reject) => {
+          saveComment(comment)
+            .then(() => {
+              console.log("comment saved");
+              resolve();
+            })
+            .catch((error) => {
+              dispatch(dispatchError(error));
+              reject();
+            });
+        });
+      });
+
+      Promise.all(promisesComments).then(
+        () => {
+          console.log("promise all comments");
+          fetchGetCommentsByProjectId(projectId);
+        },
+        (error) => {
+          dispatch(dispatchError(error));
+        },
+      );
     }
 
     // set the objects state with the correct list of the objects and comments after the save
     // TODO:  Is it correct to reload the location or calls the api again?
     // window.location.reload();
-    fetchGetObjectsByProjectId(projectId);
-    fetchGetCommentsByProjectId(projectId);
+
     dispatch(setLoading(false));
   };
 
-  const save = async (object) => {
+  const getFile = (object) => {
     // updates the matrix position before convert to JSON
     object.updateMatrixWorld(true);
 
     const json = object.toJSON();
     const output = JSON.stringify(json);
     const file = new Blob([output], { type: "application/json" });
-    await saveObject(object.uuid, object.name, projectId, file, `${object.uuid}.json`);
 
-    // saveObject(object.uuid, projectId, file, `${object.uuid}.json`).then((error) => {
-    //   alert(error);
-    // }).then(() => {
-    //   setLoading(false);
-    // });
+    return file;
   };
 
   return (

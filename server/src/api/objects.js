@@ -99,8 +99,13 @@ const uploadFileAndSaveObject = errorHandler(async (req, res) => {
   const objectName = req.body.objectName;
   const projectId = req.params.projectId;
 
-  // Saves the object in the db
-  await ObjectsController.saveObject(objectId, objectName, projectId, filepath);
+  // Checks if the object is present in the database
+  const isObjectPresent = await ObjectsController.getObjectById(objectId);
+
+  if (!isObjectPresent) {
+    // Saves the object in the db
+    await ObjectsController.saveObject(objectId, objectName, projectId, filepath);
+  }
 
   return { message: "Uploaded the file successfully: " + req.file.originalname };
 });

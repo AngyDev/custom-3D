@@ -53,27 +53,6 @@ export const getUsers = async () => {
   return await axios.get(`/users`);
 };
 
-// export const saveProject = async (userId, project) => {
-//   try {
-//     const res = await axios({
-//       method: "POST",
-//       url: `${API_URL}/project`,
-//       data: {
-//         projectName: project.projectName,
-//         patientCode: project.patientCode,
-//         status: project.status,
-//         assignedAt: project.assignedAt,
-//         userId: userId,
-//       },
-//     });
-
-//     return res.data;
-//   } catch (error) {
-//     console.log(error.message);
-//     return error.message;
-//   }
-// };
-
 export const saveProject = async (userId, project) => {
   const data = {
     projectName: project.projectName,
@@ -95,21 +74,11 @@ export const updateProject = async (projectId, project) => {
           status: project.status,
           assignedAt: project.assignedAt,
           archived: project.archived,
+          locked: project.locked,
         }
       : {};
 
-  try {
-    const res = await axios({
-      method: "PUT",
-      url: `/project/${projectId}`,
-      data: data,
-    });
-
-    return res.data;
-  } catch (error) {
-    console.log(error.message);
-    return error.message;
-  }
+  return await axios.put(`/project/${projectId}`, data);
 };
 
 export const deleteProject = async (id) => {
@@ -125,17 +94,7 @@ export const saveObject = async (id, objectName, projectId, file, filename) => {
   data.append("id", id);
   data.append("objectName", objectName);
 
-  try {
-    const res = await axios({
-      method: "POST",
-      url: `/upload/${projectId}`,
-      data: data,
-    });
-
-    return res.data;
-  } catch (error) {
-    return error.message;
-  }
+  return await axios.post(`/upload/${projectId}`, data);
 };
 
 export const saveComment = async (comment) => {
@@ -163,17 +122,7 @@ export const getCommentsByProjectId = async (projectId) => {
 };
 
 export const deleteObject = async (objectId) => {
-  try {
-    const res = await axios({
-      method: "DELETE",
-      url: `/object/${objectId}`,
-    });
-
-    return res.data;
-  } catch (error) {
-    console.log(error.message);
-    return false;
-  }
+  return await axios.delete(`/object/${objectId}`);
 };
 
 export const getOffsetMesh = async (data, offset) => {
