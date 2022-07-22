@@ -10,9 +10,9 @@ export const useGetCommentsByProjectId = () => {
   const projectComments = useSelector(getProjectComments);
 
   const fetchGetCommentsByProjectId = useCallback(
-    (projectId, pointId) => {
+    (projectId) => {
       dispatch(setLoading(true));
-      getCommentsByProjectId(projectId, pointId)
+      getCommentsByProjectId(projectId)
         .then((res) => {
           dispatch(setProjectComments(res.data));
           dispatch(setLoading(false));

@@ -16,13 +16,13 @@ export default function LayoutEditor() {
   const { objects, fetchGetObjectsByProjectId } = useGetObjectsByProjectId();
   const { fetchGetCommentsByProjectId } = useGetCommentsByProjectId();
 
+  const isCommentsActive = useSelector(getIsCommentsActive);
+
   useEffect(() => {
     fetchGetProjectById(id);
     fetchGetObjectsByProjectId(id);
     fetchGetCommentsByProjectId(id);
   }, [id]);
-
-  const isCommentsActive = useSelector(getIsCommentsActive);
 
   return (
     <>
