@@ -49,6 +49,7 @@ class ProjectsController {
       assigned_at: payload.assignedAt,
       user_id: payload.userId,
       archived: payload.archived,
+      locked: payload.locked,
     });
   }
 

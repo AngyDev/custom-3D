@@ -60,6 +60,7 @@ export const saveProject = async (userId, project) => {
     status: project.status,
     assignedAt: project.assignedAt,
     userId: userId,
+    locked: userId,
   };
 
   return await axios.post(`/project`, data);
