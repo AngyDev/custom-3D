@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  projectComments: [],
+  comments: [],
+  temporaryComments: [],
+  isCommentsActive: false,
+  isTextOpen: false,
+};
+
 export const commentsSlice = createSlice({
   name: "comments",
-  initialState: {
-    projectComments: [],
-    comments: [],
-    temporaryComments: [],
-    isCommentsActive: false,
-    isTextOpen: false,
-  },
+  initialState,
   reducers: {
     setProjectComments: (state, action) => {
       state.projectComments = action.payload;
@@ -29,10 +31,12 @@ export const commentsSlice = createSlice({
     removeComment: (state, action) => {
       state.temporaryComments = state.temporaryComments.filter((item) => item.text !== action.payload.text);
     },
+    resetComments: () => initialState,
   },
 });
 
-export const { setProjectComments, setCommentsActive, setIsTextOpen, setComments, setTemporaryComments, removeComment } = commentsSlice.actions;
+export const { setProjectComments, setCommentsActive, setIsTextOpen, setComments, setTemporaryComments, removeComment, resetComments } =
+  commentsSlice.actions;
 
 export const getIsCommentsActive = (state) => state.comments.isCommentsActive;
 export const getIsTextOpen = (state) => state.comments.isTextOpen;

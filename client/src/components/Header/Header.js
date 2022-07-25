@@ -4,10 +4,14 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import dashboardIcon from "../../assets/images/icons/white/th-large-solid.svg";
 import { useAuth } from "../../context/AuthContext";
+import { resetComments } from "../../features/comments/commentsSlice";
+import { resetCounters } from "../../features/counters/countersSlice";
 import { setHeaderHeight } from "../../features/dimensions/dimensionsSlice";
 import { dispatchError } from "../../features/error/errorSlice";
-import { setProject } from "../../features/project/projectSlice";
-import { setPositionVector, setScene } from "../../features/scene/sceneSlice";
+import { resetMeasures } from "../../features/measurements/measurementsSlice";
+import { resetObjects } from "../../features/objects/objectsSlice";
+import { resetProject } from "../../features/project/projectSlice";
+import { resetScene } from "../../features/scene/sceneSlice";
 import { getProjectById, updateProject } from "../../services/api";
 import AddComment from "../AddComment/AddComment";
 import Button from "../Button/Button";
@@ -45,9 +49,14 @@ export default function Header({ project }) {
       .catch((error) => {
         dispatch(dispatchError(error));
       });
-    dispatch(setScene({}));
-    dispatch(setPositionVector({}));
-    dispatch(setProject({}));
+
+    // reset all states
+    dispatch(resetScene());
+    dispatch(resetProject());
+    dispatch(resetObjects());
+    dispatch(resetMeasures());
+    dispatch(resetCounters());
+    dispatch(resetComments());
     history.goBack();
   };
 

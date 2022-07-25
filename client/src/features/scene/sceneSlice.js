@@ -1,16 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  scene: {},
+  renderer: {},
+  camera: {},
+  sceneModified: false,
+  selectedMesh: "",
+  positionVector: {},
+  controls: {},
+};
+
 export const sceneSlice = createSlice({
   name: "scene",
-  initialState: {
-    scene: {},
-    renderer: {},
-    camera: {},
-    sceneModified: false,
-    selectedMesh: "",
-    positionVector: {},
-    controls: {},
-  },
+  initialState,
   reducers: {
     setScene: (state, action) => {
       state.scene = action.payload;
@@ -36,11 +38,13 @@ export const sceneSlice = createSlice({
     setControls: (state, action) => {
       state.controls = action.payload;
     },
+    resetScene: () => initialState,
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setScene, setSceneModified, setCanvas, setSelectedMesh, setPositionVector, setControls, setRenderer, setCamera } = sceneSlice.actions;
+export const { setScene, setSceneModified, setCanvas, setSelectedMesh, setPositionVector, setControls, setRenderer, setCamera, resetScene } =
+  sceneSlice.actions;
 
 export const getScene = (state) => state.scene.scene;
 export const getPositionVector = (state) => state.scene.positionVector;
