@@ -30,22 +30,19 @@ export default function Save({ projectId, disabled }) {
     setIsOpen(true);
   };
 
-  const saveObjects = () => {
+  const saveObjects = async () => {
     setIsOpen(false);
     dispatch(setLoading(true));
 
-    console.log("objectsToRemove", objectsToRemove);
-
     // remove the object from the db
     for (const object of objectsToRemove) {
-      deleteObject(object.id)
-        .then(() => {
-          // remove the object from the array
-          dispatch(removeObjectFromRemove(object.id));
-        })
-        .catch((error) => {
-          dispatch(dispatchError(error));
-        });
+      const response = await deleteObject(object.id);
+
+      if (response.status === 200) {
+        dispatch(removeObjectFromRemove(object.id));
+      } else {
+        dispatch(dispatchError("Error deleting object"));
+      }
     }
 
     // update project updatedAt date
@@ -62,8 +59,6 @@ export default function Save({ projectId, disabled }) {
 
     const objects = [...mesh, ...importedMesh, ...measures];
 
-    // TODO: Checks if the object is saved before the comment
-
     const promisesObjects = objects.map((object) => {
       return new Promise((resolve, reject) => {
         const file = getFile(object);
@@ -79,9 +74,9 @@ export default function Save({ projectId, disabled }) {
       });
     });
 
-    Promise.all(promisesObjects).then(
+    await Promise.all(promisesObjects).then(
       () => {
-        console.log("promise all");
+        console.log("promise all objects");
         fetchGetObjectsByProjectId(projectId);
       },
       (error) => {
@@ -109,7 +104,7 @@ export default function Save({ projectId, disabled }) {
         });
       });
 
-      Promise.all(promisesComments).then(
+      await Promise.all(promisesComments).then(
         () => {
           console.log("promise all comments");
           fetchGetCommentsByProjectId(projectId);
