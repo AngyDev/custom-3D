@@ -17,6 +17,7 @@ export const AuthContextProvider = ({ children }) => {
   const login = (user) => {
     setUser(user);
     localStorage.setItem("user", user.id);
+    localStorage.removeItem("socketId");
   };
 
   const logout = () => {

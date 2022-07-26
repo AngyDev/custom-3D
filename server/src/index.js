@@ -7,13 +7,43 @@ const knex = require("knex");
 const knexConfig = require("./utils/knexfile");
 const { Model } = require("objection");
 const { verifyToken } = require("./middleware/auth");
+const socketio = require("socket.io");
+const { ProjectsController } = require("./controllers/ProjectsController");
 require("dotenv").config();
 
 const app = express();
 const port = process.env.NODE_PORT || 3000;
 const host = process.env.NODE_HOST || "0.0.0.0";
 
+const server = app.listen(port, host, () => {
+  console.log(`App listening at http://${host}:${port}`);
+});
+
 app.use(cors({ origin: "http://localhost:9000", credentials: true }));
+
+const io = socketio(server, { cors: { origin: "http://localhost:9000" } });
+
+io.on("connection", (socket) => {
+  console.log("User connected", socket.id);
+
+  io.emit("socketId", socket.id);
+
+  let user;
+
+  socket.on("online", (userId) => {
+    console.log("online", userId);
+    user = userId;
+  });
+
+  socket.on("disconnect", async () => {
+    console.log("user", user);
+    await ProjectsController.releaseProjectsLocked(user);
+    console.log("User disconnected", socket.id);
+
+    socket.disconnect(); // DISCONNECT SOCKET
+  });
+
+});
 
 app.use(express.static(__dirname + "public"));
 app.use(morgan("dev"));
@@ -48,8 +78,4 @@ app.use("/api/", require("./routes/threeCalculations"));
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.statusCode || 500).send({ error: err.message });
-});
-
-app.listen(port, host, () => {
-  console.log(`App listening at http://${host}:${port}`);
 });
