@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { useAuth } from "../../context/AuthContext";
 import { dispatchError } from "../../features/error/errorSlice";
-import { changePassword, getLogout } from "../../services/api";
+import { changePassword, getLogout, releaseProjectsLocked } from "../../services/api";
 import Button from "../Button/Button";
 import Dropdown from "../Dropdown/Dropdown";
 import Modal from "../Modal/Modal";
@@ -23,8 +23,12 @@ export default function Profile() {
   };
 
   const logoutUser = () => {
-    getLogout(user.id)
-      .then(() => logout())
+    releaseProjectsLocked(user.id)
+      .then(() => {
+        getLogout(user.id)
+          .then(() => logout())
+          .catch((error) => dispatch(dispatchError(error)));
+      })
       .catch((error) => dispatch(dispatchError(error)));
   };
 

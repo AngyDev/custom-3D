@@ -100,4 +100,13 @@ const deleteProject = errorHandler(async (req, res) => {
   }
 });
 
-module.exports = { getProjects, getProjectById, getProjectsByUserId, createProject, updateProject, deleteProject };
+const releaseProjectsLocked = errorHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  // Update the projects with locked = userId
+  await ProjectsController.releaseProjectsLocked(userId);
+
+  return { message: "Project updated" };
+});
+
+module.exports = { getProjects, getProjectById, getProjectsByUserId, createProject, updateProject, deleteProject, releaseProjectsLocked };

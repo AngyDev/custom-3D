@@ -168,3 +168,8 @@ export const changePassword = async (userId, oldPassword, newPassword) => {
     newPassword,
   });
 };
+
+export const releaseProjectsLocked = async (userId) => {
+  console.log("releaseProjectsLocked", userId);
+  return await axios.get(`/release-projects-locked/${userId}`);
+};

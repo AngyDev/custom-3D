@@ -9,6 +9,7 @@ import Spinner from "../../components/Spinner/Spinner";
 import { AppWrapper } from "../../context/AppContext";
 import { dispatchError, getError } from "../../features/error/errorSlice";
 import { getLoading } from "../../features/loading/loadingSlice";
+import { getLogout, releaseProjectsLocked } from "../../services/api";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 
@@ -21,14 +22,30 @@ export default function App() {
   // add alert when user reload or leave the page
   useEffect(() => {
     window.addEventListener("beforeunload", alertLogout);
+    // window.addEventListener("unload", handleLogout);
+    handleLogout();
     return () => {
       window.removeEventListener("beforeunload", alertLogout);
+      // window.removeEventListener("unload", handleLogout);
     };
   }, []);
 
   const alertLogout = (e) => {
     e.preventDefault();
     e.returnValue = "";
+  };
+
+  const handleLogout = () => {
+    const userId = localStorage.getItem("user");
+    releaseProjectsLocked(userId)
+      .then(() => {
+        getLogout(userId)
+          .then(() => {
+            localStorage.removeItem("user");
+          })
+          .catch((error) => dispatch(dispatchError(error)));
+      })
+      .catch((error) => dispatch(dispatchError(error)));
   };
 
   const closeModal = () => {

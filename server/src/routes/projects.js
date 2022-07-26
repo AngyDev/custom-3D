@@ -9,5 +9,6 @@ router.get("/project-user/:userId/:archived", api.getProjectsByUserId);
 router.post("/project", api.createProject);
 router.put("/project/:id", api.updateProject);
 router.delete("/project/:id", api.deleteProject);
+router.get("/release-projects-locked/:userId", api.releaseProjectsLocked);
 
 module.exports = router;

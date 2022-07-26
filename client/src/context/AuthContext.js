@@ -16,9 +16,11 @@ export const AuthContextProvider = ({ children }) => {
 
   const login = (user) => {
     setUser(user);
+    localStorage.setItem("user", user.id);
   };
 
   const logout = () => {
+    localStorage.removeItem("user");
     setUser(null);
   };
 

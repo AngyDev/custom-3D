@@ -71,6 +71,17 @@ class ProjectsController {
   static deleteProject(id) {
     return ProjectsModel.query().deleteById(id);
   }
+
+  /**
+   * Update the project locked to null
+   * @param {String} userId User ID
+   * @returns 
+   */
+  static releaseProjectsLocked(userId) {
+    return ProjectsModel.query()
+      .update({ locked: null })
+      .where("locked", userId);
+  }
 }
 
 module.exports = { ProjectsController };
