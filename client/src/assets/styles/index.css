@@ -8,7 +8,7 @@
 @import "./base/auth.css";
 
 @import "../../components/Dashboard/dashboard.css";
-@import "../../components/Button/button.css";
+@import "../../components/atoms/Button/button.css";
 @import "../../components/Import/import.css";
 @import "../../components/Main/main.css";
 @import "../../components/Sidebar/sidebar.css";
@@ -20,4 +20,4 @@
 @import "../../components/Comments/comments.css";
 @import "../../components/Modal/modal.css";
 @import "../../components/ChangeColor/changeColor.css";
-@import "../../components/Spinner/spinner.css";
+@import "../../components/atoms/Spinner/spinner.css";

@@ -4,8 +4,8 @@ import * as THREE from "three";
 import clipping from "../../assets/images/icons/white/cut-solid.svg";
 import { getGroup, getPositionVector, getScene, getSceneModified } from "../../features/scene/sceneSlice";
 import { addColorToClippedMesh } from "../../utils/functions/clippingObject";
-import Button from "../Button/Button";
-import { Checkbox } from "../Checkbox/Checkbox";
+import Button from "../atoms/Button/Button";
+import { Checkbox } from "../atoms/Checkbox/Checkbox";
 
 export default function Clipping() {
   const scene = useSelector(getScene);
@@ -142,7 +142,7 @@ export default function Clipping() {
 
   return (
     <div className="flex items-center">
-      <Button typeClass="btn--img btn__icon" img={clipping} onClick={clipMesh} disabled={globalClipping} active={active} />
+      <Button typeClass="btn--img btn__icon" img={clipping} onClick={clipMesh} disabled={globalClipping} active={active} title="Clipping" />
       {clipped && (
         <span style={{ marginLeft: "10px" }}>
           <Checkbox label="Negated" onChange={handleNegated} className="text-white" />

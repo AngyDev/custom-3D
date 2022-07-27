@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import InputForm from "../../components/atoms/InputForm/InputForm";
 import ShowPassword from "../../components/atoms/ShowPassword/ShowPassword";
-import Button from "../../components/Button/Button";
+import Button from "../../components/atoms/Button/Button";
 import { useAuth } from "../../context/AuthContext";
 import { dispatchError } from "../../features/error/errorSlice";
 import { registerUser } from "../../services/api";

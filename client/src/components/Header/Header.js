@@ -14,7 +14,7 @@ import { resetProject } from "../../features/project/projectSlice";
 import { resetScene } from "../../features/scene/sceneSlice";
 import { getProjectById, updateProject } from "../../services/api";
 import AddComment from "../AddComment/AddComment";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 import Export from "../Export/Export";
 import Import from "../Import/Import";
 import Profile from "../Profile/Profile";

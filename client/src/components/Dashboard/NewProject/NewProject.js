@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import Button from "../../Button/Button";
+import Button from "../../atoms/Button/Button";
 import PropTypes from "prop-types";
 
 export default function NewProject({ saveNewProject, onClose }) {

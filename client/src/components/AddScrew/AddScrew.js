@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 import screwIcon from "../../assets/images/icons/white/screw.svg";
 import { getScene, getSceneModified, setSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
 import { useDispatch, useSelector } from "react-redux";

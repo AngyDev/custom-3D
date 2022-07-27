@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import PropTypes from "prop-types";
 import React from "react";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 import importIcon from "../../assets/images/icons/black/download-solid-b.svg";
 
 export default function Card({ color, project, onClick, deleteClick, archived, archiveProject }) {

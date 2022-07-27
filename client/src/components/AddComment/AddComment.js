@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getIsCommentsActive, setCommentsActive } from "../../features/comments/commentsSlice";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 import commentIcon from "../../assets/images/icons/white/comment-regular.svg";
 
 export default function AddComment() {

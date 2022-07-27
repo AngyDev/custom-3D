@@ -8,7 +8,7 @@ import { getScene } from "../../features/scene/sceneSlice";
 import { findById } from "../../utils/common-utils";
 import { getOffsetMesh } from "../../services/api";
 import { createMeshFromObject } from "../../utils/functions/createMeshFromObject";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 
 export default function Offset({ meshId }) {
   const scene = useSelector(getScene);

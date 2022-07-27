@@ -8,7 +8,7 @@ import { getObjectsToRemove, removeObjectFromRemove } from "../../features/objec
 import { getTemporaryComments, getProjectComments } from "../../features/comments/commentsSlice";
 import { useGetObjectsByProjectId } from "../../hooks/useGetObjectsByProjectId";
 import { saveObject, updateProject, deleteObject, saveComment } from "../../services/api";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 import Modal from "../Modal/Modal";
 import { useGetCommentsByProjectId } from "../../hooks/useGetCommentsByProjectId";
 import { dispatchError } from "../../features/error/errorSlice";

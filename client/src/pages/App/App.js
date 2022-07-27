@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Alert from "../../components/Alert/Alert";
+import Alert from "../../components/atoms/Alert/Alert";
 import Dashboard from "../../components/Dashboard/Dashboard";
 import LayoutEditor from "../../components/Layout/LayoutEditor";
 import ProtectedRoute from "../../components/ProtectedRoute/ProtectedRoute";
-import Spinner from "../../components/Spinner/Spinner";
+import Spinner from "../../components/atoms/Spinner/Spinner";
 import { AppWrapper } from "../../context/AppContext";
 import { dispatchError, getError } from "../../features/error/errorSlice";
 import { getLoading } from "../../features/loading/loadingSlice";

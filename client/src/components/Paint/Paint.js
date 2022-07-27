@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 import brushIcon from "../../assets/images/icons/white/brush-solid.svg";
 import * as THREE from "three";
 import { useSelector } from "react-redux";

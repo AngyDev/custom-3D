@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import xIcon from "../../assets/images/icons/black/close-modal.svg";
+import xIcon from "../../../assets/images/icons/black/close-modal.svg";
 import "./badge.css";
 
 export const Badge = ({ text, handleClick, className }) => {

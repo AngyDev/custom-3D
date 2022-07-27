@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import screenshotIcon from "../../assets/images/icons/white/screenshot.svg";
 import { getCamera, getRenderer, getScene } from "../../features/scene/sceneSlice";
 import { downloadObject } from "../../utils/functions/downloadObject";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 
 export default function Screenshot() {
   const renderer = useSelector(getRenderer);
