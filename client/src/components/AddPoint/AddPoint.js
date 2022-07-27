@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCanvas, getGroup, getScene, getSceneModified, setSceneModified } from "../../features/scene/sceneSlice";
 import * as THREE from "three";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 import { getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
 import { getHeaderHeight } from "../../features/dimensions/dimensionsSlice";
 import { setIsTextOpen } from "../../features/comments/commentsSlice";

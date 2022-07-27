@@ -7,8 +7,8 @@ import { getProject, updatedProject } from "../../features/project/projectSlice"
 import useGetUsers from "../../hooks/useGetUsers";
 import { updateProject } from "../../services/api";
 import { Autocomplete } from "../Autocomplete/Autocomplete";
-import { Badge } from "../Badge/Badge";
-import Button from "../Button/Button";
+import { Badge } from "../atoms/Badge/Badge";
+import Button from "../atoms/Button/Button";
 import Modal from "../Modal/Modal";
 
 export default function Share() {

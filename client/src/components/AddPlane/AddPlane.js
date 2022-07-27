@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
 import { getPlaneCounter, setPlaneCounter } from "../../features/counters/countersSlice";
 import { getScene, getSceneModified, setSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 
 export default function AddPlane() {
   const planeCounter = useSelector(getPlaneCounter);

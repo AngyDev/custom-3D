@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import arrowIcon from "../../assets/images/icons/white/angle-down-solid.svg";
-import Button from "../Button/Button";
+import arrowIcon from "../../../assets/images/icons/white/angle-down-solid.svg";
+import Button from "../../atoms/Button/Button";
 
 export default function Dropdown({ text, options, open, setOpen }) {
   return (

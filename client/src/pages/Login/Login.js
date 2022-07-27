@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Button from "../../components/Button/Button";
+import Button from "../../components/atoms/Button/Button";
 import { useForm } from "react-hook-form";
 import InputForm from "../../components/atoms/InputForm/InputForm";
 import LayoutAuth from "../LayoutAuth/LayoutAuth";

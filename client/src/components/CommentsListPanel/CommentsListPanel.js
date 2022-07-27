@@ -18,7 +18,7 @@ import {
   setSelectedMesh,
 } from "../../features/scene/sceneSlice";
 import { createLabel } from "../../utils/functions/objectLabel";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 import Comments from "../Comments/Comments";
 import ModalDelete from "../Modal/ModalDelete";
 import Panel from "../Panel/Panel";

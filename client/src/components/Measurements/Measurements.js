@@ -6,7 +6,7 @@ import { CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import rulerIcon from "../../assets/images/icons/white/ruler-solid.svg";
 import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
 import { getCanvas, getChildren, getControls, getGroup, getScene, getSceneModified, setSceneModified } from "../../features/scene/sceneSlice";
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 import { getMeasureCounter, setMeasureCounter } from "../../features/counters/countersSlice";
 import { setOpenMeausurePanel } from "../../features/measurements/measurementsSlice";
 

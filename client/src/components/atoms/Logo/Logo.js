@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
-import logoScuro from "../../assets/images/logo_sfondo_scuro.svg";
-import logoChiaro from "../../assets/images/logo_sfondo_chiaro.svg";
+import logoScuro from "../../../assets/images/logo_sfondo_scuro.svg";
+import logoChiaro from "../../../assets/images/logo_sfondo_chiaro.svg";
 
 export default function Logo({ className, theme }) {
   return (

@@ -4,7 +4,7 @@ import heightIcon from "../../assets/images/icons/black/up-down-solid.svg";
 import diameterIcon from "../../assets/images/icons/black/circle-notch-solid.svg";
 import * as THREE from "three";
 
-import Button from "../Button/Button";
+import Button from "../atoms/Button/Button";
 import { findById } from "../../utils/common-utils";
 import { useSelector } from "react-redux";
 import { getScene } from "../../features/scene/sceneSlice";

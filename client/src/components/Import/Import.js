@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import importIcon from "../../assets/images/icons/white/download-solid.svg";
-import Alert from "../Alert/Alert";
+import Alert from "../atoms/Alert/Alert";
 import PanelInfo from "../Panel/PanelInfo/PanelInfo";
 import * as THREE from "three";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
