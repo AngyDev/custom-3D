@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 
 const UserContext = createContext(null);
 
-const defaultUser = {
-  id: "d27db05e-fb3f-4942-a517-59fefbd97937",
-  firstName: "Angela",
-  lastName: "Busato",
-  email: "bsuato.angela@gmail.com",
-  role: "engeener",
-};
+// const defaultUser = {
+//   id: "d27db05e-fb3f-4942-a517-59fefbd97937",
+//   firstName: "Angela",
+//   lastName: "Busato",
+//   email: "bsuato.angela@gmail.com",
+//   role: "engeener",
+// };
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -22,6 +22,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("socketId");
     setUser(null);
   };
 

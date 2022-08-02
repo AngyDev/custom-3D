@@ -15,16 +15,16 @@ export default function Dashboard({ archived }) {
     const socketId = localStorage.getItem("socketId");
     if (socketId === null) {
       const socket = io(ENDPOINT, {
-        closeOnBeforeunload: false,
+        closeOnBeforeunload: false, // to prevent the killed connection with the server when I use the beforeunload eventListener
       });
 
       socket.on("socketId", (socketId) => {
         localStorage.setItem("socketId", socketId);
       });
 
-      socket.on("connect", () => {
-        console.log("connected to server");
-      });
+      // socket.on("connect", () => {
+      //   console.log("connected to server");
+      // });
 
       socket.emit("online", user.id, (error) => {
         console.log("online", error);

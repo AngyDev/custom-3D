@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import * as THREE from "three";
+import { PlaneGeometry, MeshStandardMaterial, Mesh, DoubleSide } from "three";
 import { getPlaneCounter, setPlaneCounter } from "../../features/counters/countersSlice";
 import { getScene, getSceneModified, setSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
 import Button from "../atoms/Button/Button";
@@ -32,12 +32,12 @@ export default function AddPlane() {
    * @returns Mesh
    */
   const createPlane = () => {
-    const geometry = new THREE.PlaneGeometry(50, 50, 1, 1);
-    const material = new THREE.MeshStandardMaterial({
+    const geometry = new PlaneGeometry(50, 50, 1, 1);
+    const material = new MeshStandardMaterial({
       color: "#38382f",
-      side: THREE.DoubleSide,
+      side: DoubleSide,
     });
-    const mesh = new THREE.Mesh(geometry, material);
+    const mesh = new Mesh(geometry, material);
     mesh.name = "Plane" + (planeCounter + 1);
 
     dispatch(setPlaneCounter(planeCounter + 1));
