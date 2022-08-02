@@ -9,7 +9,8 @@ const { Model } = require("objection");
 const { verifyToken } = require("./middleware/auth");
 const socketio = require("socket.io");
 const { ProjectsController } = require("./controllers/ProjectsController");
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.join(__dirname, `../.env.${process.env.NODE_ENV}`) });
 
 const app = express();
 const port = process.env.NODE_PORT || 3000;
@@ -42,7 +43,6 @@ io.on("connection", (socket) => {
 
     socket.disconnect(); // DISCONNECT SOCKET
   });
-
 });
 
 app.use(express.static(__dirname + "public"));
