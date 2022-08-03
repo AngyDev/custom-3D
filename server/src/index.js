@@ -20,9 +20,9 @@ const server = app.listen(port, host, () => {
   console.log(`App listening at http://${host}:${port}`);
 });
 
-app.use(cors({ origin: "http://localhost:9000", credentials: true }));
+app.use(cors({ origin: process.env.CLIENT_HOST, credentials: true }));
 
-const io = socketio(server, { cors: { origin: "http://localhost:9000" } });
+const io = socketio(server, { cors: { origin: process.env.CLIENT_HOST } });
 
 io.on("connection", (socket) => {
   console.log("User connected", socket.id);
@@ -50,7 +50,7 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:9000"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", process.env.CLIENT_HOST); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header("Access-Control-Allow-Credentials", true);
   next();

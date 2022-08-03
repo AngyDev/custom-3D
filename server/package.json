@@ -8,6 +8,7 @@
     "start": "NODE_ENV=local babel-node src/index.js",
     "start:dev": "NODE_ENV=development babel-node src/index.js",
     "knex": "knex --knexfile ./src/utils/knexfile.js",
+    "knex:dev": "NODE_ENV=development knex --knexfile ./src/utils/knexfile.js",
     "seed": "knex seed:run --knexfile ./src/utils/knexfile.js",
     "test": "node ./node_modules/mocha/bin/mocha ./src/test/*.js"
   },
