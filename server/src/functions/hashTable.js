@@ -1,4 +1,4 @@
-export class Hashtable {
+class Hashtable {
   constructor(length) {
     this.data = new Array(length);
     this.size = 0;
@@ -33,3 +33,5 @@ export class Hashtable {
     this.size++;
   }
 }
+
+module.exports = { Hashtable };

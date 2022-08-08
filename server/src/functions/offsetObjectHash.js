@@ -1,4 +1,4 @@
-import { Hashtable } from "./hashTable";
+const { Hashtable } = require("./hashTable");
 
 /**
  * Creates the mesh with offset
