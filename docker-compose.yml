@@ -3,13 +3,42 @@ services:
     nodeserver:
         build:
             context: ./server
+        command: sh -c "npm run knex migrate:latest && npm start"
         ports:
             - "3000:3000"
+        depends_on:
+            - db
+        env_file:
+            - ./server/.env.local
+        environment:
+            - DB_HOST=db
+        volumes:
+            - ./server:/app
+            - ./server/src/public/uploads:/usr/src/app/src/public/uploads
+            - ./app/node_modules
     nginx:
         restart: always
         build:
             context: ./nginx
         ports:
-            - "80:80"
+            - "8080:8080"
         depends_on:
             - nodeserver
+
+    db:
+        build:
+            context: ./db
+        ports: 
+            - "5432:5432"
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=password
+    client:
+        build: ./client
+        ports:
+            - "9000:9000"
+        env_file:
+            - ./client/.env
+        volumes:
+            - ./client:/app
+            - ./app/node_modules
