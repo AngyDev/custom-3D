@@ -17,6 +17,7 @@ module.exports = {
   devtool: "cheap-module-source-map",
   devServer: {
     port: 9000,
+    host: "0.0.0.0",
     disableHostCheck: true,
     historyApiFallback: true,
   },
@@ -33,6 +34,10 @@ module.exports = {
           },
         },
       },
+      // {
+      //   test: /\.(sa|sc|c)ss$/,
+      //   use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "sass-loader"],
+      // },
       {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, { loader: "css-loader", options: { importLoaders: 1 } }, "postcss-loader"],
