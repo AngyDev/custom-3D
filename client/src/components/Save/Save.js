@@ -59,30 +59,16 @@ export default function Save({ projectId, disabled }) {
 
     const objects = [...mesh, ...importedMesh, ...measures];
 
-    const promisesObjects = objects.map((object) => {
-      return new Promise((resolve, reject) => {
-        const file = getFile(object);
-        saveObject(object.uuid, object.name, projectId, file, `${object.uuid}.json`)
-          .then(() => {
-            console.log("object saved");
-            resolve();
-          })
-          .catch((error) => {
-            dispatch(dispatchError(error));
-            reject();
-          });
-      });
-    });
+    for (const object of objects) {
+      const file = getFile(object);
+      const response = await saveObject(object.uuid, object.name, projectId, file, `${object.uuid}.json`);
 
-    await Promise.all(promisesObjects).then(
-      () => {
-        console.log("promise all objects");
-        fetchGetObjectsByProjectId(projectId);
-      },
-      (error) => {
-        dispatch(dispatchError(error));
-      },
-    );
+      if (response.status !== 200) {
+        dispatch(dispatchError("Error saving object"));
+      }
+    }
+
+    fetchGetObjectsByProjectId(projectId);
 
     // Comments
     if (projectComments.length !== temporaryComments.length) {
