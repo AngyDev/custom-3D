@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTemporaryComments, removeComment } from "../../features/comments/commentsSlice";
 import { getObjects, addObjectToRemove } from "../../features/objects/objectsSlice";
 import { getScene, getSceneModified, setSelectedMesh } from "../../features/scene/sceneSlice";
-import { findById } from "../../utils/common-utils";
+import { filterByName, findById } from "../../utils/common-utils";
 import ModalDelete from "../Modal/ModalDelete";
 import PanelItem from "../PanelItem/PanelItem";
 
@@ -90,6 +90,10 @@ export default function Panel({ type }) {
     dispatch(setSelectedMesh("1"));
 
     const mesh = findById(id)(scene.children);
+
+    // checks if the mesh has an offset and remove it
+    const offset = filterByName("Offset " + mesh.name)(scene.children);
+    offset.length > 0 && scene.remove(offset[0]);
 
     if (mesh.parent.name === "Import") {
       mesh.parent.remove(mesh);
