@@ -43,7 +43,7 @@ export default function ScaleScrew({ meshId }) {
             className="mr-2 form__input px-1 py-0 text-base"
             placeholder="height"
             step="0.1"
-            defaultValue={mesh.geometry.parameters.height}
+            defaultValue={mesh ? mesh.geometry.parameters.height : 0}
             onChange={(e) => changeScale(e, "height")}
           />
           <Button typeClass="btn--img btn__icon-sm" img={heightIcon} onClick={() => applyScale("height")} />
@@ -54,7 +54,7 @@ export default function ScaleScrew({ meshId }) {
             className="mr-2 form__input px-1 py-0 text-base"
             placeholder="diameter"
             step="0.1"
-            defaultValue={mesh.geometry.parameters.radiusBottom}
+            defaultValue={mesh ? mesh.geometry.parameters.radiusBottom : 0}
             onChange={(e) => changeScale(e, "diameter")}
           />
           <Button typeClass="btn--img btn__icon-sm" img={diameterIcon} onClick={() => applyScale("diameter")} />
