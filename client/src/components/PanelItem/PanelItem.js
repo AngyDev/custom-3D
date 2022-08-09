@@ -26,9 +26,9 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   const [clipped, setClipped] = useState(false);
   const [openOffset, setOpenOffset] = useState(false);
   const [openObjectInfo, setOpenObjectInfo] = useState(false);
+  const [openScaleScrew, setOpenScaleScrew] = useState(false);
   const [selectedObject, setSelectedObject] = useState();
   const [panelTopPosition, setPanelTopPosition] = useState();
-  const [openScaleScrew, setOpenScaleScrew] = useState(false);
   const [meshToOffsetId, setMeshToOffsetId] = useState();
   const [screwId, setScrewId] = useState();
 
@@ -201,7 +201,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
 
   const handleScaleObject = (e) => {
     dispatch(setSelectedMesh(e.target.id));
-    setOpenScaleScrew(true);
+    setOpenScaleScrew(!openScaleScrew);
     setScrewId(e.target.id);
   };
 
@@ -234,6 +234,15 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
     if (tControls.visible) {
       tControls.detach();
     }
+  };
+
+  const deleteMesh = (e) => {
+    // close the opened panel before the delete of the object
+    // otherwise the panel pass to the next element
+    setOpenOffset(false);
+    setOpenScaleScrew(false);
+    setOpenObjectInfo(false);
+    deleteClick(e);
   };
 
   return (
@@ -275,7 +284,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
             <span className="opacity" id={uuid} onClick={handleOpacity} title="opacity" />
           </>
         )}
-        <span id={uuid} name={name} className="delete" onClick={deleteClick} title="delete"></span>
+        <span id={uuid} name={name} className="delete" onClick={deleteMesh} title="delete"></span>
       </div>
       {openOffset && (
         <div className="p-1">
