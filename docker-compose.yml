@@ -9,7 +9,7 @@ services:
         depends_on:
             - db
         env_file:
-            - ./server/.env.local
+            - ./server/.env.docker
         environment:
             - DB_HOST=db
         volumes:
