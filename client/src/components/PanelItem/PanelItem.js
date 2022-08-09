@@ -29,6 +29,8 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   const [selectedObject, setSelectedObject] = useState();
   const [panelTopPosition, setPanelTopPosition] = useState();
   const [openScaleScrew, setOpenScaleScrew] = useState(false);
+  const [meshToOffsetId, setMeshToOffsetId] = useState();
+  const [screwId, setScrewId] = useState();
 
   useEffect(() => {
     // checks the selected mesh to add background to panel object
@@ -194,11 +196,13 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   const handleOffset = (e) => {
     dispatch(setSelectedMesh(e.target.id));
     setOpenOffset(!openOffset);
+    setMeshToOffsetId(e.target.id);
   };
 
   const handleScaleObject = (e) => {
     dispatch(setSelectedMesh(e.target.id));
     setOpenScaleScrew(true);
+    setScrewId(e.target.id);
   };
 
   /**
@@ -275,12 +279,12 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
       </div>
       {openOffset && (
         <div className="p-1">
-          <Offset meshId={selectedMesh} />
+          <Offset meshId={meshToOffsetId} />
         </div>
       )}
       {openScaleScrew && (
         <div className="pt-1 pb-1">
-          <ScaleScrew meshId={selectedMesh} />
+          <ScaleScrew meshId={screwId} />
         </div>
       )}
       <Modal open={isOpen} onClose={() => setIsOpen(false)} title="Change mesh color" text="Change color">
