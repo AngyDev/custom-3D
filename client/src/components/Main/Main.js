@@ -35,6 +35,8 @@ export default function Main({ objects }) {
 
   const canvasRef = useRef(null);
 
+  const ENDPOINT = process.env.REACT_APP_ENDPOINT + "/";
+
   useEffect(async () => {
     const canvasCurrent = canvasRef.current;
 
@@ -194,7 +196,7 @@ export default function Main({ objects }) {
         dispatch(setMeasureCounter(Number(measureCounter)));
 
         for (const measure of measureGroup) {
-          const object = await loader.loadAsync("http://localhost:8080/" + measure.objectPath);
+          const object = await loader.loadAsync(ENDPOINT + measure.objectPath);
           groupMeasure.add(object);
         }
 
@@ -217,7 +219,7 @@ export default function Main({ objects }) {
 
     for (const object of objects) {
       if (!object.objectName.startsWith("Measure")) {
-        const mesh = await loader.loadAsync("http://localhost:8080/" + object.objectPath);
+        const mesh = await loader.loadAsync(ENDPOINT + object.objectPath);
         if (mesh.name.startsWith("Group")) {
           // add bounding box for paint function
           mesh.geometry.computeBoundingBox();
