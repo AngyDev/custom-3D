@@ -106,7 +106,7 @@ const calcOffset = (hashTable, newObjects, offset) => {
   for (var i = 0; i < hashTable.size; i++) {
     if (hashTable.data[i]) {
       for (var j = 0; j < hashTable.data[i].length; j++) {
-        // vctor hashTable.data[i][j][0];
+        // vector hashTable.data[i][j][0];
         // object hashTable.data[i][j][1];
 
         const normalsSum = calcNormalsSum(hashTable.data[i][j][1]);
