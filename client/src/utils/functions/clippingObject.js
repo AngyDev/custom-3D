@@ -8,7 +8,7 @@ import * as THREE from "three";
  * @param {Number} renderOrder The render order of the mesh
  * @returns THREE.Group of meshes
  */
-export const createPlaneStencilGroup = (geometry, plane, positionVector, renderOrder) => {
+export const createPlaneStencilGroup = (name, geometry, plane, positionVector, renderOrder) => {
   const group = new THREE.Group();
   const baseMat = new THREE.MeshBasicMaterial();
   baseMat.depthWrite = false;
@@ -46,7 +46,7 @@ export const createPlaneStencilGroup = (geometry, plane, positionVector, renderO
   mesh1.position.set(-positionVector.x, -positionVector.y, -positionVector.z);
 
   group.add(mesh1);
-  group.name = "planeStencilGroup";
+  group.name = "planeStencilGroup" + name;
 
   return group;
 };
@@ -59,64 +59,55 @@ export const createPlaneStencilGroup = (geometry, plane, positionVector, renderO
  * @param {THREE.Plane} planesNegated The list of the negated planes
  * @param {THREE.Plane} planes The list of the planes
  */
-export const addColorToClippedMesh = (scene, group, positionVector, planesNegated, planes) => {
-  let planeObjects = [];
+export const addColorToClippedMesh = (scene, group, positionVector, planesNegated, planes, clipIntersection) => {
   let object = new THREE.Group();
   object.name = "ClippingGroup";
   scene.add(object);
+
+  let y = 0;
 
   group.children.map((mesh) => {
     let geometry = mesh.geometry;
 
     for (let i = 0; i < planesNegated.length; i++) {
       const planeObj = planesNegated[i];
-      const stencilGroup = createPlaneStencilGroup(geometry, planeObj, positionVector, i + 1);
+      const stencilGroup = createPlaneStencilGroup(mesh.name, geometry, planeObj, positionVector, y);
       object.add(stencilGroup);
+
+      const cap = createPlaneColored(planes, planeObj, mesh.material.color, y + 0.1, clipIntersection);
+      cap.name = "Clipping" + mesh.name;
+      scene.add(cap);
+
+      planeObj.coplanarPoint(cap.position);
+      cap.lookAt(cap.position.x - planeObj.normal.x, cap.position.y - planeObj.normal.y, cap.position.z - planeObj.normal.z);
+      y++;
     }
 
     mesh.material.clippingPlanes = planesNegated;
   });
+};
 
-  // Set up clip plane rendering
-  const planeGeom = new THREE.PlaneGeometry(1000, 1000);
+const createPlaneColored = (planes, plane, color, renderOrder, clipIntersection) => {
+  const capMat = new THREE.MeshStandardMaterial({
+    color: color,
+    metalness: 0.1,
+    roughness: 0.75,
+    clipIntersection: clipIntersection,
+    clippingPlanes: planes.filter((p) => p !== plane),
+    side: THREE.DoubleSide,
+    stencilWrite: true,
+    stencilRef: 0,
+    stencilFunc: THREE.NotEqualStencilFunc,
+    stencilFail: THREE.ReplaceStencilOp,
+    stencilZFail: THREE.ReplaceStencilOp,
+    stencilZPass: THREE.ReplaceStencilOp,
+  });
+  const cap = new THREE.Mesh(new THREE.PlaneGeometry(1000, 1000), capMat);
+  // clear the stencil buffer
+  cap.onAfterRender = function (renderer) {
+    renderer.clearStencil();
+  };
 
-  for (let i = 0; i < planesNegated.length; i++) {
-    const poGroup = new THREE.Group();
-    poGroup.name = "ClippingPlaneGroup";
-    const plane = planes[i];
-    // plane is clipped by the other clipping planes
-    const planeMat = new THREE.MeshStandardMaterial({
-      color: "#DE7630",
-      metalness: 0.1,
-      roughness: 0.75,
-      clippingPlanes: planes.filter((p) => p !== plane),
-      side: THREE.DoubleSide,
-
-      stencilWrite: true,
-      stencilRef: 0,
-      stencilFunc: THREE.NotEqualStencilFunc,
-      stencilFail: THREE.ReplaceStencilOp,
-      stencilZFail: THREE.ReplaceStencilOp,
-      stencilZPass: THREE.ReplaceStencilOp,
-    });
-    const po = new THREE.Mesh(planeGeom, planeMat);
-
-    po.onAfterRender = function (renderer) {
-      renderer.clearStencil();
-    };
-
-    po.renderOrder = i + 1.1;
-    po.name = "plane" + i;
-
-    poGroup.add(po);
-    planeObjects.push(po);
-    scene.add(poGroup);
-  }
-
-  for (let i = 0; i < planeObjects.length; i++) {
-    const plane = planesNegated[i];
-    const po = planeObjects[i];
-    plane.coplanarPoint(po.position);
-    po.lookAt(po.position.x - plane.normal.x, po.position.y - plane.normal.y, po.position.z - plane.normal.z);
-  }
+  cap.renderOrder = renderOrder;
+  return cap;
 };

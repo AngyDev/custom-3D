@@ -1,6 +1,11 @@
 import * as THREE from "three";
 import { mergeVertices } from "three/examples/jsm/utils/BufferGeometryUtils";
 
+/**
+ * Creates a mesh from an objects with normals and vertices
+ * @param {Object} object This is an object with normals and vertices
+ * @returns THREE.Mesh
+ */
 export const createMeshFromObject = (object) =>
   new Promise((resolve) => {
     const geometry = new THREE.BufferGeometry();
