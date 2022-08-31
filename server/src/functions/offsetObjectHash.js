@@ -103,7 +103,9 @@ const createHashTableWithObject = (initialObjects) => {
  * @returns The new objects with the offset
  */
 const calcOffset = (hashTable, newObjects, offset) => {
-  for (var i = 0; i < hashTable.size; i++) {
+  // size returns the size of the table which also means the number of key-value pairs present in the table.
+  // for (var i = 0; i < hashTable.size; i++) {
+  for (var i = 0; i < hashTable.data.length; i++) {
     if (hashTable.data[i]) {
       for (var j = 0; j < hashTable.data[i].length; j++) {
         // vector hashTable.data[i][j][0];
