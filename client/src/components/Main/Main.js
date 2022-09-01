@@ -37,126 +37,128 @@ export default function Main({ objects }) {
 
   const ENDPOINT = process.env.REACT_APP_ENDPOINT + "/";
 
-  useEffect(async () => {
+  useEffect(() => {
     const canvasCurrent = canvasRef.current;
 
-    dispatch(setCanvas(canvasCurrent));
+    const createScene = async () => {
+      dispatch(setCanvas(canvasCurrent));
 
-    // Sizes
-    const sizes = {
-      width: canvasCurrent.offsetWidth,
-      height: canvasCurrent.offsetHeight,
-    };
+      // Sizes
+      const sizes = {
+        width: canvasCurrent.offsetWidth,
+        height: canvasCurrent.offsetHeight,
+      };
 
-    var scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf0f0f0);
+      var scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xf0f0f0);
 
-    // Base camera
-    const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 10000);
-    camera.position.z = 500;
-    scene.add(camera);
+      // Base camera
+      const camera = new THREE.PerspectiveCamera(45, sizes.width / sizes.height, 0.1, 10000);
+      camera.position.z = 500;
+      scene.add(camera);
 
-    // LIGHTS
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // color, intensity
-    scene.add(ambientLight);
+      // LIGHTS
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // color, intensity
+      scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    directionalLight.position.copy(camera.position);
-    directionalLight.castShadow = true;
-    scene.add(directionalLight);
-
-    // Renderer
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(sizes.width, sizes.height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.localClippingEnabled = true;
-    renderer.preserveDrawingBuffer = true;
-
-    canvasRef.current.appendChild(renderer.domElement);
-
-    const labelRenderer = new CSS2DRenderer();
-    labelRenderer.setSize(sizes.width, sizes.height);
-    labelRenderer.domElement.style.position = "absolute";
-    labelRenderer.domElement.style.top = "40px";
-
-    canvasRef.current.appendChild(labelRenderer.domElement);
-
-    // Controls
-    const oControls = new TrackballControls(camera, canvasCurrent);
-    oControls.enableDamping = true;
-    oControls.maxDistance = 2000;
-    oControls.rotateSpeed = 4;
-
-    // the light follow the camera position
-    oControls.addEventListener("change", lightUpdate);
-
-    dispatch(setControls(oControls));
-
-    function lightUpdate() {
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
       directionalLight.position.copy(camera.position);
-    }
+      directionalLight.castShadow = true;
+      scene.add(directionalLight);
 
-    // TransformControls
-    const tControls = new TransformControls(camera, canvasCurrent);
-    tControls.name = "TransformControls";
-    // tControls.addEventListener('change', render);
-
-    tControls.addEventListener("dragging-changed", function (event) {
-      oControls.enabled = !event.value;
-    });
-
-    scene.add(tControls);
-
-    const axesHelper = new THREE.AxesHelper(5);
-    scene.add(axesHelper);
-
-    const group = new THREE.Group();
-    group.name = "Import";
-    scene.add(group);
-
-    // If there are objects recreates the saved scene
-    if (objects.length > 0) {
-      dispatch(setLoading(true));
-      await recreateScene(scene, group);
-      dispatch(setLoading(false));
-    }
-
-    var render = function () {
-      // Render
-      renderer.render(scene, camera);
-      labelRenderer.render(scene, camera);
-      // Update controls
-      oControls.update();
-      // Call tick again on the next frame
-      window.requestAnimationFrame(render);
-    };
-
-    const onWindowResize = () => {
-      // Update sizes
-      sizes.width = canvasCurrent.offsetWidth;
-      sizes.height = canvasCurrent.offsetHeight;
-
-      // Update camera
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-
-      // Update renderer
+      // Renderer
+      const renderer = new THREE.WebGLRenderer();
       renderer.setSize(sizes.width, sizes.height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.localClippingEnabled = true;
+      renderer.preserveDrawingBuffer = true;
 
+      canvasCurrent.appendChild(renderer.domElement);
+
+      const labelRenderer = new CSS2DRenderer();
       labelRenderer.setSize(sizes.width, sizes.height);
+      labelRenderer.domElement.style.position = "absolute";
+      labelRenderer.domElement.style.top = "40px";
+
+      canvasCurrent.appendChild(labelRenderer.domElement);
+
+      // Controls
+      const oControls = new TrackballControls(camera, canvasCurrent);
+      oControls.enableDamping = true;
+      oControls.maxDistance = 2000;
+      oControls.rotateSpeed = 4;
+
+      // the light follow the camera position
+      oControls.addEventListener("change", lightUpdate);
+
+      dispatch(setControls(oControls));
+
+      function lightUpdate() {
+        directionalLight.position.copy(camera.position);
+      }
+
+      // TransformControls
+      const tControls = new TransformControls(camera, canvasCurrent);
+      tControls.name = "TransformControls";
+      // tControls.addEventListener('change', render);
+
+      tControls.addEventListener("dragging-changed", function (event) {
+        oControls.enabled = !event.value;
+      });
+
+      scene.add(tControls);
+
+      const axesHelper = new THREE.AxesHelper(5);
+      scene.add(axesHelper);
+
+      const group = new THREE.Group();
+      group.name = "Import";
+      scene.add(group);
+
+      // If there are objects recreates the saved scene
+      if (objects.length > 0) {
+        dispatch(setLoading(true));
+        await recreateScene(scene, group);
+        dispatch(setLoading(false));
+      }
+
+      var render = function () {
+        // Render
+        renderer.render(scene, camera);
+        labelRenderer.render(scene, camera);
+        // Update controls
+        oControls.update();
+        // Call tick again on the next frame
+        window.requestAnimationFrame(render);
+      };
+
+      const onWindowResize = () => {
+        // Update sizes
+        sizes.width = canvasCurrent.offsetWidth;
+        sizes.height = canvasCurrent.offsetHeight;
+
+        // Update camera
+        camera.aspect = sizes.width / sizes.height;
+        camera.updateProjectionMatrix();
+
+        // Update renderer
+        renderer.setSize(sizes.width, sizes.height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        labelRenderer.setSize(sizes.width, sizes.height);
+      };
+
+      window.addEventListener("resize", onWindowResize, false);
+
+      render();
+
+      dispatch(setScene(scene));
+      dispatch(setRenderer(renderer));
+      dispatch(setCamera(camera));
+      dispatch(setSceneModified(!sceneModified));
     };
 
-    window.addEventListener("resize", onWindowResize, false);
-
-    render();
-
-    dispatch(setScene(scene));
-    dispatch(setRenderer(renderer));
-    dispatch(setCamera(camera));
-    dispatch(setSceneModified(!sceneModified));
-
-    return () => canvasRef.current.removeChild(renderer.domElement);
+    createScene();
   }, []);
 
   /**
