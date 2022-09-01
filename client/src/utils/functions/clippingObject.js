@@ -58,6 +58,7 @@ export const createPlaneStencilGroup = (name, geometry, plane, positionVector, r
  * @param {THREE.Vector} positionVector The vector to position the mesh
  * @param {THREE.Plane} planesNegated The list of the negated planes
  * @param {THREE.Plane} planes The list of the planes
+ * @param {Boolean} clipIntersection The value of the property to set on the colored planes
  */
 export const addColorToClippedMesh = (scene, group, positionVector, planesNegated, planes, clipIntersection) => {
   let object = new THREE.Group();
@@ -87,6 +88,15 @@ export const addColorToClippedMesh = (scene, group, positionVector, planesNegate
   });
 };
 
+/**
+ * Creates the colored planes for the clipping
+ * @param {Array} planes The list of planes used for the clipping
+ * @param {THREE.Plane} plane Plane to create
+ * @param {String} color Color of the mesh
+ * @param {Number} renderOrder The order to render the plane
+ * @param {Boolean} clipIntersection
+ * @returns
+ */
 const createPlaneColored = (planes, plane, color, renderOrder, clipIntersection) => {
   const capMat = new THREE.MeshStandardMaterial({
     color: color,
