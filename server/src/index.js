@@ -38,8 +38,10 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", async () => {
     console.log("user", user);
-    await ProjectsController.releaseProjectsLocked(user);
-    console.log("User disconnected", socket.id);
+    if (user) {
+      await ProjectsController.releaseProjectsLocked(user);
+      console.log("User disconnected", socket.id);
+    }
 
     socket.disconnect(); // DISCONNECT SOCKET
   });
