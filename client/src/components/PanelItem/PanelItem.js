@@ -12,7 +12,7 @@ import { findById } from "../../utils/common-utils";
 import PanelObjectInfo from "../Panel/PanelObjectInfo/PanelObjectInfo";
 import ScaleScrew from "../ScaleScrew/ScaleScrew";
 
-export default function PanelItem({ uuid, type, name, deleteClick }) {
+export default function PanelItem({ uuid, type, name, deleteClick, meshSelected }) {
   const scene = useSelector(getScene);
   const group = useSelector(getGroup);
   const selectedMesh = useSelector(getSelectedMesh);
@@ -248,7 +248,7 @@ export default function PanelItem({ uuid, type, name, deleteClick }) {
   return (
     <>
       <div className={`option flex items-center text-black ${selected ? "option-active" : ""}`}>
-        <span className="visible" id={uuid} onClick={handleClick} title="visibility"></span>
+        <span className={`visible ${!meshSelected.visible ? "active" : ""}`} id={uuid} onClick={handleClick} title="visibility"></span>
         {type === "points" ? (
           <span className="option__point" onClick={() => pointClick(uuid)}>
             {name}
@@ -308,4 +308,5 @@ PanelItem.propTypes = {
   name: PropTypes.string.isRequired,
   uuid: PropTypes.string.isRequired,
   deleteClick: PropTypes.func.isRequired,
+  meshSelected: PropTypes.object,
 };

@@ -137,28 +137,38 @@ export default function Panel({ type }) {
         {type === "scene" ? (
           <div id="scene" className="">
             {meshList.length > 0 &&
-              meshList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="scene" />)}
+              meshList.map((mesh, i) => (
+                <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="scene" meshSelected={mesh} />
+              ))}
           </div>
         ) : type === "planes" ? (
           <div id="planes" className="">
             {planeList.length > 0 &&
-              planeList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="planes" />)}
+              planeList.map((mesh, i) => (
+                <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="planes" meshSelected={mesh} />
+              ))}
           </div>
         ) : type === "points" ? (
           <div id="points" className="">
             {pointList.length > 0 &&
-              pointList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="points" />)}
+              pointList.map((mesh, i) => (
+                <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="points" meshSelected={mesh} />
+              ))}
           </div>
         ) : type === "measure" ? (
           <div id="measure" className="">
             {measureList.length > 0 &&
-              measureList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="measure" />)}
+              measureList.map((mesh, i) => (
+                <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="measure" meshSelected={mesh} />
+              ))}
           </div>
         ) : (
           type === "screw" && (
             <div id="screw" className="">
               {screwList.length > 0 &&
-                screwList.map((mesh, i) => <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="screw" />)}
+                screwList.map((mesh, i) => (
+                  <PanelItem key={i} name={mesh.name} uuid={mesh.uuid} deleteClick={handleDelete} type="screw" meshSelected={mesh} />
+                ))}
             </div>
           )
         )}
