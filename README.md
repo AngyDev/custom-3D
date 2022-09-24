@@ -1,33 +1,44 @@
 # Precise
 
 ## Table of Contents
-- [Precise](#precise)
-  - [Table of Contents](#table-of-contents)
-  - [General info](#general-info)
-  - [Features](#features)
-    - [Frontend](#frontend)
-    - [Backend](#backend)
-  - [Requirements](#requirements)
-  - [Setup](#setup)
-    - [Docker](#docker)
 
-## General info
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+        <a href="#about-the-project">About The Project</a>
+    </li>
+    <li>
+      <a href="#tech-stack">Tech stack</a>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#docker">Docker</a></li>
+      </ul>
+    </li>
+  </ol>
+</details>
 
-## Features
-### Frontend
+## About the project
+
+## Tech stack
+**Frontend**
 
 - Javascript
 - React
 - Webpack
-### Backend
+
+**Backend**
 
 - Node.JS
 - Express
 - Knex
 - Postgress
-## Requirements
+## Getting Started
 
-## Setup
+### Setup
 
 [Frontend README](https://github.com/AngyDev/custom-3D/tree/main/client/README.md)
 
