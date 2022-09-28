@@ -15,6 +15,7 @@ export default function Comments({ comments, deleteElement }) {
               uuid={item.id ? item.id : ""}
               name={item.firstName + " " + item.lastName}
               text={item.text}
+              date={item.createdAt ? item.createdAt : ""}
               deleteClick={deleteElement}
             />
           ))}
