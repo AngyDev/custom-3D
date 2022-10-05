@@ -260,7 +260,7 @@ export default function PanelItem({ uuid, type, name, deleteClick, meshSelected 
           <>
             <span id={uuid} name={name} className="translate" onClick={(e) => transformObject(e, "translate")} title="translate"></span>
             <span id={uuid} name={name} className="rotate" onClick={(e) => transformObject(e, "rotate")} title="rotate"></span>
-            <span id={uuid} name={name} className="scale" onClick={(e) => transformObject(e, "scale")} title="scale"></span>
+            {type === "planes" && <span id={uuid} name={name} className="scale" onClick={(e) => transformObject(e, "scale")} title="scale"></span>}
             <span id={uuid} name={name} className="opacity" onClick={handleOpacity} title="opacity" />
             {type === "screw" && <span id={uuid} name={name} className="height" onClick={(e) => handleScaleObject(e)} title="scale"></span>}
             {type === "planes" && (
