@@ -7,30 +7,6 @@ const axiosService = axios.create({
   withCredentials: true,
 });
 
-// let refresh = false;
-
-// axiosService.interceptors.response.use(
-//   (response) => {
-//     console.log("response", response);
-//     return response;
-//   },
-//   async (error) => {
-//     console.log("error", error);
-//     if (error.response.status === 401 && !refresh) {
-//       refresh = true;
-//       const response = await axiosService.post("/refresh", {}, { withCredentials: true });
-
-//       if (response.status === 200) {
-//         // axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
-//         return axiosService(error.config); // contains all the information of the previous request that failed
-//       }
-//     }
-
-//     refresh = false;
-//     return error;
-//   },
-// );
-
 axiosService.interceptors.response.use(
   (response) => {
     return response;
