@@ -20,6 +20,7 @@ import { createLabel, createLabelMeasure } from "../utils/functions/objectLabel"
 import { setOpenMeausurePanel } from "../features/measurements/measurementsSlice";
 import { setCommentCounter, setMeasureCounter, setPlaneCounter, setScrewCounter } from "../features/counters/countersSlice";
 import { negativeVector } from "../utils/functions/objectCalc";
+import { dispatchError } from "../features/error/errorSlice";
 
 export const useCreateScene = () => {
   const dispatch = useDispatch();
@@ -182,7 +183,10 @@ export const useCreateScene = () => {
         dispatch(setMeasureCounter(Number(measureCounter)));
 
         for (const measure of measureGroup) {
-          const object = await loader.loadAsync(ENDPOINT + measure.objectPath);
+          const object = await loader.loadAsync(ENDPOINT + measure.objectPath).catch((error) => {
+            console.log(error);
+            dispatch(dispatchError("Error loading files"));
+          });
           groupMeasure.add(object);
         }
 
@@ -205,8 +209,12 @@ export const useCreateScene = () => {
 
     for (const object of objects) {
       if (!object.objectName.startsWith("Measure")) {
-        const mesh = await loader.loadAsync(ENDPOINT + object.objectPath);
-        if (mesh.name.startsWith("Group")) {
+        const mesh = await loader.loadAsync(ENDPOINT + object.objectPath).catch((error) => {
+          console.log(error);
+          dispatch(dispatchError("Error loading files"));
+        });
+
+        if (mesh && mesh.name.startsWith("Group")) {
           // add bounding box for paint function
           mesh.geometry.computeBoundingBox();
           mesh.geometry.computeBoundsTree();

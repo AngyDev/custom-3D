@@ -15,8 +15,10 @@ export const errorSlice = createSlice({
         if (action.payload.response) {
           action.payload.response.status === 500 ? (errorMessage = "Internal server error") : (errorMessage = action.payload.response.data.error);
           errorText = action.payload.response?.status + " " + errorMessage;
-        } else {
+        } else if (action.payload.message) {
           errorText = action.payload.message;
+        } else {
+          errorText = action.payload;
         }
       }
 
