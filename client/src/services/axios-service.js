@@ -5,6 +5,10 @@ const API_URL = process.env.REACT_APP_API_URL;
 const axiosService = axios.create({
   baseURL: API_URL,
   withCredentials: true,
+  // headers for test with localtunnel
+  headers: {
+    "Bypass-Tunnel-Reminder": true,
+  },
 });
 
 axiosService.interceptors.response.use(

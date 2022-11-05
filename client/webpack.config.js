@@ -16,9 +16,28 @@ module.exports = {
   mode: "development",
   devtool: "cheap-module-source-map",
   devServer: {
+    host: "0.0.0.0",
     port: 9000,
     disableHostCheck: true,
     historyApiFallback: true,
+    // add the proxy to the webpack substitutes the ngrok service
+    proxy: {
+      "/api": {
+        target: "http://localhost:9000",
+        router: () => "http://localhost:3000",
+        logLevel: "debug",
+      },
+      "/socket.io": {
+        target: "http://localhost:9000",
+        router: () => "http://localhost:3000",
+        ws: true,
+      },
+      "/": {
+        target: "http://localhost:9000",
+        router: () => "http://localhost:3000",
+        secure: false,
+      },
+    },
   },
 
   module: {
