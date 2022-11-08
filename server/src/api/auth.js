@@ -77,16 +77,18 @@ const login = errorHandler(async (req, res) => {
 
     // set the token in the cookie
     res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+      domain: ".local.lt",
+      // httpOnly: true,
+      sameSite: "none",
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     });
 
     res.cookie("refreshToken", newRefreshToken !== "" ? newRefreshToken : refreshTokenUser[0].token, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+      domanin: ".local.lt",
+      // httpOnly: true,
+      sameSite: "none",
+      secure: true,
       maxAge: 7 * 14 * 60 * 60 * 1000, // 7 days
     });
 
@@ -133,16 +135,18 @@ const register = errorHandler(async (req, res) => {
 
   // set the token in the cookie
   res.cookie("token", token, {
-    httpOnly: true, // with true it will not be accessible from client side and we can't see the value in the cookie object in the browser development tools
-    sameSite: "lax",
-    secure: false,
+    // httpOnly: true, // with true it will not be accessible from client side and we can't see the value in the cookie object in the browser development tools
+    domain: ".local.lt",
+    sameSite: "none",
+    secure: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   });
 
   res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+    domain: ".local.lt",
+    sameSite: "none",
+    secure: true,
+    // httpOnly: true,
     maxAge: 7 * 14 * 60 * 60 * 1000, // 7 days
   });
 

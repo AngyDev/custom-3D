@@ -22,7 +22,14 @@ const server = app.listen(port, host, () => {
 
 app.use(cors({ origin: process.env.CLIENT_HOST, credentials: true }));
 
-const io = socketio(server, { cors: { origin: process.env.CLIENT_HOST } });
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", process.env.CLIENT_HOST); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Credentials", true);
+  next();
+});
+
+const io = socketio(server, { cors: { origin: '*' } });
 
 io.on("connection", (socket) => {
   console.log("User connected", socket.id);
@@ -50,13 +57,6 @@ io.on("connection", (socket) => {
 app.use(express.static(__dirname + "/public"));
 app.use(morgan("dev"));
 app.use(cookieParser());
-
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", process.env.CLIENT_HOST); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header("Access-Control-Allow-Credentials", true);
-  next();
-});
 
 const environment = knex(process.env.NODE_ENV === "production" ? knexConfig.production : knexConfig.development);
 Model.knex(environment);
