@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import shareIcon from "../../assets/images/icons/white/share-nodes-solid.svg";
 import { setLoading } from "../../features/loading/loadingSlice";
+import { dispatchError } from "../../features/error/errorSlice";
 import { getProject, updatedProject } from "../../features/project/projectSlice";
 import useGetUsers from "../../hooks/useGetUsers";
 import { updateProject } from "../../services/api";
@@ -44,7 +45,7 @@ function ShareModal({ users, onClose }) {
   );
 
   const owner = users.filter((user) => user.id === project.userId)[0];
-  // list of users that are not assigned to the project or the owner
+  // list of users that are not assigned to the project or the owner of the project
   const [usersAvailables, setUsersAvailables] = useState(
     project.assignedAt !== null
       ? users.filter((user) => !project.assignedAt.includes(user.id)).filter((user) => user.id !== project.userId)
@@ -79,6 +80,10 @@ function ShareModal({ users, onClose }) {
     setText("");
   };
 
+  /**
+   * Updates the assignedAt value in the project
+   * @param {Event} e
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -87,9 +92,13 @@ function ShareModal({ users, onClose }) {
     const projectUpdate = await updateProject(project.id, {
       ...project,
       assignedAt: selectedSuggestion.length !== 0 ? selectedSuggestion.map((user) => user.id) : null,
+    }).catch((error) => {
+      console.log("Error:", error);
+      dispatch(dispatchError("Error saving user"));
+      dispatch(setLoading(false));
     });
 
-    dispatch(updatedProject(projectUpdate));
+    dispatch(updatedProject(projectUpdate.data));
     dispatch(setLoading(false));
     onClose();
   };
