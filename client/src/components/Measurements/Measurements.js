@@ -192,7 +192,7 @@ export default function Measurements({ openPanel }) {
       <Button typeClass="btn--img btn__icon button" img={rulerIcon} onClick={addMeasures} title="Measure" active={active} />
       <div className="popover__content rounded">
         <p className="popover__message">
-          Press Left Mouse click to start drawing a line. Continue to hold Left Mouse and click again to mark the end of the line
+          Press Left Mouse click to start drawing a line. Continue to hold the left mouse and click again to mark the end of the line
         </p>
       </div>
     </div>
