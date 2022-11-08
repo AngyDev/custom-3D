@@ -44,6 +44,19 @@
 
 [Backend README](https://github.com/AngyDev/custom-3D/tree/main/server/README.md)
 
+### LocalTunnel
+
+```
+// start the client
+lt --port 9000 --subdomain my-app --local-host localhost
+
+// start the server
+lt --port 3000 --subdomain my-app-server --local-host localhost
+
+// or
+npm run start:tunnel // frontend, backend
+```
+
 ### Docker
 
 1. Clone the repository 
