@@ -25,7 +25,7 @@ app.use(cors({ origin: process.env.CLIENT_HOST, credentials: true }));
 const io = socketio(server, { cors: { origin: process.env.CLIENT_HOST } });
 
 io.on("connection", (socket) => {
-  console.log("User connected", socket.id);
+  console.log("Socket connected", socket.id);
 
   io.emit("socketId", socket.id);
 
@@ -37,10 +37,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", async () => {
-    console.log("user", user);
+    console.log("User disconnected", user);
     if (user) {
       await ProjectsController.releaseProjectsLocked(user);
-      console.log("User disconnected", socket.id);
+      console.log("Socket disconnected", socket.id);
     }
 
     socket.disconnect(); // DISCONNECT SOCKET

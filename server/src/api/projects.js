@@ -49,7 +49,7 @@ const createProject = errorHandler(async (req, res) => {
   // Validate the body input
   validateProject(project);
 
-  // TODO: Cheks if the project already exists?
+  // TODO: Checks if the project already exists?
 
   // Create the project
   const createProject = await ProjectsController.createProject(project);
