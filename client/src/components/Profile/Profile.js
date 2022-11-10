@@ -10,9 +10,11 @@ import Modal from "../Modal/Modal";
 import { useForm } from "react-hook-form";
 import InputForm from "../atoms/InputForm/InputForm";
 import ShowPassword from "../atoms/ShowPassword/ShowPassword";
+import useResetContext from "../../hooks/useResetContext";
 
 export default function Profile() {
   const { user, logout } = useAuth();
+  const { resetContext } = useResetContext();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +28,12 @@ export default function Profile() {
     releaseProjectsLocked(user.id)
       .then(() => {
         getLogout(user.id)
-          .then(() => logout())
+          .then(() => {
+            // reset all states
+            resetContext();
+            // logout
+            logout();
+          })
           .catch((error) => dispatch(dispatchError(error)));
       })
       .catch((error) => dispatch(dispatchError(error)));
