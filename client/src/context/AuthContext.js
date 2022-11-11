@@ -7,7 +7,7 @@ const UserContext = createContext(null);
 //   id: "d27db05e-fb3f-4942-a517-59fefbd97937",
 //   firstName: "Angela",
 //   lastName: "Busato",
-//   email: "bsuato.angela@gmail.com",
+//   email: "busato.angela@gmail.com",
 //   role: "engeener",
 // };
 
