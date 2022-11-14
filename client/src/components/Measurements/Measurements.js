@@ -42,7 +42,6 @@ export default function Measurements({ openPanel }) {
         canvas.addEventListener("pointermove", onDocumentMouseMove);
       }
       return () => {
-        console.log("return");
         canvas.removeEventListener("pointerdown", onDocumentMouseDown);
         canvas.removeEventListener("pointermove", onDocumentMouseMove);
       };
@@ -53,6 +52,10 @@ export default function Measurements({ openPanel }) {
     if (finish) {
       dispatch(setSceneModified(!isModified));
       setFinish(false);
+      // when the user finish the measurement the controls are enabled and the button is deactivated
+      // the user to make a new measurement must reclick on the button
+      controls.enabled = !controls.enabled;
+      setActive(!active);
     }
   }, [finish]);
 
