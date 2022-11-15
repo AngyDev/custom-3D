@@ -150,7 +150,7 @@ export default function CommentsListPanel({ projectId }) {
   };
 
   return (
-    <div className="comments  bg-baseLight dark:bg-base text-white">
+    <div className="comments bg-baseLight dark:bg-base text-white">
       <div className="properties">Comments</div>
       <div className="sidebar__buttons">
         <Button typeClass="btn--size" text="ADD POINT" onClick={addPoint} />
