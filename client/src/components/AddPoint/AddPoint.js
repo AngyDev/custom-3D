@@ -22,10 +22,6 @@ export default function AddPoint() {
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
 
-  // useEffect(() => {
-  //     console.log("AddPoint");
-  // })
-
   const addPoint = () => {
     canvas.addEventListener("dblclick", onPointerClick);
   };
