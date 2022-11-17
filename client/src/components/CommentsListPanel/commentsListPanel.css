@@ -3,8 +3,7 @@
   width: 310px;
   min-width: 310px;
   height: 100vh;
-  padding-top: 0;
-  padding: 10px;
+  padding: 0 10px 10px 10px;
   position: sticky;
   overflow: auto;
   padding-bottom: 72px;
