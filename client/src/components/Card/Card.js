@@ -12,7 +12,8 @@ export default function Card({ color, project, onClick, deleteClick, archived, a
       </div>
       <div className="p-4">
         <span className="font-bold">{project.patientCode}</span>
-        <div className="mt-4 mb-4">
+        <div className="mt-4 mb-4"></div>
+        {/* <div className="mt-4 mb-4">
           <div className="pb-2">
             <div className="w-full bg-gray-300 rounded-full">
               <div className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: "50%" }}>
@@ -21,7 +22,7 @@ export default function Card({ color, project, onClick, deleteClick, archived, a
             </div>
           </div>
           <span className="block text-gray-500 text-sm">Stato: {project.status}</span>
-        </div>
+        </div> */}
         <div>
           <span>
             Created by: {project.firstName} {project.lastName}
