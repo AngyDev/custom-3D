@@ -24,6 +24,7 @@ export default function Measurements({ openPanel }) {
 
   const [finish, setFinish] = useState(false);
   const [active, setActive] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   let drawingLine = false;
 
@@ -88,6 +89,7 @@ export default function Measurements({ openPanel }) {
     const intersects = raycaster.intersectObjects(group.children, true);
 
     if (intersects.length > 0) {
+      setDisabled(true);
       const measureName = "Measure" + count;
       if (!drawingLine) {
         //start the line
@@ -140,6 +142,7 @@ export default function Measurements({ openPanel }) {
         dispatch(setMeasureCounter(measureCounter + 1));
         drawingLine = false;
 
+        setDisabled(false);
         setFinish(true);
       }
     }
@@ -192,7 +195,7 @@ export default function Measurements({ openPanel }) {
 
   return (
     <div className="popover__wrapper">
-      <Button typeClass="btn--img btn__icon button" img={rulerIcon} onClick={addMeasures} title="Measure" active={active} />
+      <Button typeClass="btn--img btn__icon button" img={rulerIcon} onClick={addMeasures} title="Measure" active={active} disabled={disabled} />
       <div className="popover__content rounded">
         <p className="popover__message">
           Press Left Mouse click to start drawing a line. Continue to hold the left mouse and click again to mark the end of the line
