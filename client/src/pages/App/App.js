@@ -11,6 +11,7 @@ import { dispatchError, getError } from "../../features/error/errorSlice";
 import { getLoading } from "../../features/loading/loadingSlice";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
+import PasswordReset from "../PasswordReset/PasswordReset";
 
 export default function App() {
   const error = useSelector(getError);
@@ -42,11 +43,13 @@ export default function App() {
         <BrowserRouter>
           <Switch>
             <Route exact path="/">
-              {/* <Dashboard /> */}
               <Login />
             </Route>
             <Route path="/register">
               <Register />
+            </Route>
+            <Route exact path="/password_reset">
+              <PasswordReset />
             </Route>
             <Route path="/dashboard">
               <ProtectedRoute>
