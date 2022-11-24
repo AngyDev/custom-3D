@@ -8,5 +8,6 @@ router.post("/register", api.register);
 router.post("/refresh", api.refreshToken);
 router.post("/logout", api.logout);
 router.post("/change-password", api.changePassword);
+router.post("/reset-password", api.resetPassword);
 
 module.exports = router;

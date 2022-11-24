@@ -169,6 +169,13 @@ export const changePassword = async (userId, oldPassword, newPassword) => {
   });
 };
 
+export const resetPassword = async (email, password) => {
+  return await axios.post("/reset-password", {
+    email,
+    password,
+  });
+};
+
 export const releaseProjectsLocked = async (userId) => {
   console.log("releaseProjectsLocked", userId);
   return await axios.get(`/release-projects-locked/${userId}`);
