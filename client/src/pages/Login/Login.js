@@ -52,8 +52,8 @@ export default function Login() {
           />
           {errors.email && <div className="form__error">{errors.email.message}</div>}
         </div>
-        <div className="relative">
-          <div className="w-full mb-10">
+        <div className="relative mb-5">
+          <div className="w-full mb-5">
             <InputForm
               label="Password"
               id="password"
@@ -68,6 +68,9 @@ export default function Login() {
           <div className="absolute top-12 right-3">
             <ShowPassword showPassword={showPassword} onClick={toggle} />
           </div>
+          <div>
+            <Link to="/password_reset">Forgot password?</Link>
+          </div>
         </div>
         <div className="flex flex-col gap-4">
           <Button type="submit" typeClass="modal__btn-confirm w-full" text="Login" />
@@ -75,13 +78,6 @@ export default function Login() {
             <Button type="button" typeClass="modal__btn-confirm w-full" text="Register" />
           </Link>
         </div>
-        {/* <Button type="submit" typeClass="modal__btn-confirm w-full" text="Login" />
-            <p className="py-2">
-              <span className="text-black dark:text-gray-300">Don't have an account yet? </span>
-              <Link to="/signup" className="underline">
-                <span className="font-bold">Sign up</span>
-              </Link>
-            </p> */}
       </form>
     </LayoutAuth>
   );
