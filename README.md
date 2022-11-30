@@ -43,6 +43,10 @@ The application is divided into two parts, the client and the server. it is writ
 - [Postgresql](https://www.postgresql.org/) - A realational database
 ## Getting Started
 
+### Requirements
+- `node: >=14`
+- `npm`
+
 ### Setup
 
 [Frontend README](https://github.com/AngyDev/custom-3D/tree/main/client/README.md)
