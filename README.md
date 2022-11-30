@@ -1,4 +1,5 @@
 # Precise
+Precise is a Web-Based 3D visualization and editing application for surgical simulation of tumor resection.
 
 ## Table of Contents
 
@@ -22,20 +23,24 @@
 </details>
 
 ## About the project
+The Precise application is part of the [Precise Project](https://www.preciseproject.it/). The idea originating the PRECISE project comes from the urgent need of researching, innovate, integrate and validate existing and novel 3D technologies in a new objective unified framework for enabling in the current clinical practice, patient-specific methods and tools for the training, the simulation, the intervention and the follow-up of personalized surgical approaches. Such technologies include CAD, Reverse Engineering, Additive Manufacturing, and Virtual and Augmented Reality. <br>
+The Precise application is developed to create a project, import STL files, and visualize those files as 3D images and it gives the possibility to edit and interact with these images through specialized tools.
 
 ## Tech stack
+The application is divided into two parts, the client and the server. it is written completely in JavaScript. Following the technologies used to develop the application:
+
 **Frontend**
 
-- Javascript
-- React
-- Webpack
+- [Three.js](https://threejs.org/) - *JavaScript* library used to create and display animated 3D computer graphics in a web
+- [React](https://reactjs.org/) - *JavaScript* library for building user interface
+- [Webpack 5](https://webpack.js.org/) - *JavaScript* module bundler.
 
 **Backend**
 
-- Node.JS
-- Express
-- Knex
-- Postgress
+- [Node.JS](https://nodejs.org/it/) - An open source server environment
+- [Express](https://expressjs.com/it/) - A framework for Node.js web application
+- [Knex](https://knexjs.org/) - SQL Query Builder for Javascript
+- [Postgresql](https://www.postgresql.org/) - A realational database
 ## Getting Started
 
 ### Setup
@@ -44,7 +49,7 @@
 
 [Backend README](https://github.com/AngyDev/custom-3D/tree/main/server/README.md)
 
-### Docker
+### Docker Setup
 
 1. Clone the repository 
 2. Open the terminal in the project folder
