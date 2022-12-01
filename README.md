@@ -24,7 +24,7 @@ Precise is a Web-Based 3D visualization and editing application for surgical sim
 
 ## About the project
 The Precise application is part of the [Precise Project](https://www.preciseproject.it/). The idea originating the PRECISE project comes from the urgent need of researching, innovate, integrate and validate existing and novel 3D technologies in a new objective unified framework for enabling in the current clinical practice, patient-specific methods and tools for the training, the simulation, the intervention and the follow-up of personalized surgical approaches. Such technologies include CAD, Reverse Engineering, Additive Manufacturing, and Virtual and Augmented Reality. <br>
-The Precise application is developed to create a project, import STL files, and visualize those files as 3D images and it gives the possibility to edit and interact with these images through specialized tools.
+The Precise application is developed to create a project, import STL files, and visualize those files as 3D images and it gives the possibility to edit and interact with these images through specialized tools. The application is compatible with tablets.
 
 ## Tech stack
 The application is divided into two parts, the client and the server. it is written completely in JavaScript. Following the technologies used to develop the application:
@@ -40,7 +40,7 @@ The application is divided into two parts, the client and the server. it is writ
 - [Node.JS](https://nodejs.org/it/) - An open source server environment
 - [Express](https://expressjs.com/it/) - A framework for Node.js web application
 - [Knex](https://knexjs.org/) - SQL Query Builder for Javascript
-- [Postgresql](https://www.postgresql.org/) - A realational database
+- [Postgresql](https://www.postgresql.org/) - A relational database
 ## Getting Started
 
 ### Requirements
