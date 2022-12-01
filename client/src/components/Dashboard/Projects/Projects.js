@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 import { useAuth } from "../../../context/AuthContext";
 import { useDeleteProject } from "../../../hooks/useDeleteProject";
 import useGetProjectsByUserId from "../../../hooks/useGetProjectsByUserId";
-import Card from "../../Card/Card";
+import Card from "../../atoms/Card/Card";
 import ModalDelete from "../../Modal/ModalDelete";
 import { getProjectById, updateProject } from "../../../services/api";
 import { useDispatch } from "react-redux";
