@@ -72,7 +72,7 @@ export default function Projects({ archived }) {
 
   return (
     <>
-      <div className="container-component bg-baseLight dark:bg-base h-screen overflow-y-auto" style={{ paddingBottom: "83px" }}>
+      <div className="container-component projects-container bg-baseLight dark:bg-base h-screen overflow-y-auto">
         {Object.keys(projects).length > 0 ? (
           <div className="grid desktop:grid-cols-4 sm:grid-cols-2 lg:grid-cols-3 gap-10">
             {projects.map((project, i) => (

@@ -1,0 +1,9 @@
+.projects-container {
+  padding-bottom: 5.375em;
+}
+
+@media screen and (max-width: 992px) {
+  .projects-container {
+    padding-bottom: 8.75em;
+  }
+}
