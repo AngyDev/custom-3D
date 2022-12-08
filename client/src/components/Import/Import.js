@@ -23,6 +23,12 @@ export default function Import() {
   const positionVector = useSelector(getPositionVector);
   const dispatch = useDispatch();
 
+  /**
+   * Gets the files from the input, loads the files and gets the contents to convert in threejs mesh
+   * Saves the position of the first object and applies it to the next objects to maintain the original
+   * position relative to the other objects.
+   * @param {Event} e Files from the input
+   */
   const handleChange = async (e) => {
     const files = e.target.files;
 
