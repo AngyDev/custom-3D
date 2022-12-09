@@ -9,6 +9,11 @@ import { useCreateScene } from "../../hooks/useCreateScene";
 
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
 
+/**
+ * The Main component is the container of the 3D scene.
+ * @param {Array} objects List of saved objects
+ * @returns The canvas element
+ */
 export default function Main({ objects }) {
   const { createScene } = useCreateScene();
   const isCommentsActive = useSelector(getIsCommentsActive);
