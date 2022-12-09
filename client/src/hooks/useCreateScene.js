@@ -22,6 +22,13 @@ import { setCommentCounter, setMeasureCounter, setPlaneCounter, setScrewCounter 
 import { negativeVector } from "../utils/functions/objectCalc";
 import { dispatchError } from "../features/error/errorSlice";
 
+/**
+ * Handles and incorporates the business logic of the Canvas.
+ * Creates the 3D scene of the editor page.
+ * The createScene function takes the current canvas ref and the list of objects if there are
+ * saved objects.
+ * @returns CreateScene function
+ */
 export const useCreateScene = () => {
   const dispatch = useDispatch();
   const sceneModified = useSelector(getSceneModified);
@@ -66,7 +73,7 @@ export const useCreateScene = () => {
     const labelRenderer = new CSS2DRenderer();
     labelRenderer.setSize(sizes.width, sizes.height);
     labelRenderer.domElement.style.position = "absolute";
-    labelRenderer.domElement.style.top = "40px";
+    labelRenderer.domElement.style.top = "60px";
 
     canvasCurrent.appendChild(labelRenderer.domElement);
 
