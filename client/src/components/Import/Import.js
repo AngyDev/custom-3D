@@ -9,6 +9,11 @@ import { getGroup, getPositionVector, getSceneModified, setPositionVector, setSc
 import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from "three-mesh-bvh";
 import { getCenter } from "../../utils/functions/objectCalc";
 
+/**
+ * The Import component takes user-imported files, converts them
+ * to 3D objects, and passes them to the 3D scene for display.
+ * @returns Import button
+ */
 export default function Import() {
   THREE.Mesh.prototype.raycast = acceleratedRaycast;
   THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree;
