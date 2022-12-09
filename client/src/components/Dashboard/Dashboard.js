@@ -8,6 +8,12 @@ import { useAuth } from "../../context/AuthContext";
 
 const ENDPOINT = process.env.REACT_APP_ENDPOINT;
 
+/**
+ * The Dashboard component is the component that contains the list of the project or the list
+ * of the archived projects. It is possible change from one page to another via a specified button.
+ * @param {Boolean} archived Indicates if the page is the list of the projects of the archived projects
+ * @returns The page of the list of projects
+ */
 export default function Dashboard({ archived }) {
   const { user } = useAuth();
 
