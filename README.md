@@ -1,6 +1,17 @@
 # Precise
 Precise is a Web-Based 3D visualization and editing application for surgical simulation of tumor resection.
 
+The authors wish to acknowledge the Tuscany Region (Italy) for co-funding the PRECISE project (BANDO RICERCA SALUTE 2018), which originated and made possible this research.
+
+<div style=" display: flex">
+     <div style="flex: 1; padding-right: 5px;">
+          <img src="./img/projects.png" width="400"/>
+     </div>
+     <div style="flex: 1; padding-left: 5px;">
+          <img src="./img/editor.png" width="400"/>
+     </div>
+</div>
+
 ## Table of Contents
 
 <details>
