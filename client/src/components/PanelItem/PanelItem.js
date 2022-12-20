@@ -273,8 +273,12 @@ export default function PanelItem({ uuid, type, name, deleteClick, meshSelected 
                 )}
               </>
             )}
-            <span id={uuid} name={name} className="infoIcon" onClick={handleInfo} title="info plane" />
-            {openObjectInfo && <PanelObjectInfo plane={selectedObject} panelTopPosition={panelTopPosition} />}
+          </>
+        )}
+        {(type === "planes" || type === "screw" || type === "points") && (
+          <>
+            <span id={uuid} name={name} className="infoIcon" onClick={handleInfo} title="info" />
+            {openObjectInfo && <PanelObjectInfo object={selectedObject} panelTopPosition={panelTopPosition} type={type} />}
           </>
         )}
         {type === "scene" && (

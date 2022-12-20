@@ -4,31 +4,33 @@ import { getCenter, getNormal } from "../../../utils/functions/objectCalc";
 import uploadIcon from "../../../assets/images/icons/white/upload-solid.svg";
 import { downloadObject } from "../../../utils/functions/downloadObject";
 
-export default function PanelObjectInfo({ plane, panelTopPosition }) {
+export default function PanelObjectInfo({ object, panelTopPosition, type }) {
   const objectInfo = useRef();
-  const center = getCenter(plane);
-  const normal = getNormal(plane);
+  const center = getCenter(object);
+  const normal = getNormal(object);
 
   useEffect(() => {
     objectInfo.current.style.top = Math.floor(panelTopPosition) + "px";
   }, []);
 
-  const text = `Center: ${center.x.toFixed(3)}, ${center.y.toFixed(3)}, ${center.z.toFixed(3)}\nNormal: ${normal.x.toFixed(3)}, ${normal.y.toFixed(
+  const text = `${center.x.toFixed(3)}, ${center.y.toFixed(3)}, ${center.z.toFixed(3)}\n${normal.x.toFixed(3)}, ${normal.y.toFixed(
     3,
   )}, ${normal.z.toFixed(3)}`;
 
   const downloadInfo = () => {
     const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-    downloadObject(blob, plane.name + ".txt");
+    downloadObject(blob, object.name + ".txt");
   };
 
   return (
     <div
       ref={objectInfo}
-      className="inline-block fixed left-80 z-10 py-2 px-3 text-sm font-medium text-white rounded-lg shadow-sm bg-gray-600 dark:bg-base"
+      className={`inline-block fixed z-10 py-2 px-3 text-sm font-medium text-white rounded-lg shadow-sm bg-gray-600 dark:bg-base ${
+        type === "points" ? "right-80" : "left-80"
+      }`}
     >
       <div className="flex justify-between">
-        <h3>{plane.name} Info</h3>
+        <h3>{object.name} Info</h3>
         <div>
           <img className="w-4 h-4 cursor-pointer" src={uploadIcon} alt="Download info" onClick={downloadInfo} />
         </div>
@@ -52,6 +54,7 @@ export default function PanelObjectInfo({ plane, panelTopPosition }) {
 }
 
 PanelObjectInfo.propTypes = {
-  plane: PropTypes.object.isRequired,
+  object: PropTypes.object.isRequired,
   panelTopPosition: PropTypes.number,
+  type: PropTypes.string.isRequired,
 };
