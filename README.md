@@ -16,7 +16,6 @@ Precise is a Web-Based 3D visualization and editing application for surgical sim
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#setup">Setup</a></li>
-        <li><a href="#docker">Docker</a></li>
       </ul>
     </li>
   </ol>
@@ -52,12 +51,3 @@ The application is divided into two parts, the client and the server. it is writ
 [Frontend README](https://github.com/AngyDev/custom-3D/tree/main/client/README.md)
 
 [Backend README](https://github.com/AngyDev/custom-3D/tree/main/server/README.md)
-
-### Docker Setup
-
-1. Clone the repository 
-2. Open the terminal in the project folder
-3. Create the _.env_ file, one for the client folder and one for the server folder
-4. Run the following command:
-
-`docker-compose up --build`

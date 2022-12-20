@@ -1,1 +1,0 @@
-CREATE DATABASE custom3d;
