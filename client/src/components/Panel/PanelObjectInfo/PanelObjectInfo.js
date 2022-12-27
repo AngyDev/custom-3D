@@ -18,8 +18,8 @@ export default function PanelObjectInfo({ object, panelTopPosition, type }) {
   )}, ${normal.z.toFixed(3)}`;
 
   const downloadInfo = () => {
-    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-    downloadObject(blob, object.name + ".txt");
+    const blob = new Blob([text], { type: "data:text/csv;charset=utf-8" });
+    downloadObject(blob, object.name + ".csv");
   };
 
   return (
