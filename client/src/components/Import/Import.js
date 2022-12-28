@@ -99,7 +99,10 @@ export default function Import() {
   };
 
   const addPositionToMesh = (mesh, position) => {
-    mesh.position.set(-position.x, -position.y, -position.z);
+    // mesh.position.set(-position.x, -position.y, -position.z);
+    mesh.translateX(-position.x);
+    mesh.translateY(-position.y);
+    mesh.translateZ(-position.z);
     mesh.geometry.computeBoundsTree();
     mesh.renderOrder = 6;
     group.add(mesh);

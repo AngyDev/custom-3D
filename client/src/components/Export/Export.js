@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import * as THREE from "three";
 import { STLExporter } from "three/examples/jsm/exporters/STLExporter.js";
 import downloadIcon from "../../assets/images/icons/white/upload-solid.svg";
-import { getChildren } from "../../features/scene/sceneSlice";
+import { getChildren, getPositionVector } from "../../features/scene/sceneSlice";
 import Button from "../atoms/Button/Button";
 import { Checkbox } from "../atoms/Checkbox/Checkbox";
 import Modal from "../Modal/Modal";
@@ -33,6 +33,7 @@ export default function Export() {
 
 function ExportModal({ onClose }) {
   const children = useSelector(getChildren);
+  const position = useSelector(getPositionVector);
   const [values, setValues] = useState({ files: [], filename: "" });
   const [meshes, setMeshes] = useState([]);
   const [errors, setErros] = useState({});
@@ -90,7 +91,14 @@ function ExportModal({ onClose }) {
           const mesh = meshes.filter((option) => option.name === obj)[0];
 
           // Clone the mesh otherwise the meshes disappear from the scene
-          group.add(mesh.clone());
+          const newMesh = mesh.clone();
+
+          // translate the position of the mesh to match with the imported mesh
+          newMesh.translateX(position.x);
+          newMesh.translateY(position.y);
+          newMesh.translateZ(position.z);
+
+          group.add(newMesh);
         });
         const result = exporter.parse(group, { binary: true });
         downloadObject(new Blob([result], { type: "application/octet-stream" }), `${values.filename}.stl`);
