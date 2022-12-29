@@ -81,8 +81,6 @@ export default function CommentsListPanel({ projectId }) {
    * @param {Event} event
    */
   const onPointerClick = async (event) => {
-    console.log("pointerClick");
-
     pointer.x = ((event.clientX - sidebarWidth) / canvas.offsetWidth) * 2 - 1;
     pointer.y = -((event.clientY - headerHeight) / canvas.offsetHeight) * 2 + 1;
     raycaster.setFromCamera(pointer, camera);
