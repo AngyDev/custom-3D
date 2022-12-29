@@ -7,7 +7,7 @@
     "dev": "nodemon --exec babel-node src/index.js",
     "start": "NODE_ENV=local babel-node src/index.js",
     "start:dev": "NODE_ENV=development babel-node src/index.js",
-    "tunnel": "lt --port 3000 --subdomain my-app-server --local-host localhost",
+    "tunnel": "lt --port 3000 --subdomain precise-dev-server --local-host localhost",
     "start:tunnel": "npm run start & npm run tunnel",
     "knex": "NODE_ENV=local knex --knexfile ./src/utils/knexfile.js",
     "knex:dev": "NODE_ENV=development knex --knexfile ./src/utils/knexfile.js",
