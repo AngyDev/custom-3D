@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "start": "webpack serve --open",
-    "tunnel": "lt --port 9000 --subdomain precise-dev --local-host localhost",
+    "tunnel": "lt --port 9000 --subdomain precise --local-host localhost",
     "start:tunnel": "npm run start & npm run tunnel",
     "test": "jest --env=jsdom",
     "test-coverage": "jest --coverage",
