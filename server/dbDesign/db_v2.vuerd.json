@@ -237,7 +237,7 @@
           "active": false,
           "left": 28,
           "top": 39,
-          "zIndex": 57,
+          "zIndex": 3,
           "widthName": 60,
           "widthComment": 60,
           "color": "#FFEB3B"
@@ -436,9 +436,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 522,
-          "top": 72,
-          "zIndex": 2,
+          "left": 504,
+          "top": 30,
+          "zIndex": 8,
           "widthName": 60,
           "widthComment": 60,
           "color": "#F11313"
@@ -614,9 +614,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 620,
-          "top": 434,
-          "zIndex": 3,
+          "left": 707,
+          "top": 477,
+          "zIndex": 9,
           "widthName": 61.9599609375,
           "widthComment": 60,
           "color": "#03A9F4"
@@ -768,10 +768,10 @@
           }
         ],
         "ui": {
-          "active": false,
-          "left": 53.3333,
-          "top": 608,
-          "zIndex": 84,
+          "active": true,
+          "left": 54.3333,
+          "top": 562,
+          "zIndex": 12,
           "widthName": 60,
           "widthComment": 60,
           "color": "#FF9800"
@@ -900,10 +900,10 @@
           }
         ],
         "ui": {
-          "active": true,
-          "left": 30,
-          "top": 392,
-          "zIndex": 85,
+          "active": false,
+          "left": 29,
+          "top": 360,
+          "zIndex": 11,
           "widthName": 60,
           "widthComment": 60
         },
@@ -936,8 +936,8 @@
           "columnIds": [
             "2c2dab0b-3f40-4078-9f0a-ea0d3125f36e"
           ],
-          "x": 522,
-          "y": 188.5,
+          "x": 504,
+          "y": 146.5,
           "direction": "left"
         },
         "constraintName": "fk_user_to_project",
@@ -953,8 +953,8 @@
           "columnIds": [
             "690888de-e2de-45ef-b009-736828231ca2"
           ],
-          "x": 621.607666015625,
-          "y": 305,
+          "x": 603.607666015625,
+          "y": 263,
           "direction": "bottom"
         },
         "end": {
@@ -962,8 +962,8 @@
           "columnIds": [
             "3e2b2feb-c5dc-4c4f-aea5-24f0bab4a735"
           ],
-          "x": 827.91162109375,
-          "y": 434,
+          "x": 914.91162109375,
+          "y": 477,
           "direction": "top"
         },
         "constraintName": "fk_project_to_comments",
@@ -988,8 +988,8 @@
           "columnIds": [
             "140e6fdf-ec58-4bb9-9fd9-6bfe49eb3c4f"
           ],
-          "x": 620,
-          "y": 593.375,
+          "x": 707,
+          "y": 636.375,
           "direction": "left"
         },
         "constraintName": "fk_users_to_comments",
@@ -1005,8 +1005,8 @@
           "columnIds": [
             "690888de-e2de-45ef-b009-736828231ca2"
           ],
-          "x": 820.822998046875,
-          "y": 305,
+          "x": 802.822998046875,
+          "y": 263,
           "direction": "bottom"
         },
         "end": {
@@ -1014,8 +1014,8 @@
           "columnIds": [
             "474aab96-e63e-411e-9e31-487c51bf3b61"
           ],
-          "x": 478.53203046875,
-          "y": 752,
+          "x": 479.53203046875,
+          "y": 706,
           "direction": "right"
         },
         "constraintName": "fk_projects_to_objects",
@@ -1031,8 +1031,8 @@
           "columnIds": [
             "da39b3b5-67ca-445b-b42f-6e60beeb8ceb"
           ],
-          "x": 478.53203046875,
-          "y": 656,
+          "x": 479.53203046875,
+          "y": 610,
           "direction": "right"
         },
         "end": {
@@ -1040,8 +1040,8 @@
           "columnIds": [
             "1d9ef74f-1c79-4c01-9f7e-600b7b39f5a7"
           ],
-          "x": 620,
-          "y": 487.125,
+          "x": 707,
+          "y": 530.125,
           "direction": "left"
         },
         "constraintName": "fk_objects_to_comments",
@@ -1066,8 +1066,8 @@
           "columnIds": [
             "b4284071-ec11-4233-a78a-7804832717ea"
           ],
-          "x": 206.1962890625,
-          "y": 392,
+          "x": 205.1962890625,
+          "y": 360,
           "direction": "top"
         },
         "constraintName": "fk_users_to_token",
