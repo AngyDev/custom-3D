@@ -12,12 +12,13 @@ export default defineConfig({
       },
     },
   },
-  plugins: [react({ babel: { configFile: true } })],
+  plugins: [react()],
   // server: {
   //   port: 8080,
   // },
   build: {
     // Relative to the root
-    outDir: "../dist",
+    outDir: "../client/dist",
+    emptyOutDir: true,
   },
 });
