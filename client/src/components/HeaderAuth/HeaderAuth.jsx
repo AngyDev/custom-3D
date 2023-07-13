@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import Logo from "../../components/atoms/Logo/Logo";
+import Logo from "../atoms/Logo/Logo";
 
 export default function HeaderAuth() {
   const [theme, setTheme] = useState();
