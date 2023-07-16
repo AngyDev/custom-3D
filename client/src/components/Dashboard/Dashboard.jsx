@@ -6,7 +6,7 @@ import io from "socket.io-client";
 import { useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 
-const ENDPOINT = import.meta.REACT_APP_ENDPOINT;
+const ENDPOINT = import.meta.env.VITE_APP_ENDPOINT;
 
 /**
  * The Dashboard component is the component that contains the list of the project or the list
