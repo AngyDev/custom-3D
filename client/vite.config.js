@@ -13,9 +13,9 @@ export default defineConfig({
     },
   },
   plugins: [react()],
-  // server: {
-  //   port: 8080,
-  // },
+  server: {
+    port: 9000,
+  },
   build: {
     // Relative to the root
     outDir: "../client/dist",
