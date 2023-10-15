@@ -5,9 +5,6 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=local babel-node src/index.js",
-    "client": "npm start --prefix ../client",
-    "clientinstall": "npm install --prefix ../client",
-    "dev": "concurrently \"npm run start\" \"npm run client\"",
     "start:dev": "NODE_ENV=development babel-node src/index.js",
     "tunnel": "lt --port 3000 --subdomain precise-dev-server --local-host localhost",
     "start:tunnel": "npm run start & npm run tunnel",
@@ -28,7 +25,6 @@
     "body-parser": "^1.19.0",
     "chai": "^4.3.6",
     "chai-http": "^4.3.0",
-    "concurrently": "^8.2.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
