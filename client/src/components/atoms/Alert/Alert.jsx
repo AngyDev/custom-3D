@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import xIcon from "../../../assets/images/icons/black/close-modal.svg";
-import Button from "../../atoms/Button/Button";
+import Button from "../Button/Button";
 
 export default function Alert({ open, onClose, text }) {
   if (!open) return null;

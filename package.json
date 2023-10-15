@@ -1,0 +1,21 @@
+{
+  "name": "custom-3d",
+  "version": "1.0.0",
+  "description": "Precise is a Web-Based 3D visualization and editing application for surgical simulation of tumor resection.",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "cd ./server && npm ci & cd ./client && npm ci",
+    "start:all": "cd ./server && npm start & cd ./client && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AngyDev/custom-3D.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AngyDev/custom-3D/issues"
+  },
+  "homepage": "https://github.com/AngyDev/custom-3D#readme"
+}

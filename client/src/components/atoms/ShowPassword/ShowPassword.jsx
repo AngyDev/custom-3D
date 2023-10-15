@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../components/atoms/Icon/Icon";
+import Icon from "../Icon/Icon";
 import eyeIcon from "../../../assets/images/icons/black/eye-solid.svg";
 import eyeSlashIcon from "../../../assets/images/icons/black/eye-slash-solid.svg";
 

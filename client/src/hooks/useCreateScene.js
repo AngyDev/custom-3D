@@ -33,7 +33,7 @@ export const useCreateScene = () => {
   const dispatch = useDispatch();
   const sceneModified = useSelector(getSceneModified);
 
-  const ENDPOINT = process.env.REACT_APP_ENDPOINT + "/";
+  const ENDPOINT = import.meta.env.VITE_APP_ENDPOINT + "/";
 
   const createScene = async (canvasCurrent, objects) => {
     dispatch(setCanvas(canvasCurrent));

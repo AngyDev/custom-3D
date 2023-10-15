@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as THREE from "three";
 import { useAuth } from "../../context/AuthContext";
-import { getIsTextOpen, setTemporaryComments, getTemporaryComments, removeComment } from "../../features/comments/commentsSlice";
+import { setTemporaryComments, getTemporaryComments, removeComment } from "../../features/comments/commentsSlice";
 import { getCommentCounter, setCommentCounter } from "../../features/counters/countersSlice";
 import { getHeaderHeight, getSidebarWidth } from "../../features/dimensions/dimensionsSlice";
 import {

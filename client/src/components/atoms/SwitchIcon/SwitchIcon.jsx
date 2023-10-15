@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Icon from "../../../components/atoms/Icon/Icon";
+import Icon from "../Icon/Icon";
 
 export default function SwitchIcon({ className, showIcon, onClick, icon, iconSwitch, altIcon, altIconSwitch }) {
   return (

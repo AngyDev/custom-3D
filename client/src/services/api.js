@@ -1,9 +1,5 @@
 import axios from "./axios-service";
 
-// const API_URL = process.env.REACT_APP_API_URL;
-
-// axios.defaults.withCredentials = true;
-
 /**
  * Get the user by login info
  * @param {Object} login Email and password of the user
