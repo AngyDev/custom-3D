@@ -65,3 +65,10 @@ The application is divided into two parts, the client and the server. it is writ
 [Frontend README](https://github.com/AngyDev/custom-3D/tree/main/client/README.md)
 
 [Backend README](https://github.com/AngyDev/custom-3D/tree/main/server/README.md)
+
+To run client and server together use the following commands:
+- Add the `.env` file in server and client folder
+
+In the custom-3D folder
+- Run the command `npm run install:all` 
+- Run the command `npm run start:all`
