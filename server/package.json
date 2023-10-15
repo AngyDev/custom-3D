@@ -7,7 +7,7 @@
     "start": "NODE_ENV=local babel-node src/index.js",
     "client": "npm start --prefix ../client",
     "clientinstall": "npm install --prefix ../client",
-    "dev": "concurrently \"npm run start:dev\" \"npm run client\"",
+    "dev": "concurrently \"npm run start\" \"npm run client\"",
     "start:dev": "NODE_ENV=development babel-node src/index.js",
     "tunnel": "lt --port 3000 --subdomain precise-dev-server --local-host localhost",
     "start:tunnel": "npm run start & npm run tunnel",

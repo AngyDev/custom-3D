@@ -6,6 +6,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite serve",
+    "start": "vite serve",
     "preview": "vite preview",
     "tunnel": "lt --port 9000 --subdomain precise-dev --local-host localhost",
     "start:tunnel": "npm run start & npm run tunnel",
