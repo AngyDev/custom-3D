@@ -52,7 +52,7 @@
     "html-webpack-plugin": "^5.3.2",
     "jest": "^27.2.1",
     "mini-css-extract-plugin": "^2.1.0",
-    "postcss": "^8.4.25",
+    "postcss": "^8.4.31",
     "postcss-loader": "^7.3.3",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.6.1",
