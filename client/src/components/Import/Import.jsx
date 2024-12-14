@@ -41,10 +41,9 @@ export default function Import() {
       // If an object is saved, the position of the imported object is set to the center of the saved object
       let firstPosition = Object.keys(positionVector).length !== 0 ? positionVector : null;
 
+      let modified = isModified;
       for (var i = 0; i < files.length; i++) {
         if (files[i].name.split(".").pop() === "stl") {
-          let modified = modified ? !modified : isModified;
-
           const contents = await loadFile(files[i]);
           const mesh = createMeshFromFile(files[i].name, contents);
 
@@ -56,7 +55,8 @@ export default function Import() {
           }
 
           addPositionToMesh(mesh, position ? position : firstPosition);
-          dispatch(setSceneModified(!modified));
+          modified = !modified;
+          dispatch(setSceneModified(modified));
         } else {
           setError(true);
         }
