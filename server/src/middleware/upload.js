@@ -1,28 +1,28 @@
-const util = require("util");
-const multer = require("multer");
+const formidable = require("formidable");
 const fs = require("fs");
+const path = require("path");
 
-let storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dir = `${process.env.FILE_PATH}/public/uploads/${req.params.projectId}`;
+const uploadFileMiddleware = (req, res, next) => {
+  const dir = path.join(process.env.FILE_PATH, "/public/uploads/", req.params.projectId);
 
-    fs.exists(dir, (exist) => {
-      if (!exist) {
-        return fs.mkdir(dir, (error) => cb(error, dir));
-      }
-      return cb(null, dir);
-    });
-  },
-  filename: (req, file, cb) => {
-    console.log(file.originalname);
-    cb(null, file.originalname);
-  },
-});
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
 
-let uploadFile = multer({
-  storage: storage,
-}).single("file");
+  const form = new formidable.IncomingForm({
+    uploadDir: dir,
+    keepExtensions: true, // Keep original file extensions
+  });
 
-let uploadFileMiddleware = util.promisify(uploadFile); // makes the exported middleware object can be used with async-await
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      return next(err);
+    }
+
+    req.files = files; // Attach files to the request object for further processing
+    req.body = fields; // Attach other form fields if needed
+    next();
+  });
+};
 
 module.exports = uploadFileMiddleware;
