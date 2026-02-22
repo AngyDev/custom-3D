@@ -23,6 +23,7 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV}
       NODE_PORT: ${NODE_PORT}
+      FILE_PATH: /usr/src/app/src
       DB_HOST: db
       DB_PORT: ${DB_PORT}
       DB_NAME: ${DB_NAME}

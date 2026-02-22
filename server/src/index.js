@@ -68,6 +68,9 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+// Serve static files before auth middleware
+app.use("/uploads", express.static(path.join(__dirname, "/public/uploads")));
+
 app.use("/api/", require("./routes/auth"));
 app.use(verifyToken);
 app.use("/api/", require("./routes/users"));
