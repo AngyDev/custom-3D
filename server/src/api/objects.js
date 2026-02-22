@@ -90,13 +90,16 @@ const uploadFileAndSaveObject = errorHandler(async (req, res) => {
   // Uploads the file in the server folder
   await uploadFile(req, res);
 
-  if (req.file === undefined) {
+  // Get the file from formidable (req.files is an object with arrays)
+  const fileArray = req.files?.file;
+  if (!fileArray || fileArray.length === 0) {
     throw new HttpError(400, "Please upload a file!");
   }
 
-  const filepath = req.params.projectId + "/" + req.file.originalname;
-  const objectId = req.body.id;
-  const objectName = req.body.objectName;
+  const file = fileArray[0];
+  const filepath = req.params.projectId + "/" + file.originalFilename;
+  const objectId = req.body.id?.[0] || req.body.id;
+  const objectName = req.body.objectName?.[0] || req.body.objectName;
   const projectId = req.params.projectId;
 
   // Checks if the object is present in the database
