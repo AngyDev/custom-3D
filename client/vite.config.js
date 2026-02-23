@@ -15,6 +15,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 9000,
+    host: "0.0.0.0",
   },
   build: {
     // Relative to the root

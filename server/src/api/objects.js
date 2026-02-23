@@ -5,6 +5,7 @@ const { errorHandler } = require("../utils");
 const { HttpError } = require("../error");
 const uploadFile = require("../middleware/upload");
 const fs = require("fs");
+const path = require("path");
 
 /**
  * Get Object by id
@@ -90,13 +91,18 @@ const uploadFileAndSaveObject = errorHandler(async (req, res) => {
   // Uploads the file in the server folder
   await uploadFile(req, res);
 
-  if (req.file === undefined) {
+  // Get the file from formidable (req.files is an object with arrays)
+  const fileArray = req.files?.file;
+  if (!fileArray || fileArray.length === 0) {
     throw new HttpError(400, "Please upload a file!");
   }
 
-  const filepath = req.params.projectId + "/" + req.file.originalname;
-  const objectId = req.body.id;
-  const objectName = req.body.objectName;
+  const file = fileArray[0];
+  // formidable v3 uses 'newFilename', v2 uses path, filepath, newFilename
+  const filename = file.newFilename || path.basename(file.filepath) || file.filename;
+  const filepath = req.params.projectId + "/" + filename;
+  const objectId = Array.isArray(req.body.id) ? req.body.id[0] : req.body.id;
+  const objectName = Array.isArray(req.body.objectName) ? req.body.objectName[0] : req.body.objectName;
   const projectId = req.params.projectId;
 
   // Checks if the object is present in the database
@@ -107,7 +113,7 @@ const uploadFileAndSaveObject = errorHandler(async (req, res) => {
     await ObjectsController.saveObject(objectId, objectName, projectId, filepath);
   }
 
-  return { message: "Uploaded the file successfully: " + req.file.originalname };
+  return { message: "Uploaded the file successfully: " + filename };
 });
 
 module.exports = { getObjectById, getObjectsPathByProjectId, deleteObject, uploadFileAndSaveObject, getObjectsByProjectId };

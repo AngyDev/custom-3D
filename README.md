@@ -72,3 +72,22 @@ To run client and server together use the following commands:
 In the custom-3D folder
 - Run the command `npm run install:all` 
 - Run the command `npm run start:all`
+
+**Alternatively using Docker:**
+
+- Copy the example env and fill values (this repository gitignores `.env`):
+```bash
+cp .env.example .env
+```
+
+Then start services with docker-compose:
+- Build and start all services
+```bash
+docker-compose up --build
+```
+
+- Seed/run server tasks
+```bash
+docker-compose exec server npm run knex:dev -- migrate:latest
+docker-compose exec server npm run seed
+```
