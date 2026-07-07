@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/AngyDev/custom-3D#readme",
   "devDependencies": {
-    "@babel/core": "^7.14.6",
+    "@babel/core": "^7.29.6",
     "@babel/preset-env": "^7.14.7",
     "@babel/preset-react": "^7.14.5",
     "@reduxjs/toolkit": "^1.6.1",
