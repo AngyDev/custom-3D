@@ -57,7 +57,7 @@ The application is divided into two parts, the client and the server. it is writ
 ## Getting Started
 
 ### Requirements
-- `node: >=14`
+- `node: >=22` (LTS recommended)
 - `npm`
 
 ### Setup

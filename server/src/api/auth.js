@@ -14,7 +14,8 @@ const { validateUser, validateLogin } = require("../validation/validate");
  * @returns The token
  */
 const generateToken = (userId) => {
-  return jwt.sign({ userId: userId }, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const secret = process.env.JWT_SECRET || "development-jwt-secret";
+  return jwt.sign({ userId: userId }, secret, { expiresIn: "1h" });
 };
 
 /**
@@ -23,7 +24,8 @@ const generateToken = (userId) => {
  * @returns The refresh token
  */
 const generateRefreshToken = (userId) => {
-  return jwt.sign({ userId: userId }, process.env.REFRESH_TOKEN, { expiresIn: "7d" });
+  const secret = process.env.REFRESH_TOKEN || "development-refresh-secret";
+  return jwt.sign({ userId: userId }, secret, { expiresIn: "7d" });
 };
 
 /**
@@ -124,7 +126,13 @@ const register = errorHandler(async (req, res) => {
   // encrypt the password
   const encryptedPassword = await bcrypt.hash(password, 10);
 
-  const user = { firstName, lastName, email, password: encryptedPassword };
+  const user = {
+    firstName,
+    lastName,
+    email,
+    password: encryptedPassword,
+    role: "user",
+  };
 
   // create the user
   const newUser = await UsersController.createUser(user);

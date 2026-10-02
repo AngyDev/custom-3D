@@ -15,14 +15,34 @@ require("dotenv").config({ path: path.join(__dirname, `../.env.${process.env.NOD
 const app = express();
 const port = process.env.NODE_PORT || 3000;
 const host = process.env.NODE_HOST || "0.0.0.0";
+const defaultAllowedOrigins = [
+  "http://localhost:9000",
+  "http://127.0.0.1:9000",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "https://precise.app:9000",
+  "https://precise.app",
+];
+const allowedOrigins = [...new Set([
+  ...defaultAllowedOrigins,
+  ...(process.env.CLIENT_HOST || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+])];
 
 const server = app.listen(port, host, () => {
   console.log(`App listening at http://${host}:${port}`);
 });
 
-app.use(cors({ origin: process.env.CLIENT_HOST, credentials: true }));
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 
-const io = socketio(server, { cors: { origin: process.env.CLIENT_HOST } });
+const io = socketio(server, {
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+  },
+});
 
 io.on("connection", (socket) => {
   console.log("Socket connected", socket.id);
@@ -52,9 +72,16 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", process.env.CLIENT_HOST); // update to match the domain you will make the request from
+  const requestOrigin = req.headers.origin;
+  if (requestOrigin && allowedOrigins.includes(requestOrigin)) {
+    res.header("Access-Control-Allow-Origin", requestOrigin);
+  }
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
   next();
 });
 
